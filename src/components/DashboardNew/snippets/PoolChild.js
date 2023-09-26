@@ -16,11 +16,14 @@ import { PtpstakingAppAdress,usdcStakingappid,usdcStakingappaddress,swapAppId,PT
 import { checkotp, walletBalance } from "../../formula";
 import { globalstate } from "../../StableswapConfig";
 import { createtpairhistory } from "../../apicallfunction";
+import { ethers } from "ethers";
+import { DIMEAddress, DimeAbi, DimeStakingAbi, DimeStakingAddress } from "../../../abi/abi";
 
 const algodClient = new algosdk.Algodv2('',node['algodclient'], '');
 const myAlgoWallet = new MyAlgoConnect({ disableLedgerNano: false });
 const indexerClient = new algosdk.Indexer('', node['indexerclient'], '');
 const bridge = "https://bridge.walletconnect.org";
+/* global BigInt */
 
 
 function PoolChild() {
@@ -49,6 +52,51 @@ function PoolChild() {
     const handleHideLoad1 = () => setLoader1(false);
     const[loader1, setLoader1] = useState(false);
     const[swapstate,setswapstate] = useState([])
+
+
+    const[TotalStakedAmount,setTotalStakedAmount] = useState("")
+    const[mystaked,setmystaked] = useState([])
+    const[allowan,setAllowance] = useState("")
+    const[myBalance,setmyBalance] = useState("")
+    
+
+    console.log("mystaed",mystaked)
+
+    useEffect(()=>{displayValueCalculation()},[])
+
+    const displayValueCalculation = async() =>{
+      if(localStorage.getItem("walletAddress") === null || localStorage.getItem("walletAddress") === undefined || localStorage.getItem("walletAddress") === ''){                
+      }
+      else{
+          console.log("useeffect")
+          const provider = new ethers.providers.Web3Provider(window.ethereum)
+          // console.log("Connected Successfully", account);
+  
+          // Create contract instance with the correct order of arguments
+          const dimeStakingContract = new ethers.Contract(DimeStakingAddress, DimeStakingAbi, provider);
+          const dimeContract = new ethers.Contract(DIMEAddress, DimeAbi, provider);
+          
+
+          let Totalstakedamount =  ethers.utils.formatUnits(await dimeContract.balanceOf(DimeStakingAddress),0);
+          let MyStakedamount = await dimeStakingContract.userInfo(localStorage.getItem("walletAddress"));
+          let DIMEBlance = ethers.utils.formatUnits(await dimeContract.balanceOf(localStorage.getItem("walletAddress")),0);
+
+          setTotalStakedAmount(Totalstakedamount);
+          setmystaked(MyStakedamount);
+          setmyBalance(DIMEBlance)
+
+          let allowance =  ethers.utils.formatUnits(await dimeContract.allowance(localStorage.getItem("walletAddress"),DimeStakingAddress),0);
+          console.log("allowance", allowance)
+          setAllowance(allowance);
+        //   let blackpurchased = ethers.utils.formatUnits
+
+
+
+
+
+      }
+    }
+
 
     useEffect(() => {first()},[claimamount])
     const first = async()=>{
@@ -239,7 +287,7 @@ function PoolChild() {
 
        const depositOrwithdraw = async()=>{
            handleShowLoad()
-        functname == "Deposit" ? await depositUsdtLP():await withdrawUsdtLP();
+        functname == "Deposit" ? await deposit():await withdraw();
     }
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -309,6 +357,160 @@ function PoolChild() {
     
         }
 
+
+        const connectToEthereum = async () => {
+            try {
+              if (window.ethereum) {
+                let k = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                console.log("K",k)
+                const web3= new ethers.providers.Web3Provider(window.ethereum);
+                return web3;
+              } else {
+                throw new Error('No Ethereum wallet found.');
+              }
+            } catch (error) {
+              console.error(error);
+              return null;
+            }
+          };
+        
+        const deposit = async() =>{
+            handleShowLoad();
+            try{
+                const web31 = await connectToEthereum();
+                if (!web31) return;
+        
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const account = accounts[0]; // Use the first account
+        
+                console.log("Connected Successfully", account);
+        
+                // Create contract instance with the correct order of arguments
+                const dimestakingContract = new ethers.Contract(DimeStakingAddress, DimeStakingAbi, web31.getSigner(account));
+        
+                // const val = ethers.utils.formatUnits(100000000000000, 0);
+                // let k = Web3.utils.toBN(1000000000000000000n);
+                // const val11 = ethers.utils.formatUnits(100000000000000, 18);
+                // const val1 =  ethers.utils.parseUnits(val11, 18);;
+                // Send the transaction and wait for it to be mined
+                const mintTx = await dimestakingContract.deposit(BigInt(BondAmount*1e18));
+                // await mintTx.wait();
+                console.log("minttx",mintTx.hash);
+                // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
+                let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
+                toast.success(toastDiv(id));
+                toast.success("Staked succeefully");
+                handleHideLoad();
+                await sleep(1600);
+                window.location.reload();
+            }catch(error){
+                toast.error("Staking is not succeed",`${error}`);
+                console.log("error",error)
+                handleHideLoad();
+            }
+        }
+
+        const withdraw = async() =>{
+            handleShowLoad();
+            try{
+                const web31 = await connectToEthereum();
+                if (!web31) return;
+        
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const account = accounts[0]; // Use the first account
+        
+                console.log("Connected Successfully", account);
+        
+                // Create contract instance with the correct order of arguments
+                const dimestakingContract = new ethers.Contract(DimeStakingAddress, DimeStakingAbi, web31.getSigner(account));
+        
+                // const val = ethers.utils.formatUnits(100000000000000, 0);
+                // let k = Web3.utils.toBN(1000000000000000000n);
+                // const val11 = ethers.utils.formatUnits(100000000000000, 18);
+                // const val1 =  ethers.utils.parseUnits(val11, 18);;
+                // Send the transaction and wait for it to be mined
+                const mintTx = await dimestakingContract.withdraw(BigInt(BondAmount*1e18));
+                // await mintTx.wait();
+                console.log("minttx",mintTx.hash);
+                // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
+                let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
+                toast.success(toastDiv(id));
+                toast.success("withdrawn succeefully");
+                handleHideLoad();
+                await sleep(1600);
+                window.location.reload();
+            }catch(error){
+                toast.error("withdraw is not succeed",`${error}`);
+                console.log("error",error)
+                handleHideLoad();
+            }
+        }
+        const claim = async() =>{
+            handleShowLoad1();
+            try{
+                const web31 = await connectToEthereum();
+                if (!web31) return;
+        
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const account = accounts[0]; // Use the first account
+        
+                console.log("Connected Successfully", account);
+        
+                // Create contract instance with the correct order of arguments
+                const dimestakingContract = new ethers.Contract(DimeStakingAddress, DimeStakingAbi, web31.getSigner(account));
+        
+                // const val = ethers.utils.formatUnits(100000000000000, 0);
+                // let k = Web3.utils.toBN(1000000000000000000n);
+                // const val11 = ethers.utils.formatUnits(100000000000000, 18);
+                // const val1 =  ethers.utils.parseUnits(val11, 18);;
+                // Send the transaction and wait for it to be mined
+                const mintTx = await dimestakingContract.claimReward();
+                // await mintTx.wait();
+                console.log("minttx",mintTx.hash);
+                // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
+                let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
+                toast.success(toastDiv(id));
+                toast.success("claimReward succeefully");
+                handleHideLoad1();
+                await sleep(1600);
+                window.location.reload();
+            }catch(error){
+                toast.error("claimReward is not succeed",`${error}`);
+                console.log("error",error)
+                handleHideLoad1();
+            }
+        }
+
+        const approve = async() =>{
+            handleShowLoad();
+            try{
+                const web31 = await connectToEthereum();
+                if (!web31) return;
+        
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const account = accounts[0]; // Use the first account
+        
+                console.log("Connected Successfully", account);
+        
+                // Create contract instance with the correct order of arguments
+                const dimeContract = new ethers.Contract(DIMEAddress, DimeAbi, web31.getSigner(account));
+        
+                const mintTx = await dimeContract.approve(DimeStakingAddress,BigInt(10000000000*1e18));
+              
+                // await mintTx.wait();
+                console.log("minttx",mintTx.hash);
+                // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
+                let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
+                toast.success(toastDiv(id));
+                toast.success("Approve is Done succeefully");
+                handleHideLoad();
+            }catch(error){
+                toast.error("Approve is not succeed",`${error}`);
+                console.log("error",error)
+                handleHideLoad();
+            }
+        
+        }
         const depositUsdtLP = async()=>{
             try{
                 let rt = await zeroinputcheck(BondAmount)
@@ -512,101 +714,101 @@ function PoolChild() {
                 handleHideLoad()
                 } 
            }
-           const claim = async()=>{
-            handleShowLoad()
-            try{
+        //    const claim = async()=>{
+        //     handleShowLoad()
+        //     try{
               
-              const algodClient = new algosdk.Algodv2("",'https://node.testnet.algoexplorerapi.io', '');
-              const params = await algodClient.getTransactionParams().do();
-              let senderd =localStorage.getItem("walletAddress");
-              let appIDa = usdcStakingappid;
-              // let assetIda = 104654999;
-              let receiverD = usdcStakingappaddress;
-              let appArgsD = [];
-              let amtc = BondAmount * 1000000;
-              appArgsD.push(new Uint8Array (Buffer.from("SingleClaim")));
-            //   appArgsD.push(new Uint8Array (Buffer.from("ClaimUsdc")));
-              // appArgsD.push(algosdk.encodeUint64(parseInt(amtc)));
+        //       const algodClient = new algosdk.Algodv2("",'https://node.testnet.algoexplorerapi.io', '');
+        //       const params = await algodClient.getTransactionParams().do();
+        //       let senderd =localStorage.getItem("walletAddress");
+        //       let appIDa = usdcStakingappid;
+        //       // let assetIda = 104654999;
+        //       let receiverD = usdcStakingappaddress;
+        //       let appArgsD = [];
+        //       let amtc = BondAmount * 1000000;
+        //       appArgsD.push(new Uint8Array (Buffer.from("SingleClaim")));
+        //     //   appArgsD.push(new Uint8Array (Buffer.from("ClaimUsdc")));
+        //       // appArgsD.push(algosdk.encodeUint64(parseInt(amtc)));
               
-              let assArgs = [];
-              assArgs.push(parseInt(UsdcAppId));
-              let assArgs1 = [];
-              assArgs1.push(parseInt(USDCE));
-              assArgs1.push(parseInt(oldveptp));
-              assArgs1.push(parseInt(PTP));
-              const txna = algosdk.makeApplicationNoOpTxnFromObject({
-                suggestedParams: {
-                    ...params,
-                },
-                from: senderd,
-                appIndex:appIDa,
-                appArgs: appArgsD,
-                foreignApps:assArgs,
-                foreignAssets:assArgs1
+        //       let assArgs = [];
+        //       assArgs.push(parseInt(UsdcAppId));
+        //       let assArgs1 = [];
+        //       assArgs1.push(parseInt(USDCE));
+        //       assArgs1.push(parseInt(oldveptp));
+        //       assArgs1.push(parseInt(PTP));
+        //       const txna = algosdk.makeApplicationNoOpTxnFromObject({
+        //         suggestedParams: {
+        //             ...params,
+        //         },
+        //         from: senderd,
+        //         appIndex:appIDa,
+        //         appArgs: appArgsD,
+        //         foreignApps:assArgs,
+        //         foreignAssets:assArgs1
                 
-            });
+        //     });
               
-        //       const txna1 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        //           suggestedParams: {
-        //               ...params,
-        //           },
-        //           from: senderd,
-        //           to: receiverD,
-        //           amount : amtc,
-        //           assetIndex: parseInt(usdtlp)
-        //       });
-              const transArrayD = [ txna ];
-        const groupID = algosdk.computeGroupID(transArrayD)
-        for (let i = 0; i < 1; i++) 
-        transArrayD[i].group = groupID;
-        if(localStorage.getItem("walletName") === "myAlgoWallet"){
+        // //       const txna1 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+        // //           suggestedParams: {
+        // //               ...params,
+        // //           },
+        // //           from: senderd,
+        // //           to: receiverD,
+        // //           amount : amtc,
+        // //           assetIndex: parseInt(usdtlp)
+        // //       });
+        //       const transArrayD = [ txna ];
+        // const groupID = algosdk.computeGroupID(transArrayD)
+        // for (let i = 0; i < 1; i++) 
+        // transArrayD[i].group = groupID;
+        // if(localStorage.getItem("walletName") === "myAlgoWallet"){
 
-        const signedTxnsdo = await myAlgoWallet.signTransaction(transArrayD[0].toByte());
-        const responsedo = await algodClient.sendRawTransaction(signedTxnsdo.blob).do();
-        console.log(responsedo.txId);
-        await waitForConfirmation(algodClient, responsedo.txId,"Claimed successfully");
-        await createtpairhistory(responsedo.txId,"USDC Claim",claimamount/1000000,usdcStakingappid)
+        // const signedTxnsdo = await myAlgoWallet.signTransaction(transArrayD[0].toByte());
+        // const responsedo = await algodClient.sendRawTransaction(signedTxnsdo.blob).do();
+        // console.log(responsedo.txId);
+        // await waitForConfirmation(algodClient, responsedo.txId,"Claimed successfully");
+        // await createtpairhistory(responsedo.txId,"USDC Claim",claimamount/1000000,usdcStakingappid)
 
-        }
-        else if(localStorage.getItem("walletName") === "PeraWallet"){
-            const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
-            const txns = [transArrayD[0]]
-            const txnsToSign = txns.map(txn => {
-              const encodedTxn = Buffer.from(algosdk.encodeUnsignedTransaction(txn)).toString("base64");
-             //console.log(encodedTxn);
-              return {
-                txn: encodedTxn,
-            };
-          });
+        // }
+        // else if(localStorage.getItem("walletName") === "PeraWallet"){
+        //     const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
+        //     const txns = [transArrayD[0]]
+        //     const txnsToSign = txns.map(txn => {
+        //       const encodedTxn = Buffer.from(algosdk.encodeUnsignedTransaction(txn)).toString("base64");
+        //      //console.log(encodedTxn);
+        //       return {
+        //         txn: encodedTxn,
+        //     };
+        //   });
       
-          const requestParams = [ txnsToSign ];
-          const request = formatJsonRpcRequest("algo_signTxn", requestParams);
-          const result = await connector.sendCustomRequest(request);
-          const decodedResult = result.map(element => {
-            return element ? new Uint8Array(Buffer.from(element, "base64")) : null;
-          });
-            // send and await
+        //   const requestParams = [ txnsToSign ];
+        //   const request = formatJsonRpcRequest("algo_signTxn", requestParams);
+        //   const result = await connector.sendCustomRequest(request);
+        //   const decodedResult = result.map(element => {
+        //     return element ? new Uint8Array(Buffer.from(element, "base64")) : null;
+        //   });
+        //     // send and await
       
-            let response = await algodClient.sendRawTransaction(decodedResult).do();
-            await waitForConfirmation(algodClient, response.txId,"Claimed successfully");
-            await createtpairhistory(response.txId,"USDC Claim",claimamount/1000000,usdcStakingappid)
+        //     let response = await algodClient.sendRawTransaction(decodedResult).do();
+        //     await waitForConfirmation(algodClient, response.txId,"Claimed successfully");
+        //     await createtpairhistory(response.txId,"USDC Claim",claimamount/1000000,usdcStakingappid)
 
-            // await updatealgobalance()
+        //     // await updatealgobalance()
       
       
-         // localStorage.setItem("Staked","stakedbalance");
+        //  // localStorage.setItem("Staked","stakedbalance");
          
   
   
-          }
-        } 
+        //   }
+        // } 
               
-            catch (err) {
-                console.error(err);
-               toast.error(`${err}`)
-                handleHideLoad()
-                } 
-           }
+        //     catch (err) {
+        //         console.error(err);
+        //        toast.error(`${err}`)
+        //         handleHideLoad()
+        //         } 
+        //    }
            const callingMax = async() =>{
             let balan ;
          functname == "Deposit" ? balan = usdcebalance :balan = stakedAmount;
@@ -761,7 +963,7 @@ function PoolChild() {
             <Modal show={show} className="modal-dashboard" centered onHide={handleToggle}>
                 <Modal.Header className="mb-0" closeButton />
                 <Modal.Body className="pt-0">
-                    <Modal.Title className="text-center mb-4">Confirm {functname} <img src={elemlogo} alt='image' width={23} height={23} className="mx-1" /> USDCe</Modal.Title>
+                    <Modal.Title className="text-center mb-4">Confirm {functname} <img src={elemlogo} alt='image' width={23} height={23} className="mx-1" /> DIME</Modal.Title>
                     
                     <div className="d-flex text-muted align-items-center justify-content-between flex-wrap">
                         {/* <p className="mb-3">{functname}ed: 
@@ -787,7 +989,7 @@ function PoolChild() {
                                 </Tooltip>
                             }
                             >
-                                <div className="d-inline-block ms-1">{usdcebalance? parseFloat(usdcebalance/1000000).toFixed(3):'0.0'} USDCe</div>
+                                <div className="d-inline-block ms-1">{myBalance? parseFloat(myBalance/1e18).toFixed(3):'0.0'} DIME</div>
                             </OverlayTrigger>
                         </p>
                     </div>
@@ -803,7 +1005,7 @@ function PoolChild() {
                             aria-describedby="basic-addon2"
                             onChange={(e) => setBondAmount(e.target.value)}
                         />
-                        <Button variant="outline-purple" className='btn-xs-d rounded' onClick={()=>callingMax()}>Max</Button>
+                        {/* <Button variant="outline-purple" className='btn-xs-d rounded' onClick={()=>callingMax()}>Max</Button> */}
                     </InputGroup>
 
                     {/* <div className="mb-0 d-flex align-items-center justify-content-between">
@@ -866,66 +1068,7 @@ function PoolChild() {
                             <strong className="text-white">0.0 USDCe</strong>
                         </OverlayTrigger>
                     </div> */}
-                    <div className="mb-0 d-flex align-items-center justify-content-between">
-                        <p className="mb-0 pe-2">My total deposits
-                            <OverlayTrigger
-                            key="left"
-                            placement="left"
-                            overlay={
-                                <Tooltip id={`tooltip-left`}>
-                                    The amount you are Depositing to the pool (after fee).
-                                </Tooltip>
-                            }
-                            >
-                                <svg className="ms-2" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                    <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
-                                </svg>
-                            </OverlayTrigger>
-                        </p>
-
-                        <OverlayTrigger
-                            key="right"
-                            placement="right"
-                            overlay={
-                            <Tooltip id={`tooltip-right`}>
-                               USDCe
-                            </Tooltip>
-                        }
-                        >
-                            <strong className="text-white">{stakedAmount?parseFloat(stakedAmount/1000000).toFixed(3):'0.0'}USDCe</strong>
-                        </OverlayTrigger>
-                    </div>
-                    <div className="mb-0 d-flex align-items-center justify-content-between">
-                        <p className="mb-0 pe-2">Pool share
-                            {/* <OverlayTrigger
-                            key="left"
-                            placement="left"
-                            overlay={
-                                <Tooltip id={`tooltip-left`}>
-                                    The amount you are {functname}ing to the pool (after fee).
-                                </Tooltip>
-                            }
-                            >
-                                <svg className="ms-2" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                    <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
-                                </svg>
-                            </OverlayTrigger> */}
-                        </p>
-
-                        <OverlayTrigger
-                            key="right"
-                            placement="right"
-                            overlay={
-                            <Tooltip id={`tooltip-right`}>
-                                Percentage
-                            </Tooltip>
-                        }
-                        >
-                            <strong className="text-white">{parseFloat((totalusdce/(totalusdce+totalusdte))*100).toFixed(2)} %</strong>
-                        </OverlayTrigger>
-                    </div>
+                  
 
                     <Row className="mt-4 mb-3">
                         <Col sm={6} className="mb-sm-0 mb-2">
@@ -933,9 +1076,17 @@ function PoolChild() {
                         </Col>
                         <Col sm={6} className="mb-sm-0 mb-2">
                         {/* {appOpted ? (<> */}
-                                <ButtonLoad loading={loader} variant="blue" className="w-100"
+                        {allowan > (BondAmount*1e18)?
+                        (<>
+                        <ButtonLoad loading={loader} variant="blue" className="w-100"
                              onClick={()=>depositOrwithdraw()} 
                              >{functname}</ButtonLoad>
+                        </>):(<>
+                            <ButtonLoad loading={loader} variant="blue" className="w-100"
+                             onClick={()=>approve()} 
+                             >Approve</ButtonLoad>
+                        </>)}
+                                
                             {/* </>):(<>
                                 <ButtonLoad loading={loader} className='btn btn-blue w-100' onClick={()=>appOptIn()}>
                             Opt-In App
@@ -953,12 +1104,12 @@ function PoolChild() {
                     <div className='d-flex flex-md-row flex-column align-items-md-center w-100'>
                         <div class="acc-title me-2 mb-md-0 mb-3">
                             <div className="d-flex align-items-center justify-content-md-start justify-content-center mb-2">
-                                <img src={elemlogo} alt="logo" /><span class="ms-3">USDCe</span>
+                                <img src={elemlogo} alt="logo" /><span class="ms-3">DIME</span>
                             </div>
                             <p className='mb-0 d-flex text-sm align-items-center justify-content-md-start justify-content-center'>
-                                <span className='text-muted text-end'>Coverage Ratio</span> 
-                                <h5 className="mb-0 ms-1 px-1">{swapstate.cashAdded?formatter(swapstate.cashAdded/swapstate.Liability):'0.0'}</h5>
-                                <OverlayTrigger
+                                {/* <span className='text-muted text-end'>Coverage Ratio</span>  */}
+                                {/* <h5 className="mb-0 ms-1 px-1">{swapstate.cashAdded?formatter(swapstate.cashAdded/swapstate.Liability):'0.0'}</h5> */}
+                                {/* <OverlayTrigger
                                     key="right"
                                     placement="right"
                                     overlay={
@@ -971,7 +1122,7 @@ function PoolChild() {
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
                                         </svg>
-                                    </OverlayTrigger>
+                                    </OverlayTrigger> */}
                             </p>
                         </div>
                         <div className="flex-grow-1 pe-md-4 mb-md-0 mb-3 justify-content-between d-flex align-items-center">
@@ -986,7 +1137,7 @@ function PoolChild() {
                                         </Tooltip>
                                     }
                                     >
-                                    <h5 class="mb-0 d-flex align-items-center"> {totalusdce ? parseFloat(totalusdce/1000000).toFixed(3):'0.0'} </h5>
+                                    <h5 class="mb-0 d-flex align-items-center"> {TotalStakedAmount ? parseFloat(TotalStakedAmount/1e18).toFixed(3):'0.0'} </h5>
                                 </OverlayTrigger>
                                 <OverlayTrigger
                                     key="left"
@@ -997,34 +1148,10 @@ function PoolChild() {
                                         </Tooltip>
                                     }
                                     >
-                                    <h6 class="sub-heading text-xs mb-0">USDCe</h6>
+                                    <h6 class="sub-heading text-xs mb-0">DIME</h6>
                                 </OverlayTrigger>
                             </div>
-                            <div class="mr-1">
-                                <h6 class="sub-heading text-xs mb-0">Volume </h6>
-                                <OverlayTrigger
-                                    key="left"
-                                    placement="left"
-                                    overlay={
-                                        <Tooltip id={`tooltip-left`}>
-                                       Total volume
-                                        </Tooltip>
-                                    }
-                                    >
-                                    <h5 class="mb-0 d-flex align-items-center">{parseFloat((totalusdce+totalusdte)/1000000).toFixed(3)}</h5>
-                                </OverlayTrigger>
-                                {/* <OverlayTrigger
-                                    key="left"
-                                    placement="left"
-                                    overlay={
-                                        <Tooltip id={`tooltip-left`}>
-                                            14551.916605 USDC
-                                        </Tooltip>
-                                    }
-                                    >
-                                    <h6 class="sub-heading text-xs mb-0">14.6k USDCe</h6>
-                                </OverlayTrigger> */}
-                            </div>
+                           
                             <div class="mr-1">
                                 <h6 class="sub-heading text-xs mb-0">My deposits</h6>
                                 <OverlayTrigger
@@ -1036,7 +1163,7 @@ function PoolChild() {
                                         </Tooltip>
                                     }
                                     >
-                                    <h5 class="mb-0 d-flex align-items-center">{stakedAmount?parseFloat(stakedAmount/1000000).toFixed(3):'0.0'}</h5>
+                                    <h5 class="mb-0 d-flex align-items-center">{mystaked.amount?parseFloat(ethers.utils.formatUnits(mystaked.amount,18)):'0.0'}</h5>
                                 </OverlayTrigger>
                                 <OverlayTrigger
                                     key="left"
@@ -1047,21 +1174,21 @@ function PoolChild() {
                                         </Tooltip>
                                     }
                                     >
-                                    <h6 class="sub-heading text-xs mb-0">USDCe</h6>
+                                    <h6 class="sub-heading text-xs mb-0">DIME</h6>
                                 </OverlayTrigger>
                             </div>
                         </div>
                         <Stack direction="horizontal" className="justify-content-center" gap={3}>
-                            <ButtonLoad loading={loader1} onClick={()=>assetoptin()} disabled={!ptpptpoptin} variant="blue">Asset Opt-In</ButtonLoad>
-                            <Button onClick={()=>clickevent("Deposit")} disabled={ptpptpoptin} variant="blue">Stake</Button>
-                            {stakedAmount>1?(<>  <Button variant="blue" 
+                            {/* <ButtonLoad loading={loader1} onClick={()=>assetoptin()} disabled={!ptpptpoptin} variant="blue">Asset Opt-In</ButtonLoad> */}
+                            <Button onClick={()=>clickevent("Deposit")}  variant="blue">Stake</Button>
+                            {/* {stakedAmount>1?(<>  <Button variant="blue" 
                             disabled={ptpptpoptin}
                               onClick={()=>clickevent("Withdraw")} >Unstake</Button>
-                              </>):(<>
+                              </>):(<> */}
                                 <Button variant="blue" 
-                            disabled={true}
+                            // disabled={true}
                               onClick={()=>clickevent("Withdraw")} >Unstake</Button>
-                              </>)}
+                              {/* </>)} */}
                           
                         </Stack>
                     </div>
@@ -1130,10 +1257,15 @@ function PoolChild() {
                                     </OverlayTrigger>
                             </div>
                         </div>
-                        <span className="text-muted me-1">Rewards Earned:</span><span className="me-1">{claimamount  && stakedAmount > 1 ?parseFloat(claimamount/1000000).toFixed(6):"0.0"}</span>
-                       {claimamount/1000000 > 0.000001 && stakedAmount > 1 ?
+                        <span className="text-muted me-1">Rewards Earned:</span><span className="me-1">
+                            {/* {claimamount  && stakedAmount > 1 ?parseFloat(claimamount/1000000).toFixed(6):"0.0"} */}
+                            {mystaked.rewardDebt?parseFloat(ethers.utils.formatUnits(mystaked.rewardDebt,18)):'0.0'}
+                            </span>
+                            {mystaked.rewardDebt ? 
+                            (<>
+                             {ethers.utils.formatUnits(mystaked.rewardDebt,0) > 10000000000000 ?
                        (<>
-                       <ButtonLoad loading={loader} variant="blue" 
+                       <ButtonLoad loading={loader1} variant="blue" 
                         // disabled={true}
                         onClick={()=>claim()}
                         >
@@ -1153,6 +1285,9 @@ function PoolChild() {
                             </svg> */}
                         </Button>
                        </>)}
+                            </>):
+                            (<></>)}
+                      
                         
                     </div>
                 </div>
