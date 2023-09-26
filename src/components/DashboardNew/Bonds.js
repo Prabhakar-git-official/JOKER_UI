@@ -17,7 +17,7 @@ import WalletConnect from "@walletconnect/client";
 import QRCodeModal from "algorand-walletconnect-qrcode-modal";
 import { formatJsonRpcRequest } from "@json-rpc-tools/utils";
 import { updatealgobalance } from "../formula";
-import { BondAbi, BondAddress, DAIAddress, DaiAbi, JUSDPoolAbi, JUSDPoolAddress, TreasuryAbi, TreasuryAddress } from '../../abi/abi';
+import { BondAbi, BondAddress, DAIAddress, DaiAbi, JUSDAbi, JUSDAddress, JUSDPoolAbi, JUSDPoolAddress, TreasuryAbi, TreasuryAddress } from '../../abi/abi';
 import { ethers } from 'ethers';
 /* global BigInt */
 
@@ -105,6 +105,7 @@ const Bond = () => {
     const[allowan,setAllowance] = useState("")
     const[daiBlance,setdaiBlance] = useState("")
     
+    const[TimeDuration,setTimeDuration] = useState("")
     console.log("time",Math.floor(new Date().getTime() / 1000),blackPurchased.depositTime? parseInt(ethers.utils.formatUnits(blackPurchased.depositTime,0))+120 :0)
 
     //// console.log("mapSet", map1);
@@ -127,14 +128,17 @@ const Bond = () => {
           // console.log("Connected Successfully", account);
   
           // Create contract instance with the correct order of arguments
-          const JusdPoolContract = new ethers.Contract(JUSDPoolAddress, JUSDPoolAbi, provider);
+          const JusdContract = new ethers.Contract(JUSDAddress, JUSDAbi, provider);
           const daiContract = new ethers.Contract(DAIAddress, DaiAbi, provider);
           const TresuryContract = new ethers.Contract(TreasuryAddress, TreasuryAbi, provider);
           const BondContract = new ethers.Contract(BondAddress, BondAbi, provider);
 
           let trasuryBlackBalance =  ethers.utils.formatUnits(await TresuryContract.getBlackBalance(TreasuryAddress),0);
-          let blackprice =  ethers.utils.formatUnits(await JusdPoolContract.getBLACKPrice(),0);
+          let blackprice =  ethers.utils.formatUnits(await JusdContract.black_price(),0);
           let daiprice = ethers.utils.formatUnits(await BondContract.getDAIPrice(),0);
+
+          let timeduration = ethers.utils.formatUnits(await BondContract.timeDuration(),0);
+          setTimeDuration(timeduration);
           
           let blackpurchased = await BondContract.users(localStorage.getItem("walletAddress"));
 
@@ -1954,6 +1958,7 @@ const purchaseBond = async() =>{
         let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
         toast.success(toastDiv(id));
         toast.success("Bond purchased succeefully");
+        await displayValueCalculation()
         handleHideLoadPurchase();
         await sleep(1600);
     }catch(error){
@@ -1984,6 +1989,7 @@ const approve = async() =>{
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
         let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
         toast.success(toastDiv(id));
+        await displayValueCalculation();
         toast.success("Approve is Done succeefully");
         handleHideLoadPurchase();
     }catch(error){
@@ -2020,6 +2026,7 @@ const claimWalletCheck = async () =>
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
         let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
         toast.success(toastDiv(id));
+        await displayValueCalculation();
         toast.success("Claim  succeefully");
         handleHideLoadClaim();
     }catch(error){
@@ -2052,7 +2059,7 @@ const claimWalletCheck = async () =>
                         </h6>
                         <h3 className='mb-0 text-187'>${treasurBalance ? (parseFloat(treasurBalance*(blackPrice/1e9)) / 1e9).toFixed(4) : "0"}</h3>
                     </div>
-                    <div className='ms-sm-5 ms-4'>
+                    {/* <div className='ms-sm-5 ms-4'>
                         <h6 className='sub-heading mb-0'>
                             BLACK Market Price
                             <OverlayTrigger
@@ -2067,8 +2074,8 @@ const claimWalletCheck = async () =>
                                     <svg className="tooltip-icon ms-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12Z" stroke="#CCCCCC" stroke-width="1.5"></path><path d="M11 8C11 7.44772 11.4477 7 12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8Z" fill="#CCCCCC"></path><path d="M11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V12Z" fill="#CCCCCC"></path></svg>
                                 </OverlayTrigger>
                         </h6>
-                        <h3 className='mb-0 text-187'>${blackPrice ? (parseFloat((blackPrice/1e9)) ).toFixed(4) : "0"}</h3>
-                    </div>
+                        <h3 className='mb-0 text-187'>${blackPrice ? (parseFloat((blackPrice/1e18)) ).toFixed(6) : "0"}</h3>
+                    </div> */}
                 </div>
 
                 <Accordion defaultActiveKey="">
@@ -2085,7 +2092,7 @@ const claimWalletCheck = async () =>
                                         Bond Price
                                     </h6>
                                     <h5 className='mb-0 d-flex align-items-center'>
-                                        ${daiPrice ? (parseFloat((daiPrice/1e6)) ).toFixed(4) : "0"}
+                                        ${daiPrice ? (parseFloat((daiPrice/1e9)) ).toFixed(4) : "0"}
                                         <OverlayTrigger
                                             key="left"
                                             placement="left"
@@ -2235,21 +2242,21 @@ const claimWalletCheck = async () =>
                                             </div> */}
                                         </Col>
                                         <Col md={6}>
-                                            <h6><span className='text-sm text-gray-d'>Claimable Rewards: </span> {blackPurchased.userRewards?ethers.utils.formatUnits(blackPurchased.userRewards,18) :0} Black</h6>
+                                            <h6><span className='text-sm text-gray-d'>Claimable Rewards: </span> {blackPurchased.userRewards?ethers.utils.formatUnits(blackPurchased.userRewards,9) :0} Black</h6>
                                             <Row className='flex-nowrap align-items-center mb-2 gx-3'>
                                                 <Col>
 {blackPurchased.claimedTime ? 
 (<>
   {ethers.utils.formatUnits(blackPurchased.claimedTime,0) > 0 ? 
                                                 (<>
-                                                {(parseInt(ethers.utils.formatUnits(blackPurchased.claimedTime,0))+120) <= (Math.floor(new Date().getTime() / 1000)) ? (<>
+                                                {(parseInt(ethers.utils.formatUnits(blackPurchased.claimedTime,0))+parseInt(TimeDuration)) <= (Math.floor(new Date().getTime() / 1000)) ? (<>
                                                     <ButtonLoad loading={loaderClaim} className='btn w-100 btn-blue' onClick={claimWalletCheck}>Claim </ButtonLoad>
                                                 </>):(<>
                                                 
                                                     <ButtonLoad disabled={true} className='btn w-100 btn-blue' >Claim </ButtonLoad>
                                                 </>)}
                                                 </>):(<>
-                                                {(parseInt(ethers.utils.formatUnits(blackPurchased.depositTime,0))+120) <= (Math.floor(new Date().getTime() / 1000)) ? (<>
+                                                {(parseInt(ethers.utils.formatUnits(blackPurchased.depositTime,0))+parseInt(TimeDuration)) <= (Math.floor(new Date().getTime() / 1000)) ? (<>
                                                     <ButtonLoad loading={loaderClaim} className='btn w-100 btn-blue' onClick={claimWalletCheck}>Claim </ButtonLoad>
                                                 </>):(<>
                                                     <ButtonLoad disabled={true} className='btn w-100 btn-blue' >Claim </ButtonLoad>
