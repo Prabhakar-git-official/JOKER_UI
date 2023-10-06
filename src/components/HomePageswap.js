@@ -2,6 +2,7 @@ import React from 'react';
 // import { Container } from 'react-bootstrap';
 import { Col, Container, Row } from 'react-bootstrap';
 import Layout from './Layouts/LayoutLandingswap';
+// import Layout from './Layouts/LayoutLandingHome';
 import DeFiPotentialswap from './Sections/DeFiPotentialswap';
 import DeFiPotentialV2 from './Sections/DeFiPotentialV2';
 import DualToken from './Sections/DualToken';

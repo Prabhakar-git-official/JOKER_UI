@@ -8,7 +8,11 @@ import { dualwalletconnect } from '../walletconnection';
 import algosdk, { Algod ,encodeUint64} from "algosdk";
 import ButtonLoad from 'react-bootstrap-button-loader';
 import node from '../nodeapi.json';
-import elemlogo from '../../../assets/images/elem-original.png';
+// import elemlogo from '../../../assets/images/elem-original.png';
+import elemlogo from '../../../assets/images/black.jpeg';
+import dimelogo from '../../../assets/images/dime.jpeg';
+
+
 import axios from "axios";
 import MyAlgoConnect from '@randlabs/myalgo-connect';
 import { ToastContainer, Toast, Zoom, Bounce, toast} from 'react-toastify';
@@ -17,7 +21,7 @@ import { checkotp, walletBalance } from "../../formula";
 import { globalstate } from "../../StableswapConfig";
 import { createtpairhistory } from "../../apicallfunction";
 import { ethers } from "ethers";
-import { DIMEAddress, DimeAbi, DimeStakingAbi, DimeStakingAddress } from "../../../abi/abi";
+import { BLACKAddress, BlackAbi, BlackStakingAddress, DIMEAddress, DimeAbi, DimeStakingAbi, DimeStakingAddress } from "../../../abi/abi";
 
 const algodClient = new algosdk.Algodv2('',node['algodclient'], '');
 const myAlgoWallet = new MyAlgoConnect({ disableLedgerNano: false });
@@ -58,7 +62,8 @@ function PoolChild() {
     const[mystaked,setmystaked] = useState([])
     const[allowan,setAllowance] = useState("")
     const[myBalance,setmyBalance] = useState("")
-    
+    const[Myreward,setMyreward] = useState("")
+    const[unstakeTime,setunstakeTime] = useState("")
 
     console.log("mystaed",mystaked)
 
@@ -73,20 +78,26 @@ function PoolChild() {
           // console.log("Connected Successfully", account);
   
           // Create contract instance with the correct order of arguments
-          const dimeStakingContract = new ethers.Contract(DimeStakingAddress, DimeStakingAbi, provider);
+          const blackStakingContract = new ethers.Contract(BlackStakingAddress, DimeStakingAbi, provider);
           const dimeContract = new ethers.Contract(DIMEAddress, DimeAbi, provider);
-          
+          const BlackContract = new ethers.Contract(BLACKAddress, BlackAbi, provider);
+          console.log("dimeContract", BlackContract)
 
-          let Totalstakedamount =  ethers.utils.formatUnits(await dimeContract.balanceOf(DimeStakingAddress),0);
-          let MyStakedamount = await dimeStakingContract.userInfo(localStorage.getItem("walletAddress"));
-          let DIMEBlance = ethers.utils.formatUnits(await dimeContract.balanceOf(localStorage.getItem("walletAddress")),0);
+          let Totalstakedamount =  ethers.utils.formatUnits(await BlackContract.balanceOf(BlackStakingAddress),0);
+          console.log("Totalstakedamount", Totalstakedamount)
+          let MyStakedamount = await blackStakingContract.userInfo(localStorage.getItem("walletAddress"));
+          let DIMEBlance = ethers.utils.formatUnits(await BlackContract.balanceOf(localStorage.getItem("walletAddress")),0);
+          let myRewards = ethers.utils.formatUnits(await blackStakingContract.pendingBlack(localStorage.getItem("walletAddress")),0);
+          let unstakeremainingtime = ethers.utils.formatUnits(await blackStakingContract.holderUnstakeRemainingTime(localStorage.getItem("walletAddress")),0);
 
           setTotalStakedAmount(Totalstakedamount);
           setmystaked(MyStakedamount);
           setmyBalance(DIMEBlance)
+          setMyreward(myRewards)
+          setunstakeTime(unstakeremainingtime)
 
-          let allowance =  ethers.utils.formatUnits(await dimeContract.allowance(localStorage.getItem("walletAddress"),DimeStakingAddress),0);
-          console.log("allowance", allowance)
+          let allowance =  ethers.utils.formatUnits(await BlackContract.allowance(localStorage.getItem("walletAddress"),BlackStakingAddress),0);
+          console.log("allowance", DIMEBlance)
           setAllowance(allowance);
         //   let blackpurchased = ethers.utils.formatUnits
 
@@ -386,14 +397,14 @@ function PoolChild() {
                 console.log("Connected Successfully", account);
         
                 // Create contract instance with the correct order of arguments
-                const dimestakingContract = new ethers.Contract(DimeStakingAddress, DimeStakingAbi, web31.getSigner(account));
+                const dimestakingContract = new ethers.Contract(BlackStakingAddress, DimeStakingAbi, web31.getSigner(account));
         
                 // const val = ethers.utils.formatUnits(100000000000000, 0);
                 // let k = Web3.utils.toBN(1000000000000000000n);
                 // const val11 = ethers.utils.formatUnits(100000000000000, 18);
                 // const val1 =  ethers.utils.parseUnits(val11, 18);;
                 // Send the transaction and wait for it to be mined
-                const mintTx = await dimestakingContract.deposit(BigInt(BondAmount*1e18));
+                const mintTx = await dimestakingContract.deposit(BigInt(BondAmount*1e9));
                 // await mintTx.wait();
                 console.log("minttx",mintTx.hash);
                 // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
@@ -422,14 +433,14 @@ function PoolChild() {
                 console.log("Connected Successfully", account);
         
                 // Create contract instance with the correct order of arguments
-                const dimestakingContract = new ethers.Contract(DimeStakingAddress, DimeStakingAbi, web31.getSigner(account));
+                const dimestakingContract = new ethers.Contract(BlackStakingAddress, DimeStakingAbi, web31.getSigner(account));
         
                 // const val = ethers.utils.formatUnits(100000000000000, 0);
                 // let k = Web3.utils.toBN(1000000000000000000n);
                 // const val11 = ethers.utils.formatUnits(100000000000000, 18);
                 // const val1 =  ethers.utils.parseUnits(val11, 18);;
                 // Send the transaction and wait for it to be mined
-                const mintTx = await dimestakingContract.withdraw(BigInt(BondAmount*1e18));
+                const mintTx = await dimestakingContract.withdraw(BigInt(BondAmount*1e9));
                 // await mintTx.wait();
                 console.log("minttx",mintTx.hash);
                 // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
@@ -457,14 +468,14 @@ function PoolChild() {
                 console.log("Connected Successfully", account);
         
                 // Create contract instance with the correct order of arguments
-                const dimestakingContract = new ethers.Contract(DimeStakingAddress, DimeStakingAbi, web31.getSigner(account));
+                const dimestakingContract = new ethers.Contract(BlackStakingAddress, DimeStakingAbi, web31.getSigner(account));
         
                 // const val = ethers.utils.formatUnits(100000000000000, 0);
                 // let k = Web3.utils.toBN(1000000000000000000n);
                 // const val11 = ethers.utils.formatUnits(100000000000000, 18);
                 // const val1 =  ethers.utils.parseUnits(val11, 18);;
                 // Send the transaction and wait for it to be mined
-                const mintTx = await dimestakingContract.claimReward(BigInt(BondAmount*1e18));
+                const mintTx = await dimestakingContract.claimReward();
                 // await mintTx.wait();
                 console.log("minttx",mintTx.hash);
                 // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
@@ -493,9 +504,9 @@ function PoolChild() {
                 console.log("Connected Successfully", account);
         
                 // Create contract instance with the correct order of arguments
-                const dimeContract = new ethers.Contract(DIMEAddress, DimeAbi, web31.getSigner(account));
+                const dimeContract = new ethers.Contract(BLACKAddress, BlackAbi, web31.getSigner(account));
         
-                const mintTx = await dimeContract.approve(DimeStakingAddress,BigInt(10000000000*1e18));
+                const mintTx = await dimeContract.approve(BlackStakingAddress,BigInt(10000000000*1e9));
               
                 // await mintTx.wait();
                 console.log("minttx",mintTx.hash);
@@ -989,7 +1000,7 @@ function PoolChild() {
                                 </Tooltip>
                             }
                             >
-                                <div className="d-inline-block ms-1">{myBalance? parseFloat(myBalance/1e18).toFixed(3):'0.0'} BLACK</div>
+                                <div className="d-inline-block ms-1">{myBalance? parseFloat(myBalance/1e9).toFixed(3):'0.0'} BLACK</div>
                             </OverlayTrigger>
                         </p>
                     </div>
@@ -1076,7 +1087,7 @@ function PoolChild() {
                         </Col>
                         <Col sm={6} className="mb-sm-0 mb-2">
                         {/* {appOpted ? (<> */}
-                        {allowan > (BondAmount*1e18)?
+                        {allowan > (BondAmount*1e9)?
                         (<>
                         <ButtonLoad loading={loader} variant="blue" className="w-100"
                              onClick={()=>depositOrwithdraw()} 
@@ -1137,7 +1148,7 @@ function PoolChild() {
                                         </Tooltip>
                                     }
                                     >
-                                    <h5 class="mb-0 d-flex align-items-center"> {TotalStakedAmount ? parseFloat(TotalStakedAmount/1e18).toFixed(3):'0.0'} </h5>
+                                    <h5 class="mb-0 d-flex align-items-center"> {TotalStakedAmount ? parseFloat(TotalStakedAmount/1e9).toFixed(3):'0.0'} </h5>
                                 </OverlayTrigger>
                                 <OverlayTrigger
                                     key="left"
@@ -1163,7 +1174,7 @@ function PoolChild() {
                                         </Tooltip>
                                     }
                                     >
-                                    <h5 class="mb-0 d-flex align-items-center">{mystaked.amount?parseFloat(ethers.utils.formatUnits(mystaked.amount,18)):'0.0'}</h5>
+                                    <h5 class="mb-0 d-flex align-items-center">{mystaked.amount?parseFloat(ethers.utils.formatUnits(mystaked.amount,9)):'0.0'}</h5>
                                 </OverlayTrigger>
                                 <OverlayTrigger
                                     key="left"
@@ -1185,10 +1196,16 @@ function PoolChild() {
                             disabled={ptpptpoptin}
                               onClick={()=>clickevent("Withdraw")} >Unstake</Button>
                               </>):(<> */}
+                                 {parseInt(unstakeTime) <= (Math.floor(new Date().getTime() / 1000)) ?
+                               (<>
                                 <Button variant="blue" 
                             // disabled={true}
                               onClick={()=>clickevent("Withdraw")} >Unstake</Button>
-                              {/* </>)} */}
+                               </>):(<>
+                                <Button variant="blue" 
+                            disabled={true}
+                              onClick={()=>clickevent("Withdraw")} >Unstake</Button>
+                               </>)}
                           
                         </Stack>
                     </div>
@@ -1198,7 +1215,7 @@ function PoolChild() {
                         <div className="text-sm d-flex flex-wrap align-items-center">
                             <div className="d-flex align-items-center me-3">
                                 <span className="text-muted me-2">Reward</span>
-                                <img src={elemlogo} alt="logo" width={15} />
+                                <img src={dimelogo} alt="logo" width={15} />
                             </div>
                             <div className="d-flex align-items-center me-3">
                                 <span className="text-muted me-1">Base APR</span>
@@ -1259,11 +1276,11 @@ function PoolChild() {
                         </div>
                         <span className="text-muted me-1">Rewards Earned:</span><span className="me-1">
                             {/* {claimamount  && stakedAmount > 1 ?parseFloat(claimamount/1000000).toFixed(6):"0.0"} */}
-                            {mystaked.rewardDebt?parseFloat(ethers.utils.formatUnits(mystaked.rewardDebt,18)):'0.0'}
+                            {Myreward?parseFloat(Myreward/1e18).toFixed(6):'0.0'}
                             </span>
-                            {mystaked.rewardDebt ? 
+                            {Myreward? 
                             (<>
-                             {ethers.utils.formatUnits(mystaked.rewardDebt,0) > 10000000000000 ?
+                             {Myreward > 1e13 ?
                        (<>
                        <ButtonLoad loading={loader1} variant="blue" 
                         // disabled={true}

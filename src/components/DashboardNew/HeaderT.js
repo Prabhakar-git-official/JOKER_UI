@@ -8,6 +8,7 @@ import PeraWalletLogo from '../../assets/images/PeraWalletLogo.svg';
 import MetaMask from '../../assets/images/metamask-icon.svg';
 import Coinbase from '../../assets/images/coinbase-icon.svg';
 import MyAlgoLogo from '../../assets/images/MyAlgoLogo.svg';
+import jusdlogo from '../../assets/images/JUSD.svg'
 import Sidebar from './Sidebar';
 import node from './nodeapi.json';
 import { uservisit } from '../../firedbstore';
@@ -479,7 +480,9 @@ async function ConnectWallet() {
                     }
 
                 </Button>
-                <Link to="/" className="header-logo"><img src={Logo} alt="Logo" /></Link>
+                <Link to="/" className="header-logo">
+                  <img src={jusdlogo} alt="Logo" />
+                  </Link>
 
                 <div className="header-navigation-control ms-auto d-flex align-items-center">
                 {/* <Dropdown className="ms-2">
@@ -541,23 +544,23 @@ async function ConnectWallet() {
                                 <svg class="dark-theme-white-10 me-2 ms-0" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V4C20 2.9 19.1 2 18 2ZM6 4H11V12L8.5 10.5L6 12V4Z"></path></svg>
                                 Docs
                             </Dropdown.Item>
-                            <Dropdown.Item className='d-flex align-items-center' href="https://twitter.com/ElementDeFi" target="_blank" rel="noreferer">
+                            <Dropdown.Item className='d-flex align-items-center' href="https://twitter.com/Jok3rFi" target="_blank" rel="noreferer">
                                 <svg class="dark-theme-white-10 me-2 ms-0" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 7.5C19.4 7.8 18.8 7.9 18.1 8C18.8 7.6 19.3 7 19.5 6.2C18.9 6.6 18.2 6.8 17.4 7C16.8 6.4 15.9 6 15 6C13.3 6 11.8 7.5 11.8 9.3C11.8 9.6 11.8 9.8 11.9 10C9.2 9.9 6.7 8.6 5.1 6.6C4.8 7.1 4.7 7.6 4.7 8.3C4.7 9.4 5.3 10.4 6.2 11C5.7 11 5.2 10.8 4.7 10.6C4.7 12.2 5.8 13.5 7.3 13.8C7 13.9 6.7 13.9 6.4 13.9C6.2 13.9 6 13.9 5.8 13.8C6.2 15.1 7.4 16.1 8.9 16.1C7.8 17 6.4 17.5 4.8 17.5C4.5 17.5 4.3 17.5 4 17.5C5.5 18.4 7.2 19 9 19C15 19 18.3 14 18.3 9.7C18.3 9.6 18.3 9.4 18.3 9.3C19 8.8 19.6 8.2 20 7.5Z"></path></svg>
                                 Twitter
                             </Dropdown.Item>
-                            <Dropdown.Item className='d-flex align-items-center' href="https://t.me/ElementDeFi" target="_blank" rel="noreferer">
+                            {/* <Dropdown.Item className='d-flex align-items-center' href="https://t.me/ElementDeFi" target="_blank" rel="noreferer">
                                 <svg class="dark-theme-white-10 me-2 ms-0" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.1984 3.39554L3.14711 10.4923C3.14711 10.4923 2.34095 10.7854 2.40335 11.3259C2.46743 11.8673 3.12527 12.115 3.12527 12.115L7.41575 13.6467C7.41575 13.6467 8.71079 18.1519 8.96567 19.0092C9.22055 19.8641 9.42503 19.8843 9.42503 19.8843C9.66239 19.9937 9.87815 19.8195 9.87815 19.8195L12.6501 17.1389L16.9704 20.653C18.1389 21.1937 18.5642 20.0671 18.5642 20.0671L21.6 3.82442C21.6 2.7425 20.1984 3.39554 20.1984 3.39554ZM17.1797 18.7608L12.5577 15.0024L11.1235 16.3889L11.4389 13.4391L17.5997 7.6001L9.20183 12.5859L5.47679 11.2563L19.6889 5.34074L17.1797 18.7608Z"></path></svg>
                                 Telegram
-                            </Dropdown.Item>
-                            <Dropdown.Item className='d-flex align-items-center' href="https://discord.com/invite/urquv6EWYs" target="_blank" rel="noreferer">
+                            </Dropdown.Item> */}
+                            <Dropdown.Item className='d-flex align-items-center' href="https://discord.gg/2xTjCqFZ" target="_blank" rel="noreferer">
                                 <svg class="dark-theme-white-10 me-2 ms-0" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13.914 14.58C13.7537 14.6191 13.5923 14.6538 13.43 14.684C12.5494 14.8498 11.6453 14.8464 10.766 14.674C10.612 14.644 10.394 14.591 10.113 14.516L9.192 15.713C6.919 15.64 6.055 14.117 6.055 14.117C6.055 10.736 7.536 7.995 7.536 7.995C9.017 6.862 10.426 6.893 10.426 6.893L10.829 7.418C10.8661 7.41279 10.9035 7.40946 10.941 7.408C11.7092 7.30617 12.4877 7.30954 13.255 7.418L13.697 6.893C13.697 6.893 15.107 6.862 16.587 7.996C16.587 7.996 18.069 10.736 18.069 14.117C18.069 14.117 17.194 15.639 14.921 15.713L13.914 14.579V14.58ZM10.076 11C9.475 11 9 11.45 9 12C9 12.55 9.485 13 10.076 13C10.676 13 11.151 12.55 11.151 12C11.161 11.45 10.677 11 10.076 11ZM13.924 11C13.324 11 12.849 11.45 12.849 12C12.849 12.55 13.334 13 13.924 13C14.525 13 15 12.55 15 12C15 11.45 14.525 11 13.924 11ZM21 23L16.01 18H19V4H5V18H16.003L16.573 20H5C4.46957 20 3.96086 19.7893 3.58579 19.4142C3.21071 19.0391 3 18.5304 3 18V4C3 3.46957 3.21071 2.96086 3.58579 2.58579C3.96086 2.21071 4.46957 2 5 2H19C19.5304 2 20.0391 2.21071 20.4142 2.58579C20.7893 2.96086 21 3.46957 21 4V23Z"></path></svg>
                                 Discord
                             </Dropdown.Item>
-                            <Dropdown.Item className='d-flex align-items-center' href="https://medium.com/@elementdefi" target="_blank" rel="noreferer">
+                            {/* <Dropdown.Item className='d-flex align-items-center' href="https://medium.com/@elementdefi" target="_blank" rel="noreferer">
                                 <svg class="dark-theme-white-10 me-2 ms-0" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 18C10.8137 18 13.5 15.3137 13.5 12C13.5 8.68629 10.8137 6 7.5 6C4.18629 6 1.5 8.68629 1.5 12C1.5 15.3137 4.18629 18 7.5 18Z"></path><path d="M16.875 17.625C18.3247 17.625 19.5 15.1066 19.5 12C19.5 8.8934 18.3247 6.375 16.875 6.375C15.4253 6.375 14.25 8.8934 14.25 12C14.25 15.1066 15.4253 17.625 16.875 17.625Z"></path><path d="M21.375 17.25C21.9963 17.25 22.5 14.8995 22.5 12C22.5 9.1005 21.9963 6.75 21.375 6.75C20.7537 6.75 20.25 9.1005 20.25 12C20.25 14.8995 20.7537 17.25 21.375 17.25Z"></path></svg>
                                 Medium
-                            </Dropdown.Item>
-                            <Dropdown.Item className='d-flex align-items-center' href="https://github.com/ELEMENTFI" target="_blank" rel="noreferer">
+                            </Dropdown.Item> */}
+                            <Dropdown.Item className='d-flex align-items-center' href="https://github.com/JOK3RFI/" target="_blank" rel="noreferer">
                                 <svg class="dark-theme-white-10 me-2 ms-0" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 4C7.6 4 4 7.6 4 12C4 15.5 6.3 18.5 9.5 19.6C9.9 19.7 10 19.4 10 19.2C10 19 10 18.5 10 17.8C7.8 18.3 7.3 16.8 7.3 16.8C6.9 15.9 6.4 15.6 6.4 15.6C5.7 15.1 6.5 15.1 6.5 15.1C7.3 15.2 7.7 15.9 7.7 15.9C8.4 17.2 9.6 16.8 10 16.6C10.1 16.1 10.3 15.7 10.5 15.5C8.7 15.3 6.9 14.6 6.9 11.5C6.9 10.6 7.2 9.9 7.7 9.4C7.6 9.2 7.3 8.4 7.8 7.3C7.8 7.3 8.5 7.1 10 8.1C10.6 7.9 11.3 7.8 12 7.8C12.7 7.8 13.4 7.9 14 8.1C15.5 7.1 16.2 7.3 16.2 7.3C16.6 8.4 16.4 9.2 16.3 9.4C16.8 10 17.1 10.7 17.1 11.5C17.1 14.6 15.2 15.2 13.4 15.4C13.7 15.8 14 16.3 14 17C14 18.1 14 18.9 14 19.2C14 19.4 14.1 19.7 14.6 19.6C17.8 18.5 20.1 15.5 20.1 12C20 7.6 16.4 4 12 4Z"></path></svg>
                                 Code
                             </Dropdown.Item>

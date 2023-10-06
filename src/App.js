@@ -15,6 +15,7 @@ import Home from './components/HomePageswap';
 import SinglesideAmm from './components/HomePageswap';
 import Analytics from './components/Dashboard/Analytics';
 import FaucetApp from './components/DashboardNew/Faucet';
+import ElementProtocol from './components/ElementProtocol';
 
 
 // dashboard
@@ -48,6 +49,8 @@ import RecollateralizeApp from './components/DashboardNew/Recollateralize'
 import StablecoinApp from './components/DashboardNew/Stablecoin';
 import RedeemApp from './components/DashboardNew/StablecoinRedeem';
 import DashboardApp from './components/DashboardNew/Dashboard';
+import DashboardMainApp from './components/DashboardNew/DashboardJoker';
+import AdminPage from './components/DashboardNew/AdminPage';
 import BondApp from './components/DashboardNew/Bonds';
 
 export const DataContext = createContext();
@@ -80,6 +83,13 @@ function App() {
         <Route path="/dashboard">
           <DashboardApp />
         </Route>
+        <Route path="/dashboardMain">
+          <DashboardMainApp />
+        </Route>
+        <Route path="/adminPage">
+          <AdminPage />
+        </Route>
+        
         <Route path="/bond">
           <BondApp />
         </Route>
@@ -192,7 +202,8 @@ function App() {
           <DashboardAMM/>
         </Route>   
         <Route path="/">
-          <Home />
+          {/* <Home /> */}
+          <ElementProtocol/>
         </Route>
         
       </Switch>

@@ -30,7 +30,7 @@ const bridge = "https://bridge.walletconnect.org";
 const Bond = () => {
 
     useEffect(() => {
-        document.title = "ELEMENT | Bond"
+        document.title = "JOKER | Bond"
     }, [])
 
     const[appTotal,setAppTotal] = useState("");
@@ -104,6 +104,7 @@ const Bond = () => {
     const [blackPurchased,setblackPurchased] = useState([]);  
     const[allowan,setAllowance] = useState("")
     const[daiBlance,setdaiBlance] = useState("")
+    const [rewardtime,setrewardtime] = useState("");
     
     const[TimeDuration,setTimeDuration] = useState("")
     console.log("time",Math.floor(new Date().getTime() / 1000),blackPurchased.depositTime? parseInt(ethers.utils.formatUnits(blackPurchased.depositTime,0))+120 :0)
@@ -155,7 +156,19 @@ const Bond = () => {
           setdaiBlance(daibalance)  
           console.log("Bond",trasuryBlackBalance,blackprice,daiprice,blackpurchased)
         //   let blackpurchased = ethers.utils.formatUnits
-
+        
+        let rtime = ethers.utils.formatUnits(blackpurchased.claimedTime,0);
+        let xtime = ethers.utils.formatUnits(blackpurchased.depositTime,0);
+        
+        if(rtime > 0){
+            let s = parseInt(rtime) + parseInt(timeduration)
+            setrewardtime(s)
+        }
+        else{
+            let s = parseInt(xtime) + parseInt(timeduration)
+            setrewardtime(s)
+        }
+        
 
 
 
@@ -1111,7 +1124,7 @@ useEffect(async() =>{await fetch()},[bond, stable, time])
 
 useEffect(async() => {
     await first()
-}, [day, hour, min, sec, lock]);
+}, [rewardtime]);
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -1119,7 +1132,7 @@ function sleep(ms) {
 
 const first = async () => {
 
-    var us= time;
+    var us= rewardtime;
     var ff=new Date(us);
 setdate(ff.toDateString());
 var hours = ff.getHours();
@@ -1145,10 +1158,10 @@ var countDowndate   =us * 1000;
       var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       var seconds = Math.floor((distance % (1000 * 60)) / 1000);
         
-    //   // console.log("date e", day);
-    //   // console.log("hour e", hour);
-    //   // console.log("min e", minutes);
-    //   // console.log("sec e", seconds);
+      console.log("date e", rewardtime,day);
+      console.log("hour e", hour);
+      console.log("min e", minutes);
+      console.log("sec e", seconds);
 
       // Output the result in an element with id="demo"
      // document.getElementById("demo").innerHTML = hours + "h "
@@ -2244,9 +2257,11 @@ const claimWalletCheck = async () =>
                                         <Col md={6}>
                                             <h6><span className='text-sm text-gray-d'>Claimable Rewards: </span> {blackPurchased.userRewards?ethers.utils.formatUnits(blackPurchased.userRewards,9) :0} Black</h6>
                                             <Row className='flex-nowrap align-items-center mb-2 gx-3'>
-                                                <Col>
+                                              <Col>
 {blackPurchased.claimedTime ? 
 (<>
+{parseInt(ethers.utils.formatUnits(blackPurchased.userRewards,0)) >1e4  ? 
+  (<>
   {ethers.utils.formatUnits(blackPurchased.claimedTime,0) > 0 ? 
                                                 (<>
                                                 {(parseInt(ethers.utils.formatUnits(blackPurchased.claimedTime,0))+parseInt(TimeDuration)) <= (Math.floor(new Date().getTime() / 1000)) ? (<>
@@ -2262,6 +2277,10 @@ const claimWalletCheck = async () =>
                                                     <ButtonLoad disabled={true} className='btn w-100 btn-blue' >Claim </ButtonLoad>
                                                 </>)}
                                                 </>) }
+  </>):(<>
+    <ButtonLoad disabled={true} className='btn w-100 btn-blue' >Claim </ButtonLoad>
+  </>)}  
+  
 </>):(<>
 </>)}
                                               
@@ -2304,7 +2323,10 @@ const claimWalletCheck = async () =>
                                                     {/* <h6><span className='text-sm mb-1 d-block text-gray-d'>Pending Rewards</span> {(parseFloat(bond)/1000000).toFixed(2) === 'NaN' ? <>{0.00}</>:(parseFloat(bond)/1000000).toFixed(2)} ELEM</h6> */}
                                                 </div>
                                                 <div className='ms-4'>
-                                                    {/* <h6><span className='text-sm mb-1 d-block text-gray-d'>Time until fully vested</span> {lock == true ? (<>{day}d:{hour}h:{min}m:{sec}s</>):(<></>)} </h6> */}
+                                                    {rewardtime ? (<>
+                                                        <h6><span className='text-sm mb-1 d-block text-gray-d'>Time until for next claim</span> {lock == true ? (<>{day}d:{hour}h:{min}m:{sec}s</>):(<></>)} </h6>
+                                                    </>):(<></>)}
+                                                    
                                                 </div>
                                             </div>
                                         </Col>

@@ -16,16 +16,16 @@ import Icon9 from '../../assets/images/partners-investors-icon9.png'
 // import Shape from '../../assets/images/partners-investors-shape-2.png'
 import algorand from '../../assets/images/algorand-logo.png'
 import algorandFoundation from '../../assets/images/algorand-foundation.png'
-import mastermind from '../../assets/images/mastermind.png'
 
-const PartnersInvestors = () => {
+const PartnersInvestorsHome = () => {
     return (
-        <div className='partners-investors position-relative'>
+        <div className='position-relative py-5'>
             {/* <img src={Shape} className='partners-investors-shape' alt="shape" /> */}
-            <Container>
+            {/* <Container fluid="md">
                 <h2 className='text-center text-noshadow text-uppercase'>Partners & Investors</h2>
 
                 <Row>
+                   
                 <Col lg={6} sm={12} className='mb-4'>
                         <div className="avatar-info d-flex align-items-center">
                             <img src={algorand} alt="pic" />
@@ -38,88 +38,16 @@ const PartnersInvestors = () => {
                             <span>Algorand Foundation</span>
                         </div>
                     </Col>
-                    <Col lg={6} sm={12} className='mb-4'>
-                        <div className="avatar-info d-flex align-items-center">
-                            <img src={mastermind} alt="pic" />
-                            <span>MasterMind</span>
-                        </div>
-                    </Col>
-                {/* <Col lg={6} sm={6} className='mb-4'>
-                        <div className="avatar-info d-flex align-items-center">
-                            <img src={algorand} alt="pic" />
-                            <span>Algorand</span>
-                        </div>
-                    </Col>
-                    <Col lg={6} sm={6} className='mb-4'>
-                        <div className="avatar-info d-flex align-items-center">
-                            <img src={algorandFoundation} alt="pic" />
-                            <span>Algorand Foundation</span>
-                        </div>
-                    </Col> */}
                    
-                    {/* <Col lg={4} sm={6} className='mb-4'>
-                        <div className="avatar-info d-flex align-items-center">
-                            <img src={Icon1} alt="pic" />
-                            <span>Seascape</span>
-                        </div>
-                    </Col>
-                    <Col lg={4} sm={6} className='mb-4'>
-                        <div className="avatar-info d-flex align-items-center">
-                            <img src={Icon2} alt="pic" />
-                            <span>PolkaPet World</span>
-                        </div>
-                    </Col> */}
-                    {/* <Col lg={4} sm={6} className='mb-4'>
-                        <div className="avatar-info d-flex align-items-center">
-                            <img src={Icon3} alt="pic" />
-                            <span>Anyswap</span>
-                        </div>
-                    </Col>
-                    <Col lg={4} sm={6} className='mb-4'>
-                        <div className="avatar-info d-flex align-items-center">
-                            <img src={Icon4} alt="pic" />
-                            <span>Bwarelabs</span>
-                        </div>
-                    </Col>
-                    <Col lg={4} sm={6} className='mb-4'>
-                        <div className="avatar-info d-flex align-items-center">
-                            <img src={Icon5} alt="pic" />
-                            <span>State of the DApps</span>
-                        </div>
-                    </Col>
-                    <Col lg={4} sm={6} className='mb-4'>
-                        <div className="avatar-info d-flex align-items-center">
-                            <img src={Icon6} alt="pic" />
-                            <span>Relay Chain</span>
-                        </div>
-                    </Col>
-                    <Col lg={4} sm={6} className='mb-4'>
-                        <div className="avatar-info d-flex align-items-center">
-                            <img src={Icon7} alt="pic" />
-                            <span>QiDao</span>
-                        </div>
-                    </Col>
-                    <Col lg={4} sm={6} className='mb-4'>
-                        <div className="avatar-info d-flex align-items-center">
-                            <img src={Icon8} alt="pic" />
-                            <span>CoinGecko</span>
-                        </div>
-                    </Col>
-                    <Col lg={4} sm={12} className='mb-4'>
-                        <div className="avatar-info d-flex align-items-center">
-                            <img src={Icon9} alt="pic" />
-                            <span>CoinMarketCap</span>
-                        </div>
-                    </Col> */}
+                    
                 </Row>
-             </Container>
-            <Container>
+            </Container> */}
+            {/* <Container>
             <Row className="align-items-center justify-content-between">
                     <Col lg={6} className='mb-lg-0 mb-5'>
                     
-                        <h1 className='mb-40 text-uppercase'>Meet the worldwide community</h1>
+                        <h2 className='mb-40'>Meet the worldwide community</h2>
                        
-                        {/* <p>Join a fast-growing community of developers and innovators connected all over the world, building the new era of the internet.</p> */}
                         <div className="pt-md-5 pt-3 d-none">
                             <Link to="/" className='m-md-2 mb-3 btn-sm-full btn btn-white'>Start Staking
                                 <svg width="22" height="15" viewBox="0 0 22 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -144,10 +72,9 @@ const PartnersInvestors = () => {
                             </g>
                             </svg>
                             <h5>
-                            {/* <a href='https://t.me/ElementDeFi' target="_blank" rel="noreferrer" style={{color:"white"}}>
+                            <a href='https://t.me/ElementDeFi' target="_blank" rel="noreferrer" style={{color:"white"}}>
                             Community chat
-                            </a> */}
-                            </h5>
+                            </a></h5>
                             <p>Ask general questions and chat with the worldwide community on Telegram.</p>
                         </div>
                         <div className="social-card">
@@ -188,9 +115,9 @@ const PartnersInvestors = () => {
                         </div>
                     </Col>
                 </Row>
-            </Container>
+            </Container> */}
         </div>
     );
 };
 
-export default PartnersInvestors;
+export default PartnersInvestorsHome;
