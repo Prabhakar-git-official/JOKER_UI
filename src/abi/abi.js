@@ -7149,98 +7149,6 @@ export const BlackAbi =[
 
 export const BondAbi=[
 	{
-		"inputs": [],
-		"name": "claim",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "depositDAI",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "rebase",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_timeDuration",
-				"type": "uint256"
-			}
-		],
-		"name": "setClaimDuration",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bool",
-				"name": "_value",
-				"type": "bool"
-			}
-		],
-		"name": "setEmergencyLock",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_lastEpoch",
-				"type": "uint256"
-			}
-		],
-		"name": "setepochHours",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_maxthreshold",
-				"type": "uint256"
-			}
-		],
-		"name": "setMaxThreshold",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_treasury",
-				"type": "address"
-			}
-		],
-		"name": "setTreasuryAddress",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -7273,6 +7181,58 @@ export const BondAbi=[
 	},
 	{
 		"inputs": [],
+		"name": "JUSD",
+		"outputs": [
+			{
+				"internalType": "contract FraxPoolV3",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "Max_threshold",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "PRICE_PRECISION",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "Treasury",
+		"outputs": [
+			{
+				"internalType": "contract ITreasuryContract",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "chainlink_dai_usd_decimals",
 		"outputs": [
 			{
@@ -7286,6 +7246,13 @@ export const BondAbi=[
 	},
 	{
 		"inputs": [],
+		"name": "claim",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "daiToken",
 		"outputs": [
 			{
@@ -7295,6 +7262,19 @@ export const BondAbi=[
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "depositDAI",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -7338,19 +7318,6 @@ export const BondAbi=[
 	},
 	{
 		"inputs": [],
-		"name": "JUSD",
-		"outputs": [
-			{
-				"internalType": "contract FRAXStablecoin",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "lastEpoch",
 		"outputs": [
 			{
@@ -7377,38 +7344,12 @@ export const BondAbi=[
 	},
 	{
 		"inputs": [],
-		"name": "Max_threshold",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "owner",
 		"outputs": [
 			{
 				"internalType": "address",
 				"name": "",
 				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "PRICE_PRECISION",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -7425,6 +7366,78 @@ export const BondAbi=[
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "rebase",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_timeDuration",
+				"type": "uint256"
+			}
+		],
+		"name": "setClaimDuration",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bool",
+				"name": "_value",
+				"type": "bool"
+			}
+		],
+		"name": "setEmergencyLock",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_maxthreshold",
+				"type": "uint256"
+			}
+		],
+		"name": "setMaxThreshold",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_treasury",
+				"type": "address"
+			}
+		],
+		"name": "setTreasuryAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_lastEpoch",
+				"type": "uint256"
+			}
+		],
+		"name": "setepochHours",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -7448,19 +7461,6 @@ export const BondAbi=[
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "Treasury",
-		"outputs": [
-			{
-				"internalType": "contract ITreasuryContract",
-				"name": "",
-				"type": "address"
 			}
 		],
 		"stateMutability": "view",
@@ -8423,7 +8423,10 @@ export const DIMEAddress = "0x988FD5766D1E00C49D1d887f9190D1515732c016";
 export const DAIAddress = "0xf04Baae45502005C33400365e55314D22d5Aed45";
 export const BLACKAddress = "0xe1A72F9A83DDF729759A3Bf334766b9373b7fC2C";
 
-export const BondAddress = "0x816fD862562ca9baa2FE9d01E7a98EB390Ca6c1D";
-export const TreasuryAddress ="0x96457A7CAd68e5c89DB1c227DDc930d405544a9a";
+export const BondAddress = "0x418F4AB414Ae7A70E30De2A7043ED9213b313b36";
+export const TreasuryAddress ="0x2c8d9d7d6cAcC5d53BcC056522A8f86440396619";
 
 export const DimeStakingAddress = "0x5068869d9F5F6b8b0555428b003D9Bf84729281c";
+export const BlackStakingAddress = "0x95DD3D597e8aEaDBb9a054eAd99C5d66Ed5cA589";
+
+export const CommunityWallet = "0xdc61dE4fED82E2CDbC5E31156c4dA41389Ae1e22";
