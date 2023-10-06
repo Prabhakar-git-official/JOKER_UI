@@ -54,11 +54,11 @@ const Footer = () => {
                         <Button variant="primary" >TestNet Guide</Button></a>
                         </Col>
                         <Col sm="4" className='py-sm-4 py-2'>
-                        <a href="https://discord.com/invite/urquv6EWYs" target="_blank" rel="noopener noreferrer"><Button variant="primary">Discord</Button></a>
+                        <a href="https://discord.gg/2xTjCqFZ" target="_blank" rel="noopener noreferrer"><Button variant="primary">Discord</Button></a>
                         </Col>
-                        <Col sm="4" className='py-sm-4 py-2'>
+                        {/* <Col sm="4" className='py-sm-4 py-2'>
                         <a href="https://t.me/ElementDeFi" target="_blank" rel="noopener noreferrer"><Button variant="primary">Telegram</Button></a>
-                        </Col>
+                        </Col> */}
                     </Row>
 
                     <hr className='mb-3' />

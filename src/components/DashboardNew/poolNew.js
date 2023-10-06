@@ -1215,8 +1215,8 @@ try {
                     >
                         <Tab eventKey="main" title="Main Pool">
                             <PoolChild />
-                            {/* <PoolChild2 />
-                            <PoolChild3 /> */}
+                            <PoolChild2 />
+                            {/* <PoolChild3 /> */}
                             {/* <PoolChild />
                             <PoolChild /> */}
                         </Tab>

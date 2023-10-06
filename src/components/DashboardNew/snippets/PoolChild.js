@@ -8,7 +8,9 @@ import { dualwalletconnect } from '../walletconnection';
 import algosdk, { Algod ,encodeUint64} from "algosdk";
 import ButtonLoad from 'react-bootstrap-button-loader';
 import node from '../nodeapi.json';
-import elemlogo from '../../../assets/images/elem-original.png';
+// import elemlogo from '../../../assets/images/elem-original.png';
+import elemlogo from '../../../assets/images/dime.jpeg';
+// import blackLogo from '../../../assets/images/black.jpeg';
 import axios from "axios";
 import MyAlgoConnect from '@randlabs/myalgo-connect';
 import { ToastContainer, Toast, Zoom, Bounce, toast} from 'react-toastify';
@@ -58,9 +60,12 @@ function PoolChild() {
     const[mystaked,setmystaked] = useState([])
     const[allowan,setAllowance] = useState("")
     const[myBalance,setmyBalance] = useState("")
+    const[Myreward,setMyreward] = useState("")
+    const[unstakeTime,setunstakeTime] = useState("")
+
     
 
-    console.log("mystaed",mystaked)
+    console.log("unstakeTime",unstakeTime)
 
     useEffect(()=>{displayValueCalculation()},[])
 
@@ -80,10 +85,15 @@ function PoolChild() {
           let Totalstakedamount =  ethers.utils.formatUnits(await dimeContract.balanceOf(DimeStakingAddress),0);
           let MyStakedamount = await dimeStakingContract.userInfo(localStorage.getItem("walletAddress"));
           let DIMEBlance = ethers.utils.formatUnits(await dimeContract.balanceOf(localStorage.getItem("walletAddress")),0);
+          let myRewards = ethers.utils.formatUnits(await dimeStakingContract.pendingBlack(localStorage.getItem("walletAddress")),0);
+          let unstakeremainingtime = ethers.utils.formatUnits(await dimeStakingContract.holderUnstakeRemainingTime(localStorage.getItem("walletAddress")),0);
+
 
           setTotalStakedAmount(Totalstakedamount);
           setmystaked(MyStakedamount);
           setmyBalance(DIMEBlance)
+          setMyreward(myRewards)
+          setunstakeTime(unstakeremainingtime)
 
           let allowance =  ethers.utils.formatUnits(await dimeContract.allowance(localStorage.getItem("walletAddress"),DimeStakingAddress),0);
           console.log("allowance", allowance)
@@ -1185,9 +1195,17 @@ function PoolChild() {
                             disabled={ptpptpoptin}
                               onClick={()=>clickevent("Withdraw")} >Unstake</Button>
                               </>):(<> */}
+                              {parseInt(unstakeTime) <= (Math.floor(new Date().getTime() / 1000)) ?
+                               (<>
                                 <Button variant="blue" 
                             // disabled={true}
                               onClick={()=>clickevent("Withdraw")} >Unstake</Button>
+                               </>):(<>
+                                <Button variant="blue" 
+                            disabled={true}
+                              onClick={()=>clickevent("Withdraw")} >Unstake</Button>
+                               </>)}
+                               
                               {/* </>)} */}
                           
                         </Stack>
@@ -1259,11 +1277,11 @@ function PoolChild() {
                         </div>
                         <span className="text-muted me-1">Rewards Earned:</span><span className="me-1">
                             {/* {claimamount  && stakedAmount > 1 ?parseFloat(claimamount/1000000).toFixed(6):"0.0"} */}
-                            {mystaked.rewardDebt?parseFloat(ethers.utils.formatUnits(mystaked.rewardDebt,18)):'0.0'}
+                            {Myreward?parseFloat(Myreward/1e18).toFixed(6):'0.0'}
                             </span>
-                            {mystaked.rewardDebt ? 
+                            {Myreward? 
                             (<>
-                             {ethers.utils.formatUnits(mystaked.rewardDebt,0) > 10000000000000 ?
+                             {Myreward > 1e13 ?
                        (<>
                        <ButtonLoad loading={loader1} variant="blue" 
                         // disabled={true}

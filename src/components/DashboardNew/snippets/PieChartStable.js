@@ -4,7 +4,7 @@ import node from '../nodeapi.json';
 import dashboardDetails from '../../Dashboard/stablecoin.json';
 
 const algosdk = require('algosdk');
-const PieChart = () => {
+const PieChart = ({x}) => {
     const [elemCir, setElemCir] = useState();
     const [reserve, setReserve] = useState();
     const [circulating, setCirculating] = useState();
@@ -32,7 +32,7 @@ const PieChart = () => {
         } 
     }
 
-    const series1 = [99, 1];
+    const series1 = [100, x];
     const options1 = {
         chart: {
             height: 350,

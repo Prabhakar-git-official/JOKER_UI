@@ -266,32 +266,32 @@ const HotCollections = () => {
                     static // default false
                 >
                     <div className='carousel-cell'>                       
-                        <a href='https://twitter.com/ElementDeFi' target="_blank" rel="noopener noreferrer">                                                                    
+                        <a href='https://twitter.com/Jok3rFi' target="_blank" rel="noopener noreferrer">                                                                    
                             <img className='img-fluid' src={banner1}/>
                         </a>                        
                     </div>
                     <div className='carousel-cell'>
-                        <a href='https://twitter.com/ElementDeFi' target="_blank" rel="noopener noreferrer">                                                                    
+                        <a href='https://twitter.com/Jok3rFi' target="_blank" rel="noopener noreferrer">                                                                    
                             <img className='img-fluid' src={banner1}/>
                         </a>
                     </div>
                     <div className='carousel-cell'>
-                        <a href='https://twitter.com/ElementDeFi' target="_blank" rel="noopener noreferrer">                                                                                                
+                        <a href='https://twitter.com/Jok3rFi' target="_blank" rel="noopener noreferrer">                                                                                                
                             <img className='img-fluid' src={banner1}/>
                         </a>
                     </div>
                     <div className='carousel-cell'>
-                        <a href='https://twitter.com/ElementDeFi' target="_blank" rel="noopener noreferrer">                                                                    
+                        <a href='https://twitter.com/Jok3rFi' target="_blank" rel="noopener noreferrer">                                                                    
                         <img className='img-fluid' src={banner1}/>
                         </a>
                     </div>
                     <div className='carousel-cell'>
-                        <a href='https://twitter.com/ElementDeFi' target="_blank" rel="noopener noreferrer">                                                                    
+                        <a href='https://twitter.com/Jok3rFi' target="_blank" rel="noopener noreferrer">                                                                    
                         <img className='img-fluid' src={banner1}/>
                         </a>
                     </div>
                     <div className='carousel-cell'>
-                        <a href='https://twitter.com/ElementDeFi' target="_blank" rel="noopener noreferrer">                                                                    
+                        <a href='https://twitter.com/Jok3rFi' target="_blank" rel="noopener noreferrer">                                                                    
                         <img className='img-fluid' src={banner1}/>
                         </a>
                     </div>
