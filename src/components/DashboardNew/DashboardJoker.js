@@ -72,7 +72,7 @@ const Dashboard = () => {
 
     
 
-
+//algorand
 
     const algodClientGet = new algosdk.Algodv2('', node['algodclient'], '');
     
