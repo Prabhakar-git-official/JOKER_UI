@@ -87,6 +87,8 @@ const Dashboard = () => {
         const elemTotalSupply = 18446744073709.551615;
         const einrTotalSupply = 18446744073709.551615;
 
+
+        // solidity
     useEffect(async() => {
         await cir();
     }, []);
