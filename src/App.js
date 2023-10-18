@@ -51,6 +51,8 @@ import RedeemApp from './components/DashboardNew/StablecoinRedeem';
 import DashboardApp from './components/DashboardNew/Dashboard';
 import DashboardMainApp from './components/DashboardNew/DashboardJoker';
 import AdminPage from './components/DashboardNew/AdminPage';
+import VaultPage from './components/DashboardNew/VaultPage';
+
 import BondApp from './components/DashboardNew/Bonds';
 
 export const DataContext = createContext();
@@ -88,6 +90,9 @@ function App() {
         </Route>
         <Route path="/adminPage">
           <AdminPage />
+        </Route>
+        <Route path="/vault">
+          <VaultPage />
         </Route>
         
         <Route path="/bond">
