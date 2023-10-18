@@ -209,7 +209,7 @@ const Stablecoin = () => {
       }
 
       const depositETH = async() =>{
-        if(parseFloat(DepositAmount) >= parseFloat(0.01)){
+        if(parseFloat(DepositAmount) >= parseFloat(0.1)){
             handleShowMint();
             try{
                 const web31 = await connectToEthereum();
@@ -246,7 +246,7 @@ const Stablecoin = () => {
             }
         }
         else{
-            toast.error("Try to deposit greater than 0.01");
+            toast.error("Try to deposit greater than 0.1");
         }
        
     
