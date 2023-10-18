@@ -72,7 +72,7 @@ const Dashboard = () => {
 
     
 
-//algorand
+
 
     const algodClientGet = new algosdk.Algodv2('', node['algodclient'], '');
     
@@ -87,8 +87,6 @@ const Dashboard = () => {
         const elemTotalSupply = 18446744073709.551615;
         const einrTotalSupply = 18446744073709.551615;
 
-
-        // solidity
     useEffect(async() => {
         await cir();
     }, []);
@@ -145,7 +143,7 @@ const Dashboard = () => {
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
      }
-    //changed the hours display for rebase
+    
     const first = async () => {
     
         var us= nextrebasetime;
