@@ -57,7 +57,7 @@ const Dashboard = () => {
         const tauTotalSupply = 18446744073709.551615;
         const elemTotalSupply = 18446744073709.551615;
         const einrTotalSupply = 18446744073709.551615;
-//use effect for algorand part
+
     useEffect(async() => {
         await cir();
     }, [tauCir, einrCir, elemCir, usdcFee]);
