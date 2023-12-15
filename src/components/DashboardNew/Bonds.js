@@ -544,8 +544,8 @@ const claimWalletCheck = async () =>
 const changeInputValue = async(value) =>{
     setBondAmount(value*1e9);
     //blackvalue = ((1-cPercentage)*(daiAmount*daiPrice)) / (cPercentage*blackPrice)
-    let calculatedValue = ((1-90)*(value*1e9*USDCPrice))/(90*JokerPrice);
-    console.log("calculated",calculatedValue,Math.abs(calculatedValue));
+    let calculatedValue = ((1-0.9)*(value*1e9*USDCPrice))/(0.9*JokerPrice);
+    console.log("calculated",calculatedValue,Math.abs(calculatedValue)*JokerPrice,value*1e9*USDCPrice);
     setJokerInput((Math.abs(calculatedValue)));
     
 }
