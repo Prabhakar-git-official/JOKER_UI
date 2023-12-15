@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import USDC from '../../assets/images/usdc.jpg';
 import MyAlgoConnect from '@randlabs/myalgo-connect';
 import { ToastContainer, Toast, Zoom, Bounce, toast} from 'react-toastify';
+import dimeLogo from '../../assets/images/dime.jpeg';
 import Logo from '../../assets/images/modal-logo.png';
 import Arrow from '../../assets/images/arrow-tr.svg';
 import daiLogo from '../../assets/images/dai.jpeg';
@@ -17,7 +18,7 @@ import WalletConnect from "@walletconnect/client";
 import QRCodeModal from "algorand-walletconnect-qrcode-modal";
 import { formatJsonRpcRequest } from "@json-rpc-tools/utils";
 import { updatealgobalance } from "../formula";
-import { BondAbi, BondAddress, DAIAddress, DaiAbi, JUSDAbi, JUSDAddress, JUSDPoolAbi, JUSDPoolAddress, TreasuryAbi, TreasuryAddress } from '../../abi/abi';
+import { BondAbi, BondAddress, CREDITChainlinkAddress, ChainLinkABi, DAIAddress, DIMEAddress, DIMEChainlinkAddress, DaiAbi, DimeAbi, DimeContractABI, JOKERAddress, JOKERCOntractABI, JOKERChainlinkAddress, JUSDAbi, JUSDAddress, JUSDPoolAbi, JUSDPoolAddress, TreasuryAbi, TreasuryAddress, TreasuryContractABI, USDCAddress, USDCChainlinkAddress, USDCContractABI } from '../../abi/abi';
 import { ethers } from 'ethers';
 /* global BigInt */
 
@@ -90,6 +91,7 @@ const Bond = () => {
     const [usdcBalances, setUsdcBalances] = useState("");
     const [elemBalances, setElemBalances] = useState("");
     const [bondAmount, setBondAmount] = useState("");
+    const[JokerInput,setJokerInput] = useState("");
     const [elemGet, setElemGet] = useState("");
     const [minAlgo, setMinAlgo] = useState("");
     const [bondHard, setBondHard] = React.useState("");
@@ -103,10 +105,23 @@ const Bond = () => {
     const [daiPrice,setdaiPrice] = useState("");  
     const [blackPurchased,setblackPurchased] = useState([]);  
     const[allowan,setAllowance] = useState("")
+    const[allowan2,setAllowance2] = useState("")
     const[daiBlance,setdaiBlance] = useState("")
+    const[JokerBlance,setJokerBlance] = useState("");
     const [rewardtime,setrewardtime] = useState("");
-    
+
+    const[dimePrice,setdimePrice] = useState("")
+     const[JokerPrice,setJokerPrice] = useState("")
+     const[USDCPrice,setUSDCPrice] = useState("")
+   
+
+    const[ClaimedTime,setClaimedTime] = useState("")
+    const[DepoitTime,setDepoitTime] = useState("")
+    const[UserReward,setUserReward] = useState("")   
+    console.log("req",UserReward)
+    const[ClaimedAmount,setClaimedAmount] = useState("");  
     const[TimeDuration,setTimeDuration] = useState("")
+    const[TreasuryDollarvalue,setTreasuryDollarvalue] = useState("")
     console.log("time",Math.floor(new Date().getTime() / 1000),blackPurchased.depositTime? parseInt(ethers.utils.formatUnits(blackPurchased.depositTime,0))+120 :0)
 
     //// console.log("mapSet", map1);
@@ -127,40 +142,49 @@ const Bond = () => {
           console.log("useeffect")
           const provider = new ethers.providers.Web3Provider(window.ethereum)
           // console.log("Connected Successfully", account);
-  
-          // Create contract instance with the correct order of arguments
-          const JusdContract = new ethers.Contract(JUSDAddress, JUSDAbi, provider);
-          const daiContract = new ethers.Contract(DAIAddress, DaiAbi, provider);
-          const TresuryContract = new ethers.Contract(TreasuryAddress, TreasuryAbi, provider);
-          const BondContract = new ethers.Contract(BondAddress, BondAbi, provider);
+        //new code
 
-          let trasuryBlackBalance =  ethers.utils.formatUnits(await TresuryContract.getBlackBalance(TreasuryAddress),0);
-          let blackprice =  ethers.utils.formatUnits(await JusdContract.black_price(),0);
-          let daiprice = ethers.utils.formatUnits(await BondContract.getDAIPrice(),0);
+        const DimePriceContract = new ethers.Contract(DIMEChainlinkAddress, ChainLinkABi, provider);
+        const USDCPriceContract = new ethers.Contract(USDCChainlinkAddress, ChainLinkABi, provider);
+        const JokerPriceContract = new ethers.Contract(JOKERChainlinkAddress, ChainLinkABi, provider);
+        const CreditPriceContract = new ethers.Contract(CREDITChainlinkAddress, ChainLinkABi, provider);
+        const DimeContract = new ethers.Contract(DIMEAddress, DimeContractABI, provider);
+        const USDCContract = new ethers.Contract(USDCAddress, USDCContractABI, provider);
+        const TreasuryContract = new ethers.Contract(TreasuryAddress, TreasuryContractABI, provider);
+        const JOKERContract = new ethers.Contract(JOKERAddress, JOKERCOntractABI, provider);
 
-          let timeduration = ethers.utils.formatUnits(await BondContract.timeDuration(),0);
-          setTimeDuration(timeduration);
-          
-          let blackpurchased = await BondContract.users(localStorage.getItem("walletAddress"));
+        let dimeprice = ethers.utils.formatUnits(await DimePriceContract.getChainlinkDataFeedLatestAnswer(),0);
+       console.log("dimePrice",dimeprice)
+        let usdcprice = ethers.utils.formatUnits(await USDCPriceContract.getChainlinkDataFeedLatestAnswer(),0);
 
-          settreasurBalance(trasuryBlackBalance);
-          setblackPrice(blackprice);
-          setdaiPrice(daiprice);
-          setblackPurchased(blackpurchased);
-
-          let allowance =  ethers.utils.formatUnits(await daiContract.allowance(localStorage.getItem("walletAddress"),BondAddress),0);
-          console.log("allowance", allowance)
-          setAllowance(allowance);
-
-          let daibalance = ethers.utils.formatUnits(await daiContract.balanceOf(localStorage.getItem("walletAddress")),0);
-          setdaiBlance(daibalance)  
-          console.log("Bond",trasuryBlackBalance,blackprice,daiprice,blackpurchased)
-        //   let blackpurchased = ethers.utils.formatUnits
+        // let jokerPrice = ethers.utils.formatUnits(await DimePriceContract.getChainlinkDataFeedLatestAnswer(),0);
+        let jokerPrice = 10 * 10e8;//for now it is given as 10$
+        let Creditprice = ethers.utils.formatUnits(await CreditPriceContract.getChainlinkDataFeedLatestAnswer(),0);
+        setdimePrice(dimeprice);
+        setJokerPrice(jokerPrice);
+        setUSDCPrice(usdcprice) 
         
+        let allowance =  ethers.utils.formatUnits(await USDCContract.allowance(localStorage.getItem("walletAddress"),DIMEAddress),0);
+        console.log("allowance", allowance)
+        setAllowance(allowance);
+        let allowance2 =  ethers.utils.formatUnits(await JOKERContract.allowance(localStorage.getItem("walletAddress"),DIMEAddress),0);
+        console.log("allowance", allowance)
+        setAllowance2(allowance2);
+
+        let timeduration = ethers.utils.formatUnits(await DimeContract.timeDuration(),0);
+        setTimeDuration(timeduration);          
+        let blackpurchased = await DimeContract.users(localStorage.getItem("walletAddress"));
+        setblackPurchased(blackpurchased);
+
+        setClaimedTime(ethers.utils.formatUnits(blackpurchased.claimedTime,0))
+        setDepoitTime(ethers.utils.formatUnits(blackpurchased.depositTime,0));
+        setUserReward(ethers.utils.formatUnits(blackpurchased.userRewards,0))
+        console.log("userRewards",ethers.utils.formatUnits(blackpurchased.userRewards,0))
+        setClaimedAmount(ethers.utils.formatUnits(blackpurchased.claimedAmount,0))
+        console.log("blackpurchased",blackPurchased);
         let rtime = ethers.utils.formatUnits(blackpurchased.claimedTime,0);
         let xtime = ethers.utils.formatUnits(blackpurchased.depositTime,0);
-        
-        if(rtime > 0){
+          if(rtime > 0){
             let s = parseInt(rtime) + parseInt(timeduration)
             setrewardtime(s)
         }
@@ -168,6 +192,61 @@ const Bond = () => {
             let s = parseInt(xtime) + parseInt(timeduration)
             setrewardtime(s)
         }
+
+        let daibalance = ethers.utils.formatUnits(await USDCContract.balanceOf(localStorage.getItem("walletAddress")),0);
+          setdaiBlance(daibalance)  
+          let Jokerbalance = ethers.utils.formatUnits(await JOKERContract.balanceOf(localStorage.getItem("walletAddress")),0);
+          setJokerBlance(Jokerbalance)  
+
+
+        let TrdimeBalance = ethers.utils.formatUnits(await TreasuryContract.getDimeBalance(),0)
+        let TrUSDTBalance = ethers.utils.formatUnits(await TreasuryContract.getUsdtBalance(),0)
+
+        let treasuryTotalValueinUSD = TrdimeBalance*dimeprice + TrUSDTBalance*usdcprice
+        setTreasuryDollarvalue(treasuryTotalValueinUSD);
+    
+        //old one
+  
+          // Create contract instance with the correct order of arguments
+        //   const JusdContract = new ethers.Contract(JUSDAddress, JUSDAbi, provider);
+        //   const daiContract = new ethers.Contract(DAIAddress, DaiAbi, provider);
+        //   const TresuryContract = new ethers.Contract(TreasuryAddress, TreasuryAbi, provider);
+        //   const BondContract = new ethers.Contract(BondAddress, BondAbi, provider);
+
+        //   let trasuryBlackBalance =  ethers.utils.formatUnits(await TresuryContract.getBlackBalance(TreasuryAddress),0);
+        //   let blackprice =  ethers.utils.formatUnits(await JusdContract.black_price(),0);
+        //   let daiprice = ethers.utils.formatUnits(await BondContract.getDAIPrice(),0);
+
+        //   let timeduration = ethers.utils.formatUnits(await BondContract.timeDuration(),0);
+        //   setTimeDuration(timeduration);
+          
+        //   let blackpurchased = await BondContract.users(localStorage.getItem("walletAddress"));
+
+        //   settreasurBalance(trasuryBlackBalance);
+        //   setblackPrice(blackprice);
+        //   setdaiPrice(daiprice);
+        //   setblackPurchased(blackpurchased);
+
+        //   let allowance =  ethers.utils.formatUnits(await daiContract.allowance(localStorage.getItem("walletAddress"),BondAddress),0);
+        //   console.log("allowance", allowance)
+        //   setAllowance(allowance);
+
+        //   let daibalance = ethers.utils.formatUnits(await daiContract.balanceOf(localStorage.getItem("walletAddress")),0);
+        //   setdaiBlance(daibalance)  
+        //   console.log("Bond",trasuryBlackBalance,blackprice,daiprice,blackpurchased)
+        // //   let blackpurchased = ethers.utils.formatUnits
+        
+        // let rtime = ethers.utils.formatUnits(blackpurchased.claimedTime,0);
+        // let xtime = ethers.utils.formatUnits(blackpurchased.depositTime,0);
+        
+        // if(rtime > 0){
+        //     let s = parseInt(rtime) + parseInt(timeduration)
+        //     setrewardtime(s)
+        // }
+        // else{
+        //     let s = parseInt(xtime) + parseInt(timeduration)
+        //     setrewardtime(s)
+        // }
         
 
 
@@ -185,10 +264,6 @@ const Bond = () => {
 // }
 
 // const algodClientGet = new algosdk.Algodv2(token, baseServer, port);
-const algodClientGet = new algosdk.Algodv2('', node['algodclient'], '');
-
-    const algodClient = new algosdk.Algodv2('', node['algodclient'], '');
-    const indexClient = new algosdk.Indexer('', node['indexerclient'], '');
 
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -197,37 +272,13 @@ const algodClientGet = new algosdk.Algodv2('', node['algodclient'], '');
      const toastDiv = (txId) =>
     (
         <div>
-            <p> Transaction is successful &nbsp;<a style={{color:'#133ac6'}} href={txId} target="_blank" rel="noreferrer"><br/><p style={{fontWeight: 'bold'}}>View in Algo Explorer <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <p> Transaction is successful &nbsp;<a style={{color:'#133ac6'}} href={txId} target="_blank" rel="noreferrer"><br/><p style={{fontWeight: 'bold'}}>View in Sepolia Explorer <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
      <path d="M11.7176 3.97604L1.69366 14L0.046875 12.3532L10.0697 2.32926H1.23596V0H14.0469V12.8109H11.7176V3.97604Z" fill="#133ac6"/>
      </svg></p></a></p>  
         </div>
     );
 
-    const waitForConfirmation = async function (client, txId) {
-        let status = (await client.status().do());
-        let lastRound = status["last-round"];
-          while (true) {
-            const pendingInfo = await client.pendingTransactionInformation(txId).do();
-            if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
-              //Got the completed Transaction
-            //   // console.log("Transaction " + txId + " confirmed in round " + pendingInfo["confirmed-round"]);
-            // toast.success(`Transaction ${txId} is successful and confirmed in round ${pendingInfo["confirmed-round"]}`);
-            let id = "https://testnet.algoexplorer.io/tx/" + txId;
-            toast.success(toastDiv(id));
-            handleHideLoadPurchase();
-            handleHideLoadAppOpt();
-            handleHideLoadAssetOpt();
-            handleHideLoadClaim();
-            handleHideLoadUsdcFund();
-            await updatealgobalance();
-            // await sleep(5000);
-            // reload();  
-            break;
-            }
-            lastRound++;
-            await client.statusAfterBlock(lastRound).do();
-          }
-        };  
+    
 
 //         useEffect(async() => {
 //             await TreasuryBalance()
@@ -240,887 +291,13 @@ const algodClientGet = new algosdk.Algodv2('', node['algodclient'], '');
 // }
 
 
-const myAlgoOptIn = async () =>
-{
-    handleShowLoadAppOpt();
-    if(localStorage.getItem("userType") === "login")
-    {
-    let settings = {
-        shouldSelectOneAccount: true,
-        openManager: true
-    }
-    let account = await myAlgoWallet.connect(settings);
-        if (account[0].address != localStorage.getItem("walletAddress"))
-        {
-            toast.error(`Select this address ${localStorage.getItem("walletAddress")}`);
-            handleHideLoadAppOpt();
-        }
-    }
-    if (localStorage.getItem("walletAddress") === "")
-        {
-            toast.error("Connect your wallet");
-            handleHideLoadAppOpt();
-        }
-        else{
-            if(parseFloat(minAlgo) < 101000 + 85500)
-            {
-                toast.error("Your Algo balance is low. Please get more Algos from dispenser.")
-                handleHideLoadAppOpt();
-            }
-            else
-            {
-//   let application = indexClient.searchForApplications(appID_global);
-//   // console.log("Global State =", application);
-//   let appById = await algodClient.getApplicationByID(appID_global).do();
-//   // console.log("Global State =", appById.params);
-  let params = await algodClient.getTransactionParams().do();
 
-  try {
-
-    const txn = algosdk.makeApplicationOptInTxnFromObject({
-        suggestedParams:params,
-        from: localStorage.getItem("walletAddress"),
-        appIndex: parseInt(appID_global),
-    });
-
-    const signedTxn = await myAlgoWallet.signTransaction(txn.toByte());
-    //toast.info("Transaction in Progress");
-    const response = await algodClient.sendRawTransaction(signedTxn.blob).do();
-    await waitForConfirmation(algodClient, response.txId);
-    setToAppOpt(true);
-    await minBal();
-    //toast.success(`Transaction Success ${response.txId}`);
-}
-catch (err) {
-    toast.error(err.toString());
-    handleHideLoadAppOpt();
-    console.error(err);
-}
-            }
-        }
-}
-
-const appOptInPera = async () =>
-  {
-    const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
-    setConnector(connector);
-    handleShowLoadAppOpt();
-    if (localStorage.getItem("walletAddress") === "")
-        {
-            toast.error("Connect your wallet");
-            handleHideLoadAppOpt();
-        }
-        else{
-            if(parseFloat(minAlgo) < 101000 + 85500)
-            {
-                toast.error("Your Algo balance is low. Please get more Algos from dispenser.")
-                handleHideLoadAppOpt();
-            }
-            else
-            {
-//   let application = indexClient.searchForApplications(appID_global);
-//   // console.log("Global State =", application);
-//   let appById = await algodClient.getApplicationByID(appID_global).do();
-//   // console.log("Global State =", appById.params);
-  let params = await algodClient.getTransactionParams().do();
-
-  try {
-
-    const txn = algosdk.makeApplicationOptInTxnFromObject({
-        suggestedParams:params,
-        from: localStorage.getItem("walletAddress"),
-        appIndex: parseInt(appID_global),
-    });
-      let txId = txn.txID().toString();
-  
-      // time to sign . . . which we have to do with walletconnect
-      const txns = [txn]
-      const txnsToSign = txns.map(txn => {
-        const encodedTxn = Buffer.from(algosdk.encodeUnsignedTransaction(txn)).toString("base64");
-        return {
-          txn: encodedTxn,
-      };
-    });
-    const requestParams = [ txnsToSign ];
-    const request = formatJsonRpcRequest("algo_signTxn", requestParams);
-  
-    const result = await connector.sendCustomRequest(request);
-    const decodedResult = result.map(element => {
-      return element ? new Uint8Array(Buffer.from(element, "base64")) : null;
-    });
-      // send and await
-      await algodClient.sendRawTransaction(decodedResult).do();
-      await waitForConfirmation(algodClient, txId);
-      setToAppOpt(true);
-      await minBal();
-    }catch(err) {
-        toast.error(err.toString());
-        handleHideLoadAppOpt();
-        console.error(err);
-    }
-    }
-    }
-  }
-
-  const myAlgoOptInAsset = async () => {
-    handleShowLoadAssetOpt();
-        if(localStorage.getItem("userType") === "login")
-    {
-    let settings = {
-        shouldSelectOneAccount: true,
-        openManager: true
-    }
-    let account = await myAlgoWallet.connect(settings);
-        if (account[0].address != localStorage.getItem("walletAddress"))
-        {
-            toast.error(`Select this address ${localStorage.getItem("walletAddress")}`);
-            handleHideLoadAppOpt();
-        }
-    }
-    if (localStorage.getItem("walletAddress") === "")
-        {
-            toast.error("Connect your wallet");
-            handleHideLoadAssetOpt();
-        }
-        else{
-            if(parseFloat(minAlgo) < 101000)
-            {
-                toast.error("Your Algo balance is low. Please get more Algos from dispenser.")
-                handleHideLoadAssetOpt();
-            }
-            else
-            {
-  
-  let params = await algodClient.getTransactionParams().do();
-  
-  try {
-
-    const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        suggestedParams: params,
-        from: localStorage.getItem("walletAddress"),
-        to: localStorage.getItem("walletAddress"),
-        amount: 0,
-        assetIndex: elemID
-    });
-
-    const signedTxn = await myAlgoWallet.signTransaction(txn.toByte());
-    const response = await algodClient.sendRawTransaction(signedTxn.blob).do();
-    //toast.success(`Transaction Success ${response.txId}`);
-    await waitForConfirmation(algodClient, response.txId);
-    setToAssetOpt(true);
-    await minBal();
-}
-catch (err) {
-    handleHideLoadAssetOpt();
-    toast.error(err.toString());
-    console.error(err);
-
-}
-        }
-    }
-}
-
-const assetOptInPera = async () =>
-  {
-    const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
-    setConnector(connector);
-    handleShowLoadAssetOpt();
-    if (localStorage.getItem("walletAddress") === "")
-        {
-            toast.error("Connect your wallet");
-            handleHideLoadAssetOpt();
-        }
-        else{
-            if(parseFloat(minAlgo) < 101000)
-            {
-                toast.error("Your Algo balance is low. Please get more Algos from dispenser.")
-                handleHideLoadAssetOpt();
-            }
-            else
-            {
-  
-  let params = await algodClient.getTransactionParams().do();
-  
-  try {
-
-    const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        suggestedParams: params,
-        from: localStorage.getItem("walletAddress"),
-        to: localStorage.getItem("walletAddress"),
-        amount: 0,
-        assetIndex: elemID
-    });
-      let txId = txn.txID().toString();
-  
-      // time to sign . . . which we have to do with walletconnect
-      const txns = [txn]
-      const txnsToSign = txns.map(txn => {
-        const encodedTxn = Buffer.from(algosdk.encodeUnsignedTransaction(txn)).toString("base64");
-        return {
-          txn: encodedTxn,
-      };
-    });
-    const requestParams = [ txnsToSign ];
-    const request = formatJsonRpcRequest("algo_signTxn", requestParams);
-  
-    const result = await connector.sendCustomRequest(request);
-    const decodedResult = result.map(element => {
-      return element ? new Uint8Array(Buffer.from(element, "base64")) : null;
-    });
-      // send and await
-      await algodClient.sendRawTransaction(decodedResult).do();
-      await waitForConfirmation(algodClient, txId);
-      setToAssetOpt(true);
-      await minBal();
-    }catch (err) {
-        handleHideLoadAssetOpt();
-        toast.error(err.toString());
-        console.error(err);
-    }
-    }
-    }
-  }
-
-
-                const myAlgoWalletExchange =async () => {
-                // if(((parseFloat(stable)/1000000).toFixed(2) === 0.00 && (parseFloat(bond)/1000000).toFixed(2) === 0.00) || ((parseFloat(stable)/1000000).toFixed(2) === 'NaN' && (parseFloat(bond)/1000000).toFixed(2) === 'NaN'))
-                // {
-                    handleShowLoadPurchase();
-                    let Pop_amount = bondAmount;
-                    if(Pop_amount === "")
-                    {
-                        toast.error("Input field should not be left empty. Please enter some values");
-                        handleHideLoadPurchase();
-                    } 
-                    else
-                    {  
-                    // const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
-                    if (localStorage.getItem("walletAddress") === "")
-                    {
-                        toast.error("Connect your wallet");
-                        handleHideLoadPurchase();
-                    }
-                    else{
-                        if(appOpt === false)
-                        {
-                            toast.error("Please Opt-in to App and then purchase bond");
-                            handleHideLoadPurchase();
-                        }
-                        else{ 
-                            if(parseFloat(minAlgo) < 2000)
-                            {
-                                toast.error("Insufficient Algo balance. Please get more Algos from dispenser.");
-                                handleHideLoadPurchase();
-                            }
-                            else
-                            {
-                            if(parseFloat(Pop_amount) > parseFloat(usdcBalances)/1000000)
-                            {
-                                toast.error(`Insufficient USDC balance. Your balance is ${(parseFloat(usdcBalances)/1000000).toFixed(2)} USDC but try to enter ${Pop_amount} USDC`);
-                                handleHideLoadPurchase();
-                            }
-                            else
-                            {
-                                if(parseFloat(Pop_amount) <= 0)
-                                {
-                                    toast.error(`Value entered is zero. Please Enter value greater than Zero`);
-                                    handleHideLoadPurchase();
-                                }
-                                else
-                                { 
-                    // var amt =  window.prompt("Enter the amount you want to donate"); 
-                    // let amount = parseInt(amt) * 1000000;
-                    let amount = parseFloat(Pop_amount).toFixed(6) * 1000000;
-                  let index = parseInt(appID_global);
-                    // console.log("appId inside donate", index)
-                
-                    try {
-                    //   const accounts = await myAlgoWallet.connect();
-                      // const addresses = accounts.map(account => account.address);
-                      const params = await algodClient.getTransactionParams().do();
-                
-                      let appArgs1 = [];
-                      appArgs1.push(new Uint8Array(Buffer.from("discount_buy")));
-                      // let decAddr = algosdk.decodeAddress('EGUSS7HHM3ODVPW3Z2L55WPCZCR4TWSN2VVAKYPZKYEUER5BXM5N6YNH7I');
-                      // appArgs.push(decAddr.publicKey);
-                      //   // console.log("(line:516) appArgs = ",appArgs)
-                      //localStorage.setItem("escrow", 'PKWSTDTMCYQQSFLNOW3W4TJN5VFJDR3KN5Q76G6OY6D4NFKHSFDZWC5BKY');
-                      let sender = localStorage.getItem("walletAddress");
-                      let recv_escrow = escrow;
-                      // create unsigned transaction
-                      let transaction1 = algosdk.makeApplicationNoOpTxnFromObject({
-                        from:sender, 
-                        suggestedParams: params, 
-                        appIndex: index, 
-                        appArgs: appArgs1
-                      })                    
-                      
-                      
-                      let data = `#pragma version 5
-
-                      gtxn 1 TypeEnum
-                      int 4
-                      ==
-                      bnz opt_in
-                      
-                      gtxn 0 ApplicationArgs 0
-                      byte "get_token"
-                      ==
-                      bnz get_token
-                      
-                      opt_in:
-                      global GroupSize
-                      int 2
-                      ==
-                      bz failed
-                      gtxn 0 TypeEnum
-                      int 6
-                      ==
-                      
-                      gtxn 0 ApplicationID
-                      int 71951577 //appID
-                      ==
-                      &&
-                      
-                      gtxn 0 OnCompletion
-                      int NoOp
-                      ==
-                      
-                      int DeleteApplication
-                      gtxn 0 OnCompletion
-                      ==
-                      ||
-                      &&
-                      
-                      gtxn 1 RekeyTo
-                      global ZeroAddress
-                      ==
-                      &&
-                      gtxn 0 RekeyTo
-                      global ZeroAddress
-                      ==
-                      &&
-                      bz failed
-                      int 1
-                      return
-                      
-                      get_token:
-                      global GroupSize
-                      int 2
-                      ==
-                      bz failed
-                      gtxn 0 TypeEnum
-                      int 6
-                      ==
-                      
-                      gtxn 0 ApplicationID
-                      int 71951577 //appID
-                      ==
-                      &&
-                      
-                      gtxn 0 OnCompletion
-                      int NoOp
-                      ==
-                      
-                      int DeleteApplication
-                      gtxn 0 OnCompletion
-                      ==
-                      ||
-                      &&
-                      
-                      gtxn 1 RekeyTo
-                      global ZeroAddress
-                      ==
-                      &&
-                      gtxn 0 RekeyTo
-                      global ZeroAddress
-                      ==
-                      &&
-                      bz failed
-                      int 1
-                      return
-                      
-                      failed:
-                      int 0
-                      return`;
-                      
-                      
-                      
-                      let results = await algodClient.compile(data).do();
-                      // console.log("Hash = " + results.hash);
-                      // console.log("Result = " + results.result);
-                      
-                      let program = new Uint8Array(Buffer.from(escrowCompiled, "base64"));
-                      
-                      let lsig = new algosdk.LogicSigAccount(program);
-                      console.log("amount =", amount);
-                      
-                      let transaction2 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-                        from: sender, 
-                        to: lsig.address(), 
-                        amount: parseInt(amount), 
-                        assetIndex: usdcID,
-                        suggestedParams: params
-                       });
-  
-                      
-                      const groupID = algosdk.computeGroupID([ transaction1, transaction2]);
-                      const txs = [ transaction1, transaction2];
-                      txs[0].group = groupID;
-                      txs[1].group = groupID;
-  
-                      const signedTx1 = await myAlgoWallet.signTransaction([txs[0].toByte(), txs[1].toByte()]);
-                      // const signedTx2 = await myAlgoWallet.signTransaction(txs[1].toByte());
-  
-                      //toast.info("Transaction in Progress");
-                  const response = await algodClient.sendRawTransaction([ signedTx1[0].blob, signedTx1[1].blob]).do();
-                  // console.log("TxID", JSON.stringify(response, null, 1));
-                  await waitForConfirmation(algodClient, response.txId);
-                  setTim1();
-                  setTim2();
-                  setTim3();
-                  setTime4();
-                  setBondAmount("");
-                  await balAsset();
-                  await fetch(); 
-                  await first();   
-                  await minBal();            
-                  //toast.success(`Transaction Success ${response.txId}`);
-                    } catch (err) {
-                      handleHideLoadPurchase();
-                      toast.error(err.toString());
-                      console.error(err);
-                    }
-                }
-                }
-                }
-                }
-                }
-                }
-                // }
-                // else{
-                //     toast.error(`Claim all remaining Bond to exchange`);
-                // }
-
-                
-                
                   
-                        //  mapTotal();
-                        //  mapGoal();
-                        
-                          
-                          // Use the AlgoSigner encoding library to make the transactions base
-                          
-                  
-                    }
-
-                    const ExchangePera =async () => {
-                        // if(((parseFloat(stable)/1000000).toFixed(2) === 0.00 && (parseFloat(bond)/1000000).toFixed(2) === 0.00) || ((parseFloat(stable)/1000000).toFixed(2) === 'NaN' && (parseFloat(bond)/1000000).toFixed(2) === 'NaN'))
-                        // {
-                            const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
-                            setConnector(connector);
-                            handleShowLoadPurchase();
-                            let Pop_amount = bondAmount;
-                            if(Pop_amount === "")
-                            {
-                                toast.error("Input field should not be left empty. Please enter some values");
-                                handleHideLoadPurchase();
-                            } 
-                            else
-                            {  
-                            // const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
-                            if (localStorage.getItem("walletAddress") === "")
-                            {
-                                toast.error("Connect your wallet");
-                                handleHideLoadPurchase();
-                            }
-                            else{
-                                if(appOpt === false)
-                                {
-                                    toast.error("Please Opt-in to App and then purchase bond");
-                                    handleHideLoadPurchase();
-                                }
-                                else{ 
-                                    if(parseFloat(minAlgo) < 2000)
-                                    {
-                                        toast.error("Insufficient Algo balance. Please get more Algos from dispenser.");
-                                        handleHideLoadPurchase();
-                                    }
-                                    else
-                                    {
-                                    if(parseFloat(Pop_amount) > parseFloat(usdcBalances)/1000000)
-                                    {
-                                        toast.error(`Insufficient USDC balance. Your balance is ${(parseFloat(usdcBalances)/1000000).toFixed(2)} USDC but try to enter ${Pop_amount} USDC`);
-                                        handleHideLoadPurchase();
-                                    }
-                                    else
-                                    {
-                                            if(parseFloat(Pop_amount) <= 0)
-                                            {
-                                                toast.error(`Value entered is zero. Please Enter value greater than Zero`);
-                                                handleHideLoadPurchase();
-                                            }
-                                            else
-                                            { 
-                            // var amt =  window.prompt("Enter the amount you want to donate"); 
-                            // let amount = parseInt(amt) * 1000000;
-                            let amount = parseFloat(Pop_amount).toFixed(6) * 1000000;
-                          let index = parseInt(appID_global);
-                            // console.log("appId inside donate", index)
-                        
-                            try {
-                            //   const accounts = await myAlgoWallet.connect();
-                              // const addresses = accounts.map(account => account.address);
-                              const params = await algodClient.getTransactionParams().do();
-                        
-                              let appArgs1 = [];
-                              appArgs1.push(new Uint8Array(Buffer.from("discount_buy")));
-                              // let decAddr = algosdk.decodeAddress('EGUSS7HHM3ODVPW3Z2L55WPCZCR4TWSN2VVAKYPZKYEUER5BXM5N6YNH7I');
-                              // appArgs.push(decAddr.publicKey);
-                              //   // console.log("(line:516) appArgs = ",appArgs)
-                              //localStorage.setItem("escrow", 'PKWSTDTMCYQQSFLNOW3W4TJN5VFJDR3KN5Q76G6OY6D4NFKHSFDZWC5BKY');
-                              let sender = localStorage.getItem("walletAddress");
-                              let recv_escrow = escrow;
-                              // create unsigned transaction
-                              let transaction1 = algosdk.makeApplicationNoOpTxnFromObject({
-                                from:sender, 
-                                suggestedParams: params, 
-                                appIndex: index, 
-                                appArgs: appArgs1
-                              })                    
-                              
-                              
-                              let data = `#pragma version 5
-        
-                              gtxn 1 TypeEnum
-                              int 4
-                              ==
-                              bnz opt_in
-                              
-                              gtxn 0 ApplicationArgs 0
-                              byte "get_token"
-                              ==
-                              bnz get_token
-                              
-                              opt_in:
-                              global GroupSize
-                              int 2
-                              ==
-                              bz failed
-                              gtxn 0 TypeEnum
-                              int 6
-                              ==
-                              
-                              gtxn 0 ApplicationID
-                              int 71951577 //appID
-                              ==
-                              &&
-                              
-                              gtxn 0 OnCompletion
-                              int NoOp
-                              ==
-                              
-                              int DeleteApplication
-                              gtxn 0 OnCompletion
-                              ==
-                              ||
-                              &&
-                              
-                              gtxn 1 RekeyTo
-                              global ZeroAddress
-                              ==
-                              &&
-                              gtxn 0 RekeyTo
-                              global ZeroAddress
-                              ==
-                              &&
-                              bz failed
-                              int 1
-                              return
-                              
-                              get_token:
-                              global GroupSize
-                              int 2
-                              ==
-                              bz failed
-                              gtxn 0 TypeEnum
-                              int 6
-                              ==
-                              
-                              gtxn 0 ApplicationID
-                              int 71951577 //appID
-                              ==
-                              &&
-                              
-                              gtxn 0 OnCompletion
-                              int NoOp
-                              ==
-                              
-                              int DeleteApplication
-                              gtxn 0 OnCompletion
-                              ==
-                              ||
-                              &&
-                              
-                              gtxn 1 RekeyTo
-                              global ZeroAddress
-                              ==
-                              &&
-                              gtxn 0 RekeyTo
-                              global ZeroAddress
-                              ==
-                              &&
-                              bz failed
-                              int 1
-                              return
-                              
-                              failed:
-                              int 0
-                              return`;
-                              
-                              
-                              
-                              let results = await algodClient.compile(data).do();
-                              // console.log("Hash = " + results.hash);
-                              // console.log("Result = " + results.result);
-                              
-                              let program = new Uint8Array(Buffer.from(escrowCompiled, "base64"));
-                              
-                              let lsig = new algosdk.LogicSigAccount(program);
-                              // console.log("Escrow =", lsig.address());
-                              
-                              let transaction2 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-                                from: sender, 
-                                to: lsig.address(), 
-                                amount: amount, 
-                                assetIndex: usdcID,
-                                suggestedParams: params
-                               });
-          
-                              
-                              const groupID = algosdk.computeGroupID([ transaction1, transaction2]);
-                              const txs = [ transaction1, transaction2];
-                              txs[0].group = groupID;
-                              txs[1].group = groupID;
-          
-                        // time to sign . . . which we have to do with walletconnect
-                        const txns = [txs[0], txs[1]]
-                        const txnsToSign = txns.map(txn => {
-                          const encodedTxn = Buffer.from(algosdk.encodeUnsignedTransaction(txn)).toString("base64");
-                          return {
-                            txn: encodedTxn,
-                           };
-                         });
-                         const requestParams = [ txnsToSign ];
-                        const request = formatJsonRpcRequest("algo_signTxn", requestParams);
-   
-                         const result = await connector.sendCustomRequest(request);
-                         const decodedResult = result.map(element => {
-                           return element ? new Uint8Array(Buffer.from(element, "base64")) : null;
-                         });
-                           // send and await
-                           let response = await algodClient.sendRawTransaction(decodedResult).do();
-                          await waitForConfirmation(algodClient, response.txId);
-                          setTim1();
-                          setTim2();
-                          setTim3();
-                          setTime4();
-                          setBondAmount("");
-                          await balAsset();
-                          await fetch(); 
-                          await first();   
-                          await minBal();
-                          //toast.success(`Transaction Success ${response.txId}`);
-                            } catch (err) {
-                              handleHideLoadPurchase();
-                              toast.error(err.toString());
-                              console.error(err);
-                            }
-                        }
-                        }
-                        }
-                        }
-                        }
-                        }
-                        // }
-                        // else{
-                        //     toast.error(`Claim all remaining Bond to exchange`);
-                        // }
-        
-                        
-                        
-                          
-                                //  mapTotal();
-                                //  mapGoal();
-                                
-                                  
-                                  // Use the AlgoSigner encoding library to make the transactions base
-                                  
-                          
-                            }                    
 
 
 
-const globalState = async (index) =>
-{
-      try {
-        let appById = await algodClientGet.getApplicationByID(appID_global).do();
-        setMap(appById['params']['global-state']);
-        let accountInfoResponse = await indexClient.lookupAccountByID(localStorage.getItem("walletAddress")).do();
-        // // console.log("R value", appById);
-        // // console.log("local", accountInfoResponse);
-        // // console.log("stable", accountInfoResponse['apps-local-state'])
-        let c = 0;
-
-        if( accountInfoResponse['account']['apps-local-state'].length === null|| accountInfoResponse['account']['apps-local-state'].length ===undefined||accountInfoResponse['account']['apps-local-state'].length===""){
-            // alert("check");
-         }
-        else{
-        
-        
-        //   // console.log("User",accountInfoResponse['account']['apps-local-state'].length);
-          for (let i = 0; i < accountInfoResponse['account']['apps-local-state'].length; i++) { 
-              if (accountInfoResponse['account']['apps-local-state'][i].id == parseInt(appID_global)) {
-                //   // console.log("User's local state:",accountInfoResponse['account']['apps-local-state'][i].id);
-                  let acccheck= accountInfoResponse['account']['apps-local-state'][i][`key-value`]; 
-                //   // console.log("Usercheck",acccheck);
-                //   // console.log("User",accountInfoResponse['account']['apps-local-state'][i][`key-value`]);
-                
-                  if(accountInfoResponse['account']['apps-local-state'][i][`key-value`]=== null|| accountInfoResponse['account']['apps-local-state'][i][`key-value`] === undefined||accountInfoResponse['account']['apps-local-state'][i][`key-value`]===""){
-                    // alert("check");
-                 }
-                else{
-        for (let n = 0; n < accountInfoResponse['account']['apps-local-state'][i][`key-value`].length; n++) {
-                    //   // console.log(accountInfoResponse['account']['apps-local-state'][i][`key-value`][n]);
-                      //setStakedBalance(accountInfoResponse['account']['apps-local-state'][i][`key-value`][n]);
-                      
-                      let rewardkey =accountInfoResponse['account']['apps-local-state'][i]['key-value'][n];
-                     if(rewardkey['key'] === "TXlBbW91bnRCb25k"){
-                    //    stakedbalancenew=accountInfoResponse['account']['apps-local-state'][i]['key-value'][n]['value']['uint'];
-                    setBond(accountInfoResponse['account']['apps-local-state'][i]['key-value'][n]['value']['uint']);
-                     }
-                    if(rewardkey['key'] === "TXlBbW91bnRTdGFibGU="){
-                    //   rewardbalancenew=accountInfoResponse['account']['apps-local-state'][i]['key-value'][n]['value']['uint'];
-                    // // console.log("stable",accountInfoResponse['account']['apps-local-state'][i]['key-value'][n]['value']['uint']);
-                    setToStable(accountInfoResponse['account']['apps-local-state'][i]['key-value'][n]['value']['uint']);
-                    //   // console.log("rewardcheck",accountInfoResponse['account']['apps-local-state'][i]['key-value'][n]['value']['uint']);
-                    }
-                    if(rewardkey['key'] === "TXlUaW1l"){
-                    //   usertimenew = accountInfoResponse['account']['apps-local-state'][i]['key-value'][n]['value']['uint'];
-                    // // console.log("MyTime",accountInfoResponse['account']['apps-local-state'][i]['key-value'][n]['value']['uint']);
-                    setToTime(parseInt(accountInfoResponse['account']['apps-local-state'][i]['key-value'][n]['value']['uint'])+300);
-                    //   // console.log("rewardcheck",accountInfoResponse['account']['apps-local-state'][i]['key-value'][n]['value']['uint']);
-                    let myTime = parseInt(accountInfoResponse['account']['apps-local-state'][i]['key-value'][n]['value']['uint']);
-                    let myTimeSet = parseInt((parseInt(parseInt(new Date().getTime()/1000) - myTime))/(300));
-                    console.log("timeSplit", parseInt((parseInt(parseInt(new Date().getTime()/1000) - myTime))/(300)));
-                    if(myTimeSet < 5 && myTimeSet > 0)
-                    {
-                        setToTimeSplitHard(myTimeSet);
-                    }
-                    else if(myTimeSet <= 0)
-                    {
-                        setToTimeSplitHard(0);
-                    }
-                    else
-                    {
-                        setToTimeSplitHard(5);
-                    }
-                    }
-                      
-                  }
-        
-                }
-        
-                  
-              }
-          }
-        }
 
 
-        // // console.log("c =", c);
-        // map1.map((a)=>{
-        //     // console.log("map", a);
-        // })
-
-        // map1.forEach((element) => {
-        //     // console.log("Element", element)
-        // });
-
-        let appArgsRet = [];
-        appArgsRet.push(JSON.stringify(appById['params']['global-state'][0]['key']));
-        appArgsRet.push(JSON.stringify(appById['params']['global-state'][1]['key']));
-        appArgsRet.push(JSON.stringify(appById['params']['global-state'][2]['key']));
-        appArgsRet.push(JSON.stringify(appById['params']['global-state'][3]['key']));
-        appArgsRet.push(JSON.stringify(appById['params']['global-state'][4]['key']));
-        appArgsRet.push(JSON.stringify(appById['params']['global-state'][5]['key']));
-        appArgsRet.push(JSON.stringify(appById['params']['global-state'][6]['key']));
-        appArgsRet.push(JSON.stringify(appById['params']['global-state'][7]['key']));
-        // // console.log("array", appArgsRet);
-
-        // setrec(JSON.stringify(r['application']['params']['global-state'][0]['value'][`bytes`]));
-        // setstartdt(JSON.stringify(r['application']['params']['global-state'][1]['value'][`uint`]));
-        // settotal(JSON.stringify(r['application']['params']['global-state'][2]['value'][`uint`]));
-        // setCreator(JSON.stringify(r['application']['params']['global-state'][3]['value'][`bytes`]));
-        // setenddt(JSON.stringify(r['application']['params']['global-state'][4]['value'][`uint`]));
-        // setclsdt(JSON.stringify(r['application']['params']['global-state'][5]['value'][`uint`]));
-        // setgoal(JSON.stringify(r['application']['params']['global-state'][6]['value'][`uint`]));
-        // setescrow(JSON.stringify(r['application']['params']['global-state'][7]['value'][`bytes`]));
-
-        for (let i = 0; i <= 7; i++) { 
-
-                        if(appArgsRet[i] == '"Q3JlYXRvcg=="'){
-                            let creatorAddress_c =  JSON.stringify(await appById['params']['global-state'][i]['value'][`bytes`]);
-                            // // console.log("creator address", creatorAddress_c)
-                            setCreator(JSON.stringify(await appById['params']['global-state'][i]['value'][`bytes`]));
-                        }
-                        else if(appArgsRet[i] == '"RW5kRGF0ZQ=="'){
-                            let endDate_c = JSON.stringify(await appById['params']['global-state'][i]['value'][`uint`]);
-                            setenddt(JSON.stringify(await appById['params']['global-state'][i]['value'][`uint`]));
-                        }
-                        else if(appArgsRet[i] == '"RnVuZENsb3NlRGF0ZQ=="'){
-                            let closeDate_c = JSON.stringify(await appById['params']['global-state'][i]['value'][`uint`]);
-                            setclsdt(JSON.stringify(await appById['params']['global-state'][i]['value'][`uint`]));
-                        }
-                        else if(appArgsRet[i] == '"R29hbA=="'){
-                            let goalAmount_c = JSON.stringify(await appById['params']['global-state'][i]['value'][`uint`]);
-                            setgoal(goalAmount_c);
-                        }
-                        else if(appArgsRet[i] == '"UmVjZWl2ZXI="'){
-                            let recv_c = JSON.stringify(await appById['params']['global-state'][i]['value'][`bytes`]);
-                            setrec(JSON.stringify(await appById['params']['global-state'][i]['value'][`bytes`]));
-                        }
-                        else if(appArgsRet[i] == '"U3RhcnREYXRl"'){
-                            let startDate_c = JSON.stringify(await appById['params']['global-state'][i]['value'][`uint`]);
-                            setstartdt(JSON.stringify(await appById['params']['global-state'][i]['value'][`uint`]));
-                        }
-                        else if(appArgsRet[i] == '"VG90YWw="'){
-                            let total_c = JSON.stringify(await appById['params']['global-state'][i]['value'][`uint`]);
-                            settotal(JSON.stringify(await appById['params']['global-state'][i]['value'][`uint`]));
-                        }
-                        else if(appArgsRet[i] == '"RXNjcm93"'){
-                            let escrow_c = JSON.stringify(await appById['params']['global-state'][i]['value'][`bytes`]);
-                            setescrow(JSON.stringify(await appById['params']['global-state'][i]['value'][`bytes`]));
-                        }
-                        let j = i + 1;
-                        // // console.log("time =", j, "then", JSON.stringify(await r['application']['params']['global-state'][6]['value'][`uint`]));
-                        // // console.log("state", goal);
-                        // // console.log("state", JSON.stringify(await r['application']['params']['global-state'][1]['value'][`uint`]));
-                        // //let start = JSON.stringify(await r['application']['params']['global-state'][1]['value'][`uint`]);
-                        let per = parseFloat((parseFloat(total/1000000)/parseFloat(goal/1000000)) * 100);
-                        // // console.log("----------------total =", total);
-                        // // console.log("----------------per =", per);
-                        setPercent(per);
-                }
-
-
-        //return JSON.stringify(r['application']['params']['global-state'][7]['value'][`bytes`], null, 2);
-      } catch (e) {
-        //console.error(e);
-        return JSON.stringify(e, null, 2);
-      }
-}
-
-useEffect(async() =>{await fetch()},[bond, stable, time])
 
 useEffect(async() => {
     await first()
@@ -1194,741 +371,19 @@ var countDowndate   =us * 1000;
 
 }
 
-const fetch = async () => {
-let index = parseInt(appID_global); //current app id need to be entered
-setappid(index);
-// await readLocalState(algodClient, localStorage.getItem("walletAddress"), index);
-await globalState(index);
-}
-
-const myAlgoWalletClaim =async () => {
-    handleShowLoadClaim();
-
-    let amount_es;
-    if(((parseInt(stable) * 20) / 100 >= parseInt(bond))){ //1080 >= 570
-        amount_es = parseInt(bond);
-    }
-    else{
-        amount_es = ((parseInt(stable) * 20) / 100) * parseInt(timeSplitHard);
-    }
-    // // console.log("amount-es", amount_es);
-    if (localStorage.getItem("walletAddress") === "")
-        {
-            toast.error("Connect your wallet");
-            handleHideLoadClaim();
-        }
-        else{
-            if(lock === true)
-        {
-            toast.error(`Claim is locked for ${day} Day : ${hour} Hours : ${min} Minutes : ${sec} Seconds`);
-            handleHideLoadClaim();
-        }
-        else{
-            if(parseFloat(minAlgo) < 1000)
-            {
-                toast.error("Your Algo balance is low. Please get more Algos from dispenser.")
-                handleHideLoadClaim();
-            }
-            else
-            {
-            if(amount_es === 'NaN')
-            {
-                toast.error("Claiming amount is either zero or not a valid number");
-                handleHideLoadClaim();
-            }
-            else
-            {
-
-//   const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
-
- 
-//   let amount = parseInt(amountsend);
-  let index = parseInt(appID_global);
-  // console.log("appId inside donate", index)
-
-  try {
-    // const accounts = await myAlgoWallet.connect();
-    // const addresses = accounts.map(account => account.address);
-    const params = await algodClient.getTransactionParams().do();
-
-    let appArgs1 = [];
-    appArgs1.push(new Uint8Array(Buffer.from("get_token")));
-    // let decAddr = algosdk.decodeAddress('EGUSS7HHM3ODVPW3Z2L55WPCZCR4TWSN2VVAKYPZKYEUER5BXM5N6YNH7I');
-    // appArgs.push(decAddr.publicKey);
-    //   // console.log("(line:516) appArgs = ",appArgs)
-    //localStorage.setItem("escrow", 'PKWSTDTMCYQQSFLNOW3W4TJN5VFJDR3KN5Q76G6OY6D4NFKHSFDZWC5BKY');
-    let sender = localStorage.getItem("walletAddress");
-    let recv_escrow = escrow;
-    // create unsigned transaction
-    let transaction1 = algosdk.makeApplicationNoOpTxnFromObject({
-      from:sender, 
-      suggestedParams: params, 
-      appIndex: index, 
-      appArgs: appArgs1
-    })   
-    
-    
-    let data = `#pragma version 5
-
-    gtxn 1 TypeEnum
-    int 4
-    ==
-    bnz opt_in
-    
-    gtxn 0 ApplicationArgs 0
-    byte "get_token"
-    ==
-    bnz get_token
-    
-    opt_in:
-    global GroupSize
-    int 2
-    ==
-    bz failed
-    gtxn 0 TypeEnum
-    int 6
-    ==
-    
-    gtxn 0 ApplicationID
-    int 71951577 //appID
-    ==
-    &&
-    
-    gtxn 0 OnCompletion
-    int NoOp
-    ==
-    
-    int DeleteApplication
-    gtxn 0 OnCompletion
-    ==
-    ||
-    &&
-    
-    gtxn 1 RekeyTo
-    global ZeroAddress
-    ==
-    &&
-    gtxn 0 RekeyTo
-    global ZeroAddress
-    ==
-    &&
-    bz failed
-    int 1
-    return
-    
-    get_token:
-    global GroupSize
-    int 2
-    ==
-    bz failed
-    gtxn 0 TypeEnum
-    int 6
-    ==
-    
-    gtxn 0 ApplicationID
-    int 71951577 //appID
-    ==
-    &&
-    
-    gtxn 0 OnCompletion
-    int NoOp
-    ==
-    
-    int DeleteApplication
-    gtxn 0 OnCompletion
-    ==
-    ||
-    &&
-    
-    gtxn 1 RekeyTo
-    global ZeroAddress
-    ==
-    &&
-    gtxn 0 RekeyTo
-    global ZeroAddress
-    ==
-    &&
-    bz failed
-    int 1
-    return
-    
-    failed:
-    int 0
-    return`;
-    
-    
-    
-    let results = await algodClient.compile(data).do();
-    // // console.log("Hash = " + results.hash);
-    // // console.log("Result = " + results.result);
-    
-    let program = new Uint8Array(Buffer.from(escrowCompiled, "base64"));
-    
-    let lsig = new algosdk.LogicSigAccount(program);
-    // // console.log("Escrow =", lsig.address());
-    
-    let sender_es = lsig.address();
-    let receiver_es = localStorage.getItem("walletAddress");
-    // let receiver = "<receiver-address>"";
-    // // console.log("amount rebase=", amount_es);
-    // let assetID = 50812029 ;
-    let transaction2 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-      from: sender_es, 
-      to: receiver_es,  
-      amount: parseInt(amount_es), 
-      assetIndex: elemID, 
-      suggestedParams: params
-    }); 
-    console.log("amount_Es", amount_es);
 
 
-  
-    const groupID = algosdk.computeGroupID([ transaction1, transaction2]);
-    const txs = [ transaction1, transaction2 ];
-    txs[0].group = groupID;
-    txs[1].group = groupID;
-    
-    
-    const signedTx1 = await myAlgoWallet.signTransaction(txs[0].toByte());
-    const signedTx2 = algosdk.signLogicSigTransaction(txs[1], lsig);
-    //toast.info(`Transaction in Progress`)
-const response = await algodClient.sendRawTransaction([ signedTx1.blob, signedTx2.blob]).do();
-// console.log("TxID", JSON.stringify(response, null, 1));
-await waitForConfirmation(algodClient, response.txId);
-setTim1();
-setTim2();
-setTim3();
-setTime4();
-setBondAmount("");
-await balAsset();
-await fetch(); 
-await first();   
-await minBal();
-//toast.success(`Transaction Successful with ${response.txId}`);
-  } catch (err) {
-    handleHideLoadClaim();
-    toast.error(err.toString());
-    console.error(err);
-  }
-        }
-    }
-    }
-}
-
-
-      //  mapTotal();
-      //  mapGoal();
-      
-        
-        // Use the AlgoSigner encoding library to make the transactions base
-        
-
-  }
-
-  const ClaimPera =async () => {
-
-    const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
-    setConnector(connector);    
-    handleShowLoadClaim();
-
-    let amount_es;
-    if(((parseInt(stable) * 20) / 100 >= parseInt(bond))){
-        amount_es = parseInt(bond);
-    }
-    else{
-        amount_es = (parseInt(stable) * 20) / 100;
-    }
-    // console.log("amount-es", amount_es);
-    if (localStorage.getItem("walletAddress") === "")
-        {
-            toast.error("Connect your wallet");
-            handleHideLoadClaim();
-        }
-        else{
-            if(lock === true)
-        {
-            toast.error(`Claim is locked for ${day} Day : ${hour} Hours : ${min} Minutes : ${sec} Seconds`);
-            handleHideLoadClaim();
-        }
-        else{
-            if(parseFloat(minAlgo) < 1000)
-            {
-                toast.error("Your Algo balance is low. Please get more Algos from dispenser.")
-                handleHideLoadClaim();
-            }
-            else
-            {
-            if(amount_es === 'NaN')
-            {
-                toast.error("Claiming amount is either zero or not a valid number");
-                handleHideLoadClaim();
-            }
-            else
-            {
-
-//   const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
-
- 
-//   let amount = parseInt(amountsend);
-  let index = parseInt(appID_global);
-  // console.log("appId inside donate", index)
-
-  try {
-    // const accounts = await myAlgoWallet.connect();
-    // const addresses = accounts.map(account => account.address);
-    const params = await algodClient.getTransactionParams().do();
-
-    let appArgs1 = [];
-    appArgs1.push(new Uint8Array(Buffer.from("get_token")));
-    // let decAddr = algosdk.decodeAddress('EGUSS7HHM3ODVPW3Z2L55WPCZCR4TWSN2VVAKYPZKYEUER5BXM5N6YNH7I');
-    // appArgs.push(decAddr.publicKey);
-    //   // console.log("(line:516) appArgs = ",appArgs)
-    //localStorage.setItem("escrow", 'PKWSTDTMCYQQSFLNOW3W4TJN5VFJDR3KN5Q76G6OY6D4NFKHSFDZWC5BKY');
-    let sender = localStorage.getItem("walletAddress");
-    // create unsigned transaction
-    let transaction1 = algosdk.makeApplicationNoOpTxnFromObject({
-      from:sender, 
-      suggestedParams: params, 
-      appIndex: index, 
-      appArgs: appArgs1
-    })   
-    
-    
-    let data = `#pragma version 5
-
-    gtxn 1 TypeEnum
-    int 4
-    ==
-    bnz opt_in
-    
-    gtxn 0 ApplicationArgs 0
-    byte "get_token"
-    ==
-    bnz get_token
-    
-    opt_in:
-    global GroupSize
-    int 2
-    ==
-    bz failed
-    gtxn 0 TypeEnum
-    int 6
-    ==
-    
-    gtxn 0 ApplicationID
-    int 71951577 //appID
-    ==
-    &&
-    
-    gtxn 0 OnCompletion
-    int NoOp
-    ==
-    
-    int DeleteApplication
-    gtxn 0 OnCompletion
-    ==
-    ||
-    &&
-    
-    gtxn 1 RekeyTo
-    global ZeroAddress
-    ==
-    &&
-    gtxn 0 RekeyTo
-    global ZeroAddress
-    ==
-    &&
-    bz failed
-    int 1
-    return
-    
-    get_token:
-    global GroupSize
-    int 2
-    ==
-    bz failed
-    gtxn 0 TypeEnum
-    int 6
-    ==
-    
-    gtxn 0 ApplicationID
-    int 71951577 //appID
-    ==
-    &&
-    
-    gtxn 0 OnCompletion
-    int NoOp
-    ==
-    
-    int DeleteApplication
-    gtxn 0 OnCompletion
-    ==
-    ||
-    &&
-    
-    gtxn 1 RekeyTo
-    global ZeroAddress
-    ==
-    &&
-    gtxn 0 RekeyTo
-    global ZeroAddress
-    ==
-    &&
-    bz failed
-    int 1
-    return
-    
-    failed:
-    int 0
-    return`;
-    
-    
-    
-    let results = await algodClient.compile(data).do();
-    // // console.log("Hash = " + results.hash);
-    // // console.log("Result = " + results.result);
-    
-    let program = new Uint8Array(Buffer.from(escrowCompiled, "base64"));
-    
-    let lsig = new algosdk.LogicSigAccount(program);
-    // // console.log("Escrow =", lsig.address());
-    
-    let sender_es = lsig.address();
-    let receiver_es = localStorage.getItem("walletAddress");
-    // let receiver = "<receiver-address>"";
-    // // console.log("amount rebase=", amount_es);
-    // let assetID = 50812029 ;
-    let transaction2 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-      from: sender_es, 
-      to: receiver_es,  
-      amount: amount_es, 
-      assetIndex: elemID, 
-      suggestedParams: params
-    }); 
-    
-
-
-  
-    const groupID = algosdk.computeGroupID([ transaction1, transaction2]);
-    const txs = [ transaction1, transaction2 ];
-    txs[0].group = groupID;
-    txs[1].group = groupID;
-    
-    const escrow = algosdk.signLogicSigTransaction(txs[1], lsig);
-    const txns = [txs[0], txs[1]]
-    const txnsToSign = txns.map(txn => {
-      const encodedTxn = Buffer.from(algosdk.encodeUnsignedTransaction(txn)).toString("base64");
-      // console.log(encodedTxn);
-      return {
-        txn: encodedTxn,
-    };
-  });
-  const requestParams = [ txnsToSign ];
-  const request = formatJsonRpcRequest("algo_signTxn", requestParams);
-
-  const result = await connector.sendCustomRequest(request);
-  const decodedResult = result.map(element => {
-    return element ? new Uint8Array(Buffer.from(element, "base64")) : null;
-  });
-  // console.log(result);
-  // console.log(escrow.blob);
-    // send and await
-    decodedResult[1] = escrow.blob;
-    let response = await algodClient.sendRawTransaction(decodedResult).do();
-    await waitForConfirmation(algodClient, response.txId);
-    setTim1();
-    setTim2();
-    setTim3();
-    setTime4();
-    setBondAmount("");
-    await balAsset();
-    await fetch(); 
-    await first();   
-    await minBal();
-//toast.success(`Transaction Successful with ${response.txId}`);
-  } catch (err) {
-    handleHideLoadClaim();
-    toast.error(err.toString());
-    console.error(err);
-  }
-        }
-    }
-    }
-}
-
-
-      //  mapTotal();
-      //  mapGoal();
-      
-        
-        // Use the AlgoSigner encoding library to make the transactions base
-        
-
-  }
-
-const Finish = async () => {
-
-    const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
-
- 
-    //   let amount = parseInt(amountsend);
-      let index = parseInt(appID_global);
-      // console.log("appId inside", index)
-    
-      try {
-        const accounts = await myAlgoWallet.connect();
-        const addresses = accounts.map(account => account.address);
-        const params = await algodClient.getTransactionParams().do();
-    
-        let appArgs1 = [];
-        appArgs1.push(new Uint8Array(Buffer.from("finish")));
-        let sender = localStorage.getItem("walletAddress");
-        // create unsigned transaction
-        let transaction1 = algosdk.makeApplicationNoOpTxnFromObject({
-          from:sender, 
-          suggestedParams: params, 
-          appIndex: index, 
-          appArgs: appArgs1
-        })   
-
-
-        const signedTx1 = await myAlgoWallet.signTransaction(transaction1.toByte());
-        //toast.info(`Transaction in Progress`)
-    const response = await algodClient.sendRawTransaction(signedTx1.blob).do();
-    // console.log("TxID", JSON.stringify(response, null, 1));
-    await waitForConfirmation(algodClient, response.txId);
-    //toast.success(`Transaction Successful with ${response.txId}`);
-      } catch (err) {
-        toast.error(err.toString());
-        console.error(err);
-      }
-
-}
-
-
-const usdcFund = async () =>
-{
-    handleShowLoadUsdcFund();
-    if (localStorage.getItem("walletAddress") === "")
-        {
-            toast.error("Connect your wallet");
-            handleHideLoadUsdcFund();
-        }
-        else{
-
-let usdcFundProgram = new Uint8Array(Buffer.from("BSABATEZIhIiQzIEgQISMwAQIhIQMwEQgQQSQQACIkOBAEM=", "base64"));
-
-let lsigusdcFund = new algosdk.LogicSigAccount(usdcFundProgram);
-// // console.log("Escrow =", lsigusdcFund.address());
-
-try {
-
-    const params = await algodClient.getTransactionParams().do();
-
-    let sender = localStorage.getItem("walletAddress");
-    let escrow = lsigusdcFund.address();
-    // create unsigned transaction
-    let transaction1 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        from: sender, 
-        to: sender,  
-        amount: 0, 
-        assetIndex: parseInt(usdcID), 
-        suggestedParams: params
-      });    
-
-    let transaction2 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-      from: escrow, 
-      to: sender,  
-      amount: 10 * 1000000, 
-      assetIndex: parseInt(usdcID), 
-      suggestedParams: params
-    }); 
-
-    const groupID = algosdk.computeGroupID([ transaction1, transaction2]);
-    const txs = [ transaction1, transaction2 ];
-    txs[0].group = groupID;
-    txs[1].group = groupID;
-    
-    
-    const signedTx1 = await myAlgoWallet.signTransaction(txs[0].toByte());
-    const signedTx2 = algosdk.signLogicSigTransaction(txs[1], lsigusdcFund);
-    // toast.info(`Transaction in Progress`)
-const response = await algodClient.sendRawTransaction([ signedTx1.blob, signedTx2.blob]).do();
-// // console.log("TxID", JSON.stringify(response, null, 1));
-await waitForConfirmation(algodClient, response.txId);
-//toast.success(`Transaction Successful with ${response.txId}`);
-  } catch (err) {
-    handleHideLoadUsdcFund();
-    toast.error(err.toString());
-    console.error(err);
-  }
-
-        }
-}
-
-useEffect(async () => {
-    await balAsset();
-}, [usdcBalances, elemBalances, bondAmount, appTotal]);
-
-const balAsset = async () =>
-{
-    // indexClient
-let gApp = await indexClient.lookupApplications(bondDetails.bondAppID).do();
-// // console.log(gApp['application']['params']['global-state']);
-let gAppLen = gApp['application']['params']['global-state']['length'];
-
-for(let j = 0; j < gAppLen; j++)
-{
-    if(gApp['application']['params']['global-state'][j]['key'] === "VG90YWw=")
-    {
-        setAppTotal(gApp['application']['params']['global-state'][j]['value']['uint']);
-        // // console.log("gAppTotal =",gApp['application']['params']['global-state'][j]['value']['uint']);
-        break;
-    }
-let bal = await indexClient.lookupAccountByID(localStorage.getItem("walletAddress")).do();
-let l = bal['account']['assets']['length'];    
-for(let i = 0; i < l; i++)
-{
-    if(bal['account']['assets'][i]['asset-id'] === usdcID)
-    {
-        setUsdcBalances(bal['account']['assets'][i]['amount']);
-        break;
-    }
-}
-for(let j = 0; j < l; j++)
-{
-    if(bal['account']['assets'][j]['asset-id'] === elemID)
-    {
-        setElemBalances(bal['account']['assets'][j]['amount']);
-        break;
-    }
-}
-
-
-}
-
-// setAssets(bal['account']['assets']);
-} 
-
-useEffect(async() => {
-    await BondBalance()
-}, [bondBalance]);        
-
-const BondBalance = async () =>{
-let balance = await indexClient.lookupAccountByID(bondDetails.b_escrow).do();
-// // console.log(balance['account']['assets'][0]['amount']);
-let assetCount = balance['account']['assets']['length']
-// // console.log(l);
-for(let i = 0; i < assetCount; i++)
-{
-    if(balance['account']['assets'][i]['asset-id'] === elemID)
-    {
-setBondBalance(parseFloat(balance['account']['assets'][i]['amount'])/1000000);
-break;
-    }
-}
-}
-
-useEffect(async() => {
-    await optCheck();
-}, [assetOpt, appOpt]);
-
-const optCheck = async () =>
-{
-let accountInfo = await indexClient.lookupAccountByID(localStorage.getItem("walletAddress")).do();
-// console.log(accountInfo);
-let assetCount = accountInfo['account']['assets']['length']
-// // console.log(l);
-for(let i = 0; i < assetCount; i++)
-{
-    if(accountInfo['account']['assets'][i]['asset-id'] === elemID)
-    {
-        setToAssetOpt(true);
-        break;
-    }
-}
-
-const apps = accountInfo['account']['apps-local-state'];
-console.log("app", apps);
-// setAssets(bal['account']['assets']);
-let appCount = apps['length'];
-// // console.log(l);
-for(let j = 0; j < appCount; j++)
-{
-    if(accountInfo['account']['apps-local-state'][j]['id'] === appID_global)
-    {
-        setToAppOpt(true);
-        break;
-    }
-}
-}
-const reload = () => {
-    sessionStorage.setItem("reloading", "true");
-    window.location.reload(false); 
-};
-
-    window.onload = () => {
-        let reloading = sessionStorage.getItem("reloading");
-        if (reloading) {
-            sessionStorage.removeItem("reloading");
-        }
-    }      
+     
 
 // useEffect(async () => {
 //     await elemRecv();
 // }, [setElemGet]);
 
-useEffect(async() => {
-    await minBal();
-}, [minAlgo]);
 
-const minBal = async () =>
-{
-    let min = await algodClientGet.accountInformation(localStorage.getItem("walletAddress")).do();
-    // // console.log("minBalanceApi", min['min-balance']);
-    setMinAlgo(min['amount'] - min['min-balance']);
-    // console.log("minBalance", minAlgo);
-}
 
-const maxButton = async () =>{
-    setBondAmount(parseFloat(usdcBalances)/1000000)
-}
 
-const appOptinWalletCheck = async () =>
-{
-    if(localStorage.getItem("walletName") === "myAlgoWallet")
-    {
-        await myAlgoOptIn();
-    }
-    else if(localStorage.getItem("walletName") === "PeraWallet")
-    {
-        await appOptInPera();
-    }
-}
 
-const assetOptinWalletCheck = async () =>
-{
-    if(localStorage.getItem("walletName") === "myAlgoWallet")
-    {
-        await myAlgoOptInAsset();
-    }
-    else if(localStorage.getItem("walletName") === "PeraWallet")
-    {
-        await assetOptInPera();
-    }
-}
 
-const exchangeWalletCheck = async () =>
-{
-    if(localStorage.getItem("walletName") === "myAlgoWallet")
-    {
-        await myAlgoWalletExchange();
-    }
-    else if(localStorage.getItem("walletName") === "PeraWallet")
-    {
-        await ExchangePera();
-    }
-}
 const connectToEthereum = async () => {
     try {
       if (window.ethereum) {
@@ -1957,14 +412,14 @@ const purchaseBond = async() =>{
         console.log("Connected Successfully", account);
 
         // Create contract instance with the correct order of arguments
-        const bondContract = new ethers.Contract(BondAddress, BondAbi, web31.getSigner(account));
+        const DimeContract = new ethers.Contract(DIMEAddress, DimeContractABI, web31.getSigner(account));
 
         // const val = ethers.utils.formatUnits(100000000000000, 0);
         // let k = Web3.utils.toBN(1000000000000000000n);
         // const val11 = ethers.utils.formatUnits(100000000000000, 18);
         // const val1 =  ethers.utils.parseUnits(val11, 18);;
         // Send the transaction and wait for it to be mined
-        const mintTx = await bondContract.depositDAI(BigInt(bondAmount*1e18));
+        const mintTx = await DimeContract.participateInBond(BigInt(parseInt(bondAmount)),BigInt(parseInt(JokerInput)));
         // await mintTx.wait();
         console.log("minttx",mintTx.hash);
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
@@ -1993,15 +448,51 @@ const approve = async() =>{
         console.log("Connected Successfully", account);
 
         // Create contract instance with the correct order of arguments
-        const daiContract = new ethers.Contract(DAIAddress, DaiAbi, web31.getSigner(account));
+        const USdcContract = new ethers.Contract(USDCAddress, USDCContractABI, web31.getSigner(account));
 
-        const mintTx = await daiContract.approve(BondAddress,BigInt(10000000000*1e18));
+        const mintTx = await USdcContract.approve(DIMEAddress,BigInt(10000000000*1e9));
       
         // await mintTx.wait();
         console.log("minttx",mintTx.hash);
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
         let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
+        await sleep(2000);
         toast.success(toastDiv(id));
+       
+        await displayValueCalculation();
+        toast.success("Approve is Done succeefully");
+        handleHideLoadPurchase();
+    }catch(error){
+        toast.error("Approve is not succeed",`${error}`);
+        console.log("error",error)
+        handleHideLoadPurchase();
+    }
+
+}
+
+const approveJOKER = async() =>{
+    handleShowLoadPurchase();
+    try{
+        const web31 = await connectToEthereum();
+        if (!web31) return;
+
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const account = accounts[0]; // Use the first account
+
+        console.log("Connected Successfully", account);
+
+        // Create contract instance with the correct order of arguments
+        const JOKERContract = new ethers.Contract(JOKERAddress, JOKERCOntractABI, web31.getSigner(account));
+
+        const mintTx = await JOKERContract.approve(DIMEAddress,BigInt(10000000000*1e9));
+      
+        // await mintTx.wait();
+        console.log("minttx",mintTx.hash);
+        // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
+        let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
+        await sleep(2000);
+        toast.success(toastDiv(id));
+        
         await displayValueCalculation();
         toast.success("Approve is Done succeefully");
         handleHideLoadPurchase();
@@ -2026,18 +517,19 @@ const claimWalletCheck = async () =>
         console.log("Connected Successfully", account);
 
         // Create contract instance with the correct order of arguments
-        const bondContract = new ethers.Contract(BondAddress, BondAbi, web31.getSigner(account));
+        const DimeContract = new ethers.Contract(DIMEAddress, DimeContractABI, web31.getSigner(account));
 
         // const val = ethers.utils.formatUnits(100000000000000, 0);
         // let k = Web3.utils.toBN(1000000000000000000n);
         // const val11 = ethers.utils.formatUnits(100000000000000, 18);
         // const val1 =  ethers.utils.parseUnits(val11, 18);;
         // Send the transaction and wait for it to be mined
-        const mintTx = await bondContract.claim();
+        const mintTx = await DimeContract.claim();
         // await mintTx.wait();
         console.log("minttx",mintTx.hash);
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
         let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
+        await sleep(2000);
         toast.success(toastDiv(id));
         await displayValueCalculation();
         toast.success("Claim  succeefully");
@@ -2047,6 +539,15 @@ const claimWalletCheck = async () =>
         console.log("error",error)
         handleHideLoadClaim();
     }
+}
+
+const changeInputValue = async(value) =>{
+    setBondAmount(value*1e9);
+    //blackvalue = ((1-cPercentage)*(daiAmount*daiPrice)) / (cPercentage*blackPrice)
+    let calculatedValue = ((1-0.9)*(value*1e9*USDCPrice))/(0.9*JokerPrice);
+    console.log("calculated",calculatedValue,Math.abs(calculatedValue)*JokerPrice,value*1e9*USDCPrice);
+    setJokerInput((Math.abs(calculatedValue)));
+    
 }
 
     return (
@@ -2070,7 +571,7 @@ const claimWalletCheck = async () =>
                                     <svg className="tooltip-icon ms-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12Z" stroke="#CCCCCC" stroke-width="1.5"></path><path d="M11 8C11 7.44772 11.4477 7 12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8Z" fill="#CCCCCC"></path><path d="M11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V12Z" fill="#CCCCCC"></path></svg>
                                 </OverlayTrigger>
                         </h6>
-                        <h3 className='mb-0 text-187'>${treasurBalance ? (parseFloat(treasurBalance*(blackPrice/1e9)) / 1e9).toFixed(4) : "0"}</h3>
+                        <h3 className='mb-0 text-187'>${TreasuryDollarvalue ? (parseFloat(TreasuryDollarvalue/1e18) ).toFixed(4) : "0"}</h3>
                     </div>
                     {/* <div className='ms-sm-5 ms-4'>
                         <h6 className='sub-heading mb-0'>
@@ -2095,8 +596,8 @@ const claimWalletCheck = async () =>
                     <Accordion.Item className='mb-24' eventKey="0">
                         <Accordion.Header>
                             <div className="acc-title me-2 d-flex align-items-center">
-                                <img src={daiLogo} alt="logo" />
-                                <span className='ms-3'>DAI</span>
+                                <img src={dimeLogo} alt="logo" />
+                                <span className='ms-3'>DIME</span>
                             </div>
 
                             <div className="ms-auto flex-grow-1 pe-md-4 justify-content-between d-flex align-items-center">
@@ -2105,13 +606,13 @@ const claimWalletCheck = async () =>
                                         Bond Price
                                     </h6>
                                     <h5 className='mb-0 d-flex align-items-center'>
-                                        ${daiPrice ? (parseFloat((daiPrice/1e9)) ).toFixed(4) : "0"}
+                                        ${dimePrice ? (parseFloat((dimePrice/1e8)) ).toFixed(4) : "0"}
                                         <OverlayTrigger
                                             key="left"
                                             placement="left"
                                             overlay={
                                                 <Tooltip id={`tooltip-left`}>
-                                                    Discount Price of ELEM asset
+                                                     Price of  1 DIME asset
                                                 </Tooltip>
                                             }
                                             >
@@ -2162,13 +663,13 @@ const claimWalletCheck = async () =>
                                         Purchased
                                     </h6>
                                     <h5 className='mb-0 d-flex align-items-center'>
-                                        {blackPurchased.claimedAmount?ethers.utils.formatUnits(blackPurchased.claimedAmount,18) :0}
+                                        {ClaimedAmount?parseFloat(ClaimedAmount/1e9).toFixed(4) :0}
                                         <OverlayTrigger
                                 key="left"
                                 placement="left"
                                 overlay={
                                     <Tooltip id={`tooltip-left`}>
-                                        Total ELEM purchased in bond represented in USD.
+                                        Total DIME purchased in bond represented .
                                     </Tooltip>
                                 }
                                 >
@@ -2220,30 +721,35 @@ const claimWalletCheck = async () =>
                             
                                 <Tab eventKey="bond" title="Bond">
                                     <Row className='row-divider'>
-                                        <Col md={6}>
-                                            <h6><span className='text-sm text-gray-d'>Your DAI Balance: </span>{daiBlance ? (parseFloat(daiBlance)/1e18).toFixed(4) : '0'} DAI</h6>
+                                        <Col md={3}>
+                                            <h6><span className='text-sm text-gray-d'>Your USDC Balance: </span>{daiBlance ? (parseFloat(daiBlance)/1e9).toFixed(4) : '0'} USDC</h6>
                                             <Row className='flex-nowrap mb-2 gx-3'>
-                                                <Col>
+                                            <Col> <div className="acc-title me-2 d-flex ">
+                                <img src={USDC} alt="logo" />
+                                {/* <span className='ms-3'>USDC</span> */}
+                                    
                                                     <InputGroup className='input-group-max'>
                                                         <FormControl
                                                             // disabled={true}
-                                                            value={bondAmount}
+                                                            // value={bondAmount}
                                                             type='number'
                                                             placeholder="0.00"
                                                             aria-label="Recipient's username"
                                                             aria-describedby="basic-addon2"
-                                                            onChange={(e) => setBondAmount(e.target.value)}
+                                                            onChange={(e) => changeInputValue(e.target.value)}
                                                         />
                                                         {/* <Button variant="outline-purple" className='btn-xs-d' onClick={maxButton}>Max</Button> */}
                                                     </InputGroup>
+                                                    </div> 
                                                 </Col>
+{/*                                                 
                                                 <Col xs="auto">
                                                 {allowan > bondAmount ? <Button loading={loaderPurchase} className='btn btn-blue' onClick={purchaseBond}>
                                                         Purchase Bond
                                                     </Button>:<ButtonLoad loading={loaderPurchase} className='btn btn-blue' onClick={approve}>
                                                     Approve DAI
                                                     </ButtonLoad>}
-                                                </Col>
+                                                </Col> */}
                                             </Row>
                                             {/* <div className="d-flex">
                                                 <div>
@@ -2254,24 +760,81 @@ const claimWalletCheck = async () =>
                                                 </div>
                                             </div> */}
                                         </Col>
-                                        <Col md={6}>
-                                            <h6><span className='text-sm text-gray-d'>Claimable Rewards: </span> {blackPurchased.userRewards?ethers.utils.formatUnits(blackPurchased.userRewards,9) :0} Black</h6>
+                                        <Col md={3}>
+                                            <h6><span className='text-sm text-gray-d'>Your JOKER Balance: </span>{JokerBlance ? (parseFloat(JokerBlance)/1e9).toFixed(4) : '0'} JOKER</h6>
+                                            <Row className='flex-nowrap mb-2 gx-3'>
+                                            <Col> <div className="acc-title me-2 d-flex ">
+                                <img src={USDC} alt="logo" />
+                                {/* <span className='ms-3'>USDC</span> */}
+                                    
+                                                    <InputGroup className='input-group-max'>
+                                                        <FormControl
+                                                            // disabled={true}
+                                                            value={JokerInput?parseFloat(JokerInput/1e9).toFixed(4):'0.0'}
+                                                            type='number'
+                                                            placeholder="0.00"
+                                                            aria-label="Recipient's username"
+                                                            aria-describedby="basic-addon2"
+                                                            // onChange={(e) => JokerInput(e.target.value)}
+                                                        />
+                                                        {/* <Button variant="outline-purple" className='btn-xs-d' onClick={maxButton}>Max</Button> */}
+                                                    </InputGroup>
+                                                    </div> 
+                                                </Col>
+                                                
+                                                
+                                            </Row>
+                                          
+                                        </Col>
+                                        <Col md={3}>
+                                            {/* <h6><span className='text-sm text-gray-d'>Your USDC Balance: </span>{daiBlance ? (parseFloat(daiBlance)/1e18).toFixed(4) : '0'} DAI</h6> */}
+                                            <Row className='flex-nowrap mb-2 gx-3'>
+                                            
+                                                
+                                                <Col >
+                                                <br/>
+                                                {allowan > bondAmount ?( allowan2 > JokerInput ? 
+                                                    (<><Button loading={loaderPurchase} className='btn btn-blue' onClick={purchaseBond}>
+                                                        Purchase Bond
+                                                    </Button></>) :
+                                                    (<><ButtonLoad loading={loaderPurchase} className='btn btn-blue' onClick={approveJOKER}>
+                                                    Approve JOKER
+                                                    </ButtonLoad></>) ):(<>
+                                                        <ButtonLoad loading={loaderPurchase} className='btn btn-blue' onClick={approve}>
+                                                    Approve USDC
+                                                    </ButtonLoad>
+                                                    </>) }
+                                                
+                                                
+                                                {/* allowan2 > bondAmount ? (<><Button loading={loaderPurchase} className='btn btn-blue' onClick={purchaseBond}>
+                                                        Purchase Bond
+                                                    </Button></>): <ButtonLoad loading={loaderPurchase} className='btn btn-blue' onClick={approveJOKER}>
+                                                    Approve JOKER
+                                                    </ButtonLoad>:<ButtonLoad loading={loaderPurchase} className='btn btn-blue' onClick={approve}>
+                                                    Approve USDC
+                                                    </ButtonLoad>} */}
+                                                </Col>
+                                            </Row>
+                                          
+                                        </Col>
+                                        <Col md={3}>
+                                            <h6><span className='text-sm text-gray-d'>Claimable Rewards: </span> {UserReward?parseFloat(UserReward/1e9).toFixed(4) :0} JOKER</h6>
                                             <Row className='flex-nowrap align-items-center mb-2 gx-3'>
                                               <Col>
-{blackPurchased.claimedTime ? 
+{ClaimedTime ? 
 (<>
-{parseInt(ethers.utils.formatUnits(blackPurchased.userRewards,0)) >1e4  ? 
+{parseInt(UserReward) >1e4  ? 
   (<>
-  {ethers.utils.formatUnits(blackPurchased.claimedTime,0) > 0 ? 
+  {ClaimedTime > 0 ? 
                                                 (<>
-                                                {(parseInt(ethers.utils.formatUnits(blackPurchased.claimedTime,0))+parseInt(TimeDuration)) <= (Math.floor(new Date().getTime() / 1000)) ? (<>
+                                                {(parseInt(ClaimedTime)+parseInt(TimeDuration)) <= (Math.floor(new Date().getTime() / 1000)) ? (<>
                                                     <ButtonLoad loading={loaderClaim} className='btn w-100 btn-blue' onClick={claimWalletCheck}>Claim </ButtonLoad>
                                                 </>):(<>
                                                 
                                                     <ButtonLoad disabled={true} className='btn w-100 btn-blue' >Claim </ButtonLoad>
                                                 </>)}
                                                 </>):(<>
-                                                {(parseInt(ethers.utils.formatUnits(blackPurchased.depositTime,0))+parseInt(TimeDuration)) <= (Math.floor(new Date().getTime() / 1000)) ? (<>
+                                                {(parseInt(DepoitTime)+parseInt(TimeDuration)) <= (Math.floor(new Date().getTime() / 1000)) ? (<>
                                                     <ButtonLoad loading={loaderClaim} className='btn w-100 btn-blue' onClick={claimWalletCheck}>Claim </ButtonLoad>
                                                 </>):(<>
                                                     <ButtonLoad disabled={true} className='btn w-100 btn-blue' >Claim </ButtonLoad>
@@ -2282,6 +845,7 @@ const claimWalletCheck = async () =>
   </>)}  
   
 </>):(<>
+    <ButtonLoad disabled={true} className='btn w-100 btn-blue' >Claim </ButtonLoad>
 </>)}
                                               
                                                 {/* {ethers.utils.formatUnits(blackPurchased.userRewards,18) == true ? <Button disabled className='btn w-100 btn-blue'>
@@ -2310,7 +874,7 @@ const claimWalletCheck = async () =>
                                                     placement="left"
                                                     overlay={
                                                         <Tooltip id={`tooltip-left`}>
-                                                            Please Opt-In the address to app and asset to use the bond.
+                                                            Your claimable rewards.
                                                         </Tooltip>
                                                     }
                                                     >

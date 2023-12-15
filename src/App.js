@@ -47,6 +47,7 @@ import FaucetStable from './components/DashboardNew/FaucetStable';
 import BuybackApp from './components/DashboardNew/Buyback'
 import RecollateralizeApp from './components/DashboardNew/Recollateralize'
 import StablecoinApp from './components/DashboardNew/Stablecoin';
+import MintingApp from './components/DashboardNew/MintCredit&DIME';
 import RedeemApp from './components/DashboardNew/StablecoinRedeem';
 import DashboardApp from './components/DashboardNew/Dashboard';
 import DashboardMainApp from './components/DashboardNew/DashboardJoker';
@@ -101,6 +102,10 @@ function App() {
         <Route path="/mint">
           <StablecoinApp />
         </Route>
+        <Route path="/minting">
+          <MintingApp />
+        </Route>
+        
         <Route path="/redeem">
           <RedeemApp />
         </Route>     
