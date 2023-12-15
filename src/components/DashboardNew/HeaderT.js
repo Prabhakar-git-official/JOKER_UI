@@ -374,10 +374,10 @@ async function ConnectWallet() {
       console.log("injectedConnector", injectedConnector);
       const chainId = await window.ethereum.request({ method: 'eth_requestAccounts' });
           console.log(chainId);
-          if(chainId!==0x14a33)
+          if(chainId!==0xaa36a7)
           {  await window.ethereum.request({
               method: 'wallet_switchEthereumChain',
-              params: [{ chainId:'0x14a33' }],
+              params: [{ chainId:'0xaa36a7' }],
             });
           }
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
@@ -407,8 +407,8 @@ async function ConnectWallet() {
       
             const APP_NAME = 'Coinbase';
             const APP_LOGO_URL = 'https://example.com/logo.png';
-            const DEFAULT_ETH_JSONRPC_URL =  'https://base-goerli.public.blastapi.io';
-            const DEFAULT_CHAIN_ID = 84531;
+            const DEFAULT_ETH_JSONRPC_URL =  'https://eth-sepolia.public.blastapi.io';
+            const DEFAULT_CHAIN_ID = 11155111;
       
             const coinbaseWallet = new CoinbaseWalletSDK({
                   appName: APP_NAME,
@@ -445,7 +445,7 @@ async function ConnectWallet() {
       if(localStorage.getItem("walletAddress") === null || localStorage.getItem("walletAddress") === undefined || localStorage.getItem("walletAddress") === ''){                
       }
       else{
-      const response = await fetch(`https://api-goerli.basescan.org/api?module=account&action=balance&address=${walletAddress}&tag=latest`);
+      const response = await fetch(`https://api-sepolia.org/api?module=account&action=balance&address=${walletAddress}&tag=latest`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
