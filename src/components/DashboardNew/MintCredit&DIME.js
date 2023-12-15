@@ -843,17 +843,17 @@ const usdcMaxTau = () =>
                                             <strong className='font-semibold'>0.00 USDC</strong>
                                         </div> */}
                                         <div className="d-flex mb-1 align-items-center justify-content-between text-md">
-                                            <span> </span>
-                                            {/* <strong className='font-semibold'>Rate : 1 USDC = 1 TAU = 0.33 ELEM</strong> */}
+                                            <span>Exchange Rate </span>
+                                            <strong className='font-semibold'> $1 USDC + $1 JOKER = ${parseFloat((2*CreditPrice)/1e8).toFixed(3)} CREDITS</strong>
                                         </div>
                                         <div className="d-flex mb-1 align-items-center justify-content-between text-md">
-                                            <span> </span>
-                                            {/* <strong className='font-semibold'>Minting fee (1%) : { parseFloat((usdcAmount * usdcPrice) + (elemAmount * elemPrice) * 0.01) ? ((parseFloat((usdcAmount * usdcPrice) + (elemAmount * elemPrice)) * 0.01)).toFixed(6) : '0'} TAU</strong> */}
+                                            <span>Minting Fee </span>
+                                            <strong className='font-semibold'>5% USDT : 5% JOKER</strong>
                                         </div>
-                                        {/* <div className="d-flex mb-1 align-items-center justify-content-between text-md">
+                                        <div className="d-flex mb-1 align-items-center justify-content-between text-md">
                                             <span>You will receive</span>
-                                            <strong className='font-semibold'>{parseFloat(tauAmount).toFixed(2) === 'NaN' ? '0.00' : parseFloat(tauAmount).toFixed(2)} TAU</strong>
-                                        </div> */}
+                                            <strong className='font-semibold'>{parseFloat(CreditToken).toFixed(2) === 'NaN' ? '0.00' : parseFloat(CreditToken/1e9).toFixed(2)} CREDITS</strong>
+                                        </div>
                                         {/* <div className="d-flex mb-1 align-items-center justify-content-between text-md">
                                             <span>Claimable amount</span>
                                             <strong className='font-semibold'>0.00 TAU</strong>
@@ -987,13 +987,17 @@ const usdcMaxTau = () =>
                                             <span>Max mint per tx</span>
                                             <strong className='font-semibold'>0.00 USDC</strong>
                                         </div> */}
-                                        <div className="d-flex mb-1 align-items-center justify-content-between text-md">
-                                            <span> </span>
-                                            {/* <strong className='font-semibold'>Rate : 1 USDC = 1 TAU = 0.33 ELEM</strong> */}
+                                       <div className="d-flex mb-1 align-items-center justify-content-between text-md">
+                                            <span>Exchange Rate </span>
+                                            <strong className='font-semibold'> $1 USDC + $1 JOKER = ${parseFloat((2*dimePrice)/1e8).toFixed(4)} DIME</strong>
                                         </div>
                                         <div className="d-flex mb-1 align-items-center justify-content-between text-md">
-                                            <span> </span>
-                                            {/* <strong className='font-semibold'>Minting fee (1%) : { parseFloat((usdcAmount * usdcPrice) + (elemAmount * elemPrice) * 0.01) ? ((parseFloat((usdcAmount * usdcPrice) + (elemAmount * elemPrice)) * 0.01)).toFixed(6) : '0'} TAU</strong> */}
+                                            <span>Minting Fee </span>
+                                            <strong className='font-semibold'>5% USDT : 5% JOKER</strong>
+                                        </div>
+                                        <div className="d-flex mb-1 align-items-center justify-content-between text-md">
+                                            <span>You will receive</span>
+                                            <strong className='font-semibold'>{parseFloat(DimeToken).toFixed(2) === 'NaN' ? '0.00' : parseFloat(DimeToken/1e9).toFixed(2)} DIME</strong>
                                         </div>
                                         {/* <div className="d-flex mb-1 align-items-center justify-content-between text-md">
                                             <span>You will receive</span>

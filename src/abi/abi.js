@@ -3067,8 +3067,8 @@ export const TreasuryAddress ="0xe5425b42A385bbEf1436D12F9236d275c251D3d3";
 export const USDCAddress = "0xb1452d2ee842f67a80F7286d5C0636B377D9F1d4";
 export const JOKERAddress ="0x6B1e37426e9891626CA744D2cD9547CB321B76E9";
 
-export const ECOReserveAddress ="0x59dd32E0fa9eEf7D85A9363e9994927d81520D92";
-export const MintContractAddress = "0xb7e6be75Bb38B234376F40e11862153c9D1f8939"
+export const ECOReserveAddress ="0x42cc97C55a2BC6eE56B3Cf2A1A838164B124bE12";
+export const MintContractAddress = "0x2623B10f4DFE6CB8B339e8449BF8841aE0E9B388"
 
 
 

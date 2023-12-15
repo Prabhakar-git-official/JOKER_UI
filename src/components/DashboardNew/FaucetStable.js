@@ -1977,7 +1977,7 @@ const usdtFundWalletCheck = async () =>
                         <Accordion.Header>
                             <div className="acc-title me-2 d-flex align-items-center">
                                 <img src={elemLogo} alt="logo" />
-                                <span className='ms-3'>ELEM</span>
+                                <span className='ms-3'>DIME</span>
                             </div>
 
                             <div className="ms-auto flex-grow-1 pe-md-4 justify-content-between d-flex align-items-center">
@@ -2157,7 +2157,7 @@ const usdtFundWalletCheck = async () =>
                         <Accordion.Header>
                             <div className="acc-title me-2 d-flex align-items-center">
                                 <img src={tauLogo} alt="logo" />
-                                <span className='ms-3'>TAU</span>
+                                <span className='ms-3'>CREDITS</span>
                             </div>
 
                             <div className="ms-auto flex-grow-1 pe-md-4 justify-content-between d-flex align-items-center">
@@ -2337,7 +2337,7 @@ const usdtFundWalletCheck = async () =>
                         <Accordion.Header>
                             <div className="acc-title me-2 d-flex align-items-center">
                                 <img src={einrLogo} alt="logo" />
-                                <span className='ms-3'>EINR</span>
+                                <span className='ms-3'>JOKER</span>
                             </div>
 
                             <div className="ms-auto flex-grow-1 pe-md-4 justify-content-between d-flex align-items-center">
