@@ -26,6 +26,10 @@ import WalletConnect from "@walletconnect/client";
 import QRCodeModal from "algorand-walletconnect-qrcode-modal";
 import { formatJsonRpcRequest } from "@json-rpc-tools/utils";
 
+import jokercoin from '../../assets/images/Jokercoin.png';
+import stasiscoin  from '../../assets/images/stasiscoin.png';
+import creditscoin from '../../assets/images/creditscoin.png';
+
 import {ethers} from 'ethers';
 import { BLACKAddress, BlackAbi, CREDITChainlinkAddress, ChainLinkABi, DAIAddress, DIMEAddress, DIMEChainlinkAddress, DaiAbi, DimeAbi, JOKERAddress, JOKERCOntractABI, JOKERChainlinkAddress, JUSDAbi, JUSDAddress, JUSDPoolAbi, JUSDPoolAddress, USDCAddress, USDCChainlinkAddress, USDCContractABI } from '../../abi/abi';
 import { MintContractAddress } from '../../abi/abi';
@@ -795,7 +799,7 @@ const usdcMaxTau = () =>
                                         <Row>
                                             <Col sm={5} className="mb-sm-0 mb-3">
                                                 <Button variant='link' className='btn-currency p-0'>
-                                                    <img src={blackLogo} alt="USDC" />
+                                                    <img src={jokercoin} alt="USDC" />
                                                     <div className="ms-3 text-start">
                                                         
                                                         <h5 className='mb-0 font-semibold'>JOKER</h5>
@@ -818,7 +822,7 @@ const usdcMaxTau = () =>
                                         <Row>
                                             <Col sm={5} className="mb-sm-0 mb-3">
                                                 <Button variant='link' className='btn-currency p-0'>
-                                                    <img src={jusdLogo} alt="USDC" />
+                                                    <img src={creditscoin} alt="USDC" />
                                                     <div className="ms-3 text-start">
                                                         
                                                         <h5 className='mb-0 font-semibold'>CREDIT</h5>
@@ -940,7 +944,7 @@ const usdcMaxTau = () =>
                                         <Row>
                                             <Col sm={5} className="mb-sm-0 mb-3">
                                                 <Button variant='link' className='btn-currency p-0'>
-                                                    <img src={blackLogo} alt="USDC" />
+                                                    <img src={jokercoin} alt="USDC" />
                                                     <div className="ms-3 text-start">
                                                         
                                                         <h5 className='mb-0 font-semibold'>JOKER</h5>
@@ -963,7 +967,7 @@ const usdcMaxTau = () =>
                                         <Row>
                                             <Col sm={5} className="mb-sm-0 mb-3">
                                                 <Button variant='link' className='btn-currency p-0'>
-                                                    <img src={jusdLogo} alt="USDC" />
+                                                    <img src={stasiscoin} alt="USDC" />
                                                     <div className="ms-3 text-start">
                                                         
                                                         <h5 className='mb-0 font-semibold'>DIME</h5>

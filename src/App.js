@@ -115,7 +115,7 @@ function App() {
         <Route path="/recollateralize">
           <RecollateralizeApp />
         </Route>   
-        <Route path="/faucet-stable">
+        <Route path="/faucet">
           <FaucetStable />
         </Route>
         {/* Stabecoin end */}
@@ -202,7 +202,7 @@ function App() {
         <Route path="/analytics">
           <Analytics />
         </Route>
-        <Route path="/faucet">
+        <Route path="/faucet-stable">
           <FaucetApp />
         </Route>
         <Route path="/dashboardnft">

@@ -17,6 +17,11 @@ import node from "./nodeapi.json"
 import WalletConnect from "@walletconnect/client";
 import QRCodeModal from "algorand-walletconnect-qrcode-modal";
 import { formatJsonRpcRequest } from "@json-rpc-tools/utils";
+
+import jokercoin from '../../assets/images/Jokercoin.png';
+import stasiscoin  from '../../assets/images/stasiscoin.png';
+import creditscoin from '../../assets/images/creditscoin.png';
+
 import { updatealgobalance } from "../formula";
 import { BondAbi, BondAddress, CREDITChainlinkAddress, ChainLinkABi, DAIAddress, DIMEAddress, DIMEChainlinkAddress, DaiAbi, DimeAbi, DimeContractABI, JOKERAddress, JOKERCOntractABI, JOKERChainlinkAddress, JUSDAbi, JUSDAddress, JUSDPoolAbi, JUSDPoolAddress, TreasuryAbi, TreasuryAddress, TreasuryContractABI, USDCAddress, USDCChainlinkAddress, USDCContractABI } from '../../abi/abi';
 import { ethers } from 'ethers';
@@ -31,7 +36,7 @@ const bridge = "https://bridge.walletconnect.org";
 const Bond = () => {
 
     useEffect(() => {
-        document.title = "JOKER | Bond"
+        document.title = "𝚪ɸꝁΣℝ | Bond"
     }, [])
 
     const[appTotal,setAppTotal] = useState("");
@@ -596,7 +601,7 @@ const changeInputValue = async(value) =>{
                     <Accordion.Item className='mb-24' eventKey="0">
                         <Accordion.Header>
                             <div className="acc-title me-2 d-flex align-items-center">
-                                <img src={dimeLogo} alt="logo" />
+                                <img src={stasiscoin} alt="logo" />
                                 <span className='ms-3'>DIME</span>
                             </div>
 
@@ -764,7 +769,7 @@ const changeInputValue = async(value) =>{
                                             <h6><span className='text-sm text-gray-d'>Your JOKER Balance: </span>{JokerBlance ? (parseFloat(JokerBlance)/1e9).toFixed(4) : '0'} JOKER</h6>
                                             <Row className='flex-nowrap mb-2 gx-3'>
                                             <Col> <div className="acc-title me-2 d-flex ">
-                                <img src={USDC} alt="logo" />
+                                <img src={jokercoin} alt="logo" />
                                 {/* <span className='ms-3'>USDC</span> */}
                                     
                                                     <InputGroup className='input-group-max'>
