@@ -6,7 +6,7 @@ import {
 import { Button, Col, Container, Modal, OverlayTrigger, Row, Tab, Tabs, Tooltip } from 'react-bootstrap';
 // import PoolParent from './snippets/PoolParent';
 import PoolChild from './snippets/PoolChild';
-import PoolChild2 from './snippets/PoolChild2';
+import PoolChild1 from './snippets/PoolChild1';
 import PoolChild3 from './snippets/PoolChild3';
 import ButtonLoad from 'react-bootstrap-button-loader';
 import axios from 'axios';
@@ -14,6 +14,10 @@ import algologo from '../../assets/images/Algo.png';
 // import elemlogo from '../../assets/images/elem-original.png';
 import elemlogo from '../../assets/images/elem-original-old.png';
 
+
+import jokercoin from '../../assets/images/Jokercoin.png';
+import stasiscoin  from '../../assets/images/stasiscoin.png';
+import creditscoin from '../../assets/images/creditscoin.png';
 
 import WalletConnect from "@walletconnect/client";
 import QRCodeModal from "algorand-walletconnect-qrcode-modal";
@@ -997,7 +1001,7 @@ try {
                 <Modal show={show1} className="modal-dashboard" centered onHide={handleToggle1}>
                 <Modal.Header className="mb-0" closeButton />
                 <Modal.Body className="pt-0">
-                    <Modal.Title className="text-center mb-4">Confirm {functname} <img src={elemlogo} alt='image' width={23} height={23} className="mx-1" /> ELEM</Modal.Title>
+                    <Modal.Title className="text-center mb-4">Confirm {functname} <img src={stasiscoin} alt='image' width={23} height={23} className="mx-1" /> ELEM</Modal.Title>
                     
                     <div className="d-flex text-muted align-items-center justify-content-between flex-wrap">
                         {/* <p className="mb-3">Deposited: 
@@ -1215,7 +1219,8 @@ try {
                     >
                         <Tab eventKey="main" title="Main Pool">
                             <PoolChild />
-                            <PoolChild2 />
+                            <PoolChild1 />
+                            {/* <PoolChild2 /> */}
                             {/* <PoolChild3 /> */}
                             {/* <PoolChild />
                             <PoolChild /> */}
