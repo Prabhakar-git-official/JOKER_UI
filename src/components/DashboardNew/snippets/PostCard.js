@@ -23,6 +23,7 @@ import { updatealgobalance } from "../../formula";
 // import url from '../../../../configurl';
 import { Link } from 'react-router-dom';
 import { launchpadAbi, launchpadAddress, saiTokenAbi, saiTokenAddress } from '../../../abi/abi';
+import { Erc20TokenAddress, LaunchpadAddress, Erc20TokenAbi, LaunchpadAbi } from '../../../abi/LaunchPadabi';
 const algosdk = require('algosdk');
 const myAlgoWallet = new MyAlgoConnect();
 const bridge = "https://bridge.walletconnect.org";
@@ -87,15 +88,20 @@ const PostCard = () => {
     const [elemBalance, setElemBalance] = useState("");
     const [algoDonated, setAlgoDonated] = useState("");
     const [ethBalance, setEthBalance] = useState();
-    const[Saibalance,setSaibalance] = useState()
-    const[TotalCount,setTotalCount] = useState();
-    const[MyDeposit,setMyDeposit] = useState()
+    const[Saibalance,setSaibalance] = useState();
+    // const[TotalCount,setTotalCount] = useState();
+    const[MyDeposit,setMyDeposit] = useState();
+    const[TotalDeposit,setTotalDeposit] = useState()
+    const[minimumStake, setMinimumStake] = useState(0.0001);
 
     
     const [minAlgo, setMinAlgo] = useState("");
 
     const handleAssetFalse = () => setToAssetOpt(false);
     const handleAssetTrue = () => setToAssetOpt(true);
+
+    // Function to convert wei to ETH with decimal values
+  const weiToEth = (wei) => ethers.utils.formatUnits(wei, 'ether');
 
     let appID_global = launchpadDetails['app1']['appID'];
     let escrow_global = "LMCGCWB7LOFIQBIKO663W4OOOQQCNWQGU23HCMLYXX3S35OXS47XLXLTXQ";
@@ -107,7 +113,7 @@ const PostCard = () => {
         console.log("balanceWei")
         // const web3 = new Web3(window.ethereum)
         const provider = new ethers.providers.Web3Provider(window.ethereum)
-        let launchpadContract =  new ethers.Contract(launchpadAddress,launchpadAbi,provider);
+        let launchpadContract =  new ethers.Contract(LaunchpadAddress,LaunchpadAbi,provider);
         if(localStorage.getItem("walletAddress")){
             // await provider.send("eth_requestAccounts", []);
             console.log("balanceWei")
@@ -116,19 +122,24 @@ const PostCard = () => {
             console.log("balanceWei",balance)
             setEthBalance(parseFloat(balance).toFixed(5));
 
-            let saiContract =  new ethers.Contract(saiTokenAddress,saiTokenAbi,provider);
-            let saibalance = await saiContract.balanceOf(localStorage.getItem("walletAddress"));
-            let balanceinth = ethers.utils.formatUnits(saibalance, 18)
-            console.log("saibalace",balanceinth)
+            let jokerContract =  new ethers.Contract(Erc20TokenAddress,Erc20TokenAbi,provider);
+            let jokerbalance = await jokerContract.balanceOf(localStorage.getItem("walletAddress"));
+            let balanceinth = ethers.utils.formatUnits(jokerbalance, 18)
+            console.log("jokerbalance",balanceinth)
             setSaibalance(balanceinth)
-            let mydeposits = await launchpadContract.myDeposits(localStorage.getItem("walletAddress"));
-            let mydep = ethers.utils.formatUnits(mydeposits.total_Token, 18)
-            console.log("mydeposits",mydep)
-            setMyDeposit(mydep)
-
+            let mydeposits = await launchpadContract.getStakeddAmount(localStorage.getItem("walletAddress"));
+            let mydep = (mydeposits /10 **18).toFixed(4);
+            setMyDeposit(mydep);
+            let totaldeposit = await launchpadContract.getContractBalance();
+            let totaldep = (totaldeposit /10 **18).toFixed(4);
+            setTotalDeposit(totaldep);
+            let minimumStake1 = await launchpadContract.minimumStake();
+            let minStake = ethers.utils.formatUnits(minimumStake1, 18);
+            console.log("minimum stake:", minStake);
         }
-        let totalcount = await launchpadContract.tokenCount();
-        setTotalCount(ethers.utils.formatUnits(totalcount, 18))
+        // let totalcount = await launchpadContract.getContractBalance();
+        // console.log("contract balance:", totalcount);
+        // setTotalCount(ethers.utils.formatUnits(totalcount, 18))
 
         
 
@@ -1036,7 +1047,7 @@ function sleep(ms) {
 
 const first = async () => {
 
-    var us= 1701412457;
+    var us= 1710843278;
     var ff=new Date(us);
 setdate(ff.toDateString());
 var hours = ff.getHours();
@@ -1336,6 +1347,38 @@ useEffect(async() => {
         //     }
         // }   
         
+        // const donateWalletCheck = async(value) =>{
+        //     if(localStorage.getItem("walletAddress") === null || localStorage.getItem("walletAddress") === undefined || localStorage.getItem("walletAddress") === ''){                
+        //         toast.warning(`please connect your wallet`,{autoClose: 5000});            
+        //         handleHideLoadParticipate()                     
+        //       }
+             
+        //       else{        
+        //       handleShowLoadParticipate(); 
+        //       const web3 = await connectToEthereum();
+        //       if (!web3) return;
+      
+        //       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        //       const account = accounts[0]; // Use the first account
+      
+        //       console.log("Connected Successfully", account);
+      
+        //       // Create contract instance with the correct order of arguments
+        //       const launchpadContract = new ethers.Contract(launchpadAddress, launchpadAbi, web3.getSigner(account));
+      
+        //       const val = 10000000000000;
+        //       // Send the transaction and wait for it to be mined
+        //       const mintTx = await launchpadContract.deposit(val, { value: val });
+        //       await mintTx.wait();
+        //       toast.success("Particiapted successfully",{autoClose: 5000}); 
+        //     //   let id = "https://testnet.algoexplorer.io/tx/" + txId;
+        //     //   toast.success(toastDiv(id));
+        //       // setMinStart(true)
+        //       handleHideLoadParticipate() ;
+        //       handleCloseDonate();
+        // }   
+        // }
+
         const donateWalletCheck = async(value) =>{
             if(localStorage.getItem("walletAddress") === null || localStorage.getItem("walletAddress") === undefined || localStorage.getItem("walletAddress") === ''){                
                 toast.warning(`please connect your wallet`,{autoClose: 5000});            
@@ -1353,16 +1396,21 @@ useEffect(async() => {
               console.log("Connected Successfully", account);
       
               // Create contract instance with the correct order of arguments
-              const launchpadContract = new ethers.Contract(launchpadAddress, launchpadAbi, web3.getSigner(account));
+              const launchpadContract = new ethers.Contract(LaunchpadAddress, LaunchpadAbi, web3.getSigner(account));
       
-              const val = 10000000000000;
-              // Send the transaction and wait for it to be mined
-              const mintTx = await launchpadContract.deposit(val, { value: val });
-              await mintTx.wait();
+            //   const val = 10000000000000;
+            const val = value * 10 ** 18;
+            const valueInWei = ethers.utils.parseEther(value.toString()); // Convert to string before passing it to BigNumber
+            console.log("val", valueInWei);
+
+            // Send the transaction and wait for it to be mined
+            const depositTx = await launchpadContract.stake({ value: valueInWei });
+            await depositTx.wait();
               toast.success("Particiapted successfully",{autoClose: 5000}); 
             //   let id = "https://testnet.algoexplorer.io/tx/" + txId;
             //   toast.success(toastDiv(id));
               // setMinStart(true)
+            await walletBalance();
               handleHideLoadParticipate() ;
               handleCloseDonate();
         }   
@@ -1404,6 +1452,7 @@ const max = () =>
                         <Form.Group className="mb-4" controlId="formBasicPassword">
                             <center><Form.Label><h5>Sale</h5></Form.Label></center> <br/>
                             <center><Form.Label><p>Spendable ETH Balance:&nbsp;{(parseFloat(ethBalance - 0.00003)).toFixed(2) === 'NaN' ?<>0.00</> :(parseFloat(ethBalance - 0.00003)).toFixed(2)} ETH</p></Form.Label></center> <br/>
+                            <center><Form.Label><p>Minimum Stake Amount:&nbsp; {minimumStake} ETH</p></Form.Label></center> <br/>
                             {/* <Form.Control type="text" placeholder="Enter Amount" value={value} onChange={(e) => setValue(e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'))}/> */}
                             <div className="input-group-max px-3 input-group-max-lg w-100">
                             <InputGroup>
@@ -1524,10 +1573,10 @@ const max = () =>
                             <strong>Start</strong>
                             <strong>End</strong>
                         </div>
-                        <ProgressBar className='no-shadow' now={TotalCount? (TotalCount/1000000)*100 : 0} />
+                        <ProgressBar className='no-shadow' now={MyDeposit? (MyDeposit/TotalDeposit)*100 : 0} />
                         <div className="d-flex justify-content-between">
-                            <strong>{TotalCount? parseFloat((TotalCount/1000000)*100).toFixed(4):0}%</strong>
-                            <strong>{ TotalCount ? parseFloat(TotalCount).toFixed(4) : 0}  / {1000000 }  ETH</strong>
+                            <strong>{(MyDeposit && TotalDeposit)? parseFloat((MyDeposit/TotalDeposit)*100).toFixed(4):0}%</strong>
+                            <strong>{ MyDeposit ? parseFloat(MyDeposit).toFixed(4) : 0}  / {TotalDeposit }  ETH</strong>
                         </div>
                     </div>
                     <div className="d-flex align-items-start justify-content-between">
@@ -1551,11 +1600,11 @@ const max = () =>
                             <div className="h6 mb-0">{1000000} SAI</div>
                             {/* <strong>ELEM</strong> */}
                         </div>
-                        <div className='d-flex flex-column align-items-end'>
+                        {/* <div className='d-flex flex-column align-items-end'>
                             <strong>Total Sold</strong>
-                            <div className="h6 mb-0">{TotalCount? parseFloat(1000000 - TotalCount) : 0} SAI</div>
+                            <div className="h6 mb-0">{TotalCount? parseFloat(1000000 - TotalCount) : 0} SAI</div> */}
                             {/* <strong>ALGO</strong> */}
-                        </div>
+                        {/* </div> */}
                     </div>
                 </Modal.Body>
             </Modal>
