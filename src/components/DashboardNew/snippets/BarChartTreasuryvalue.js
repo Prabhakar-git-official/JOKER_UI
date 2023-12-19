@@ -58,21 +58,21 @@ const BarChartTreasuryvalue = () => {
         console.log("checkp",JokerPrice);
         console.log("check");
         const Ecoreservecontract = new ethers.Contract(ECOReserveAddress,ECOReserveABI, provider);
-        let Credittotalbalance = ethers.utils.formatUnits(await Ecoreservecontract.getTreasuryBalance(),9);
+        let Credittotalbalance = ethers.utils.formatUnits(await Ecoreservecontract.getTreasuryBalanceCredit(),9);
         console.log("creditvalue1",creditvalue);
         let creditvalue =Credittotalbalance * creditprice;
         console.log("creditvalue",creditvalue);
-        let dimetotalbalance = ethers.utils.formatUnits(await Ecoreservecontract.getTreasuryBalance(),9);
+        let dimetotalbalance = ethers.utils.formatUnits(await Ecoreservecontract.getTreasuryBalanceDime(),9);
         let dimevalue =dimetotalbalance*dimeprice;
         setTreasuryPricecredit(creditvalue);
         setTreasuryPricedime(creditvalue);
-        let jokertotalbalance = ethers.utils.formatUnits(await Ecoreservecontract.getTreasuryBalance(),9);
+        let jokertotalbalance = ethers.utils.formatUnits(await Ecoreservecontract.getTreasuryBalanceJoker(),9);
         let jokervalue =jokertotalbalance*jokerprice;
         setTreasuryPricejoker(jokervalue);
-        const Bondreserve= new ethers.Contract(TreasuryAddress,TreasuryContractABI,provider);
-        let usdctotalbalance = ethers.utils.formatUnits(await Bondreserve.getUsdtBalance(),9);
-        let usdcvalue =usdctotalbalance*usdcprice;
-        setTreasuryPriceusdc(usdcvalue);
+        // const Bondreserve= new ethers.Contract(TreasuryAddress,TreasuryContractABI,provider);
+        // let usdctotalbalance = ethers.utils.formatUnits(await Bondreserve.getUsdtBalance(),9);
+        // let usdcvalue =usdctotalbalance*usdcprice;
+        // setTreasuryPriceusdc(usdcvalue);
 
        //setTreasuryTime([1639756800, 1639843200, 1639929600, 1640016000, 1640102400, 1640188800]);
     }
@@ -106,7 +106,7 @@ const BarChartTreasuryvalue = () => {
             colors: ['transparent']
         },
         xaxis: {
-            categories: ['JOKER', 'CREDIT', 'DIME','USDC'],
+            categories: ['JOKER', 'CREDIT', 'DIME'],
         },
         yaxis: {
             title: {
@@ -134,7 +134,7 @@ const BarChartTreasuryvalue = () => {
     const series = [
         {
             name: 'Treasuryvalue',
-            data: [jokertreasuryvalue, credittreasuryvalue, dimetreasuryvalue,usdctreasuryvalue]
+            data: [jokertreasuryvalue, credittreasuryvalue, dimetreasuryvalue]
              //data: [200000000, 10000000, 20000000]
         }
     ];

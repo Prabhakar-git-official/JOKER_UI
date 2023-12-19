@@ -139,13 +139,15 @@ const Dashboard = () => {
         setnextrebasetimeDime(added)
         console.log("lastepore",nextrebasetimedime);
         const Ecoreservecontract = new ethers.Contract(ECOReserveAddress,ECOReserveABI, provider);
-        let Credittotalbalance = ethers.utils.formatUnits(await Ecoreservecontract.getTreasuryBalance(),0);
+        let Credittotalbalance = ethers.utils.formatUnits(await Ecoreservecontract.getTreasuryBalanceCredit(),9);
         console.log("creditvalue1",creditvalue);
         let creditvalue =Credittotalbalance * creditprice;
         console.log("creditvalue",creditvalue);
-        let dimetotalbalance = ethers.utils.formatUnits(await Ecoreservecontract.getTreasuryBalance(),0);
+        let dimetotalbalance = ethers.utils.formatUnits(await Ecoreservecontract.getTreasuryBalanceDime(),9);
         let dimevalue =dimetotalbalance*dimeprice;
-        setTreasuryPrice(creditvalue + dimevalue);
+        let jokertotalbalance = ethers.utils.formatUnits(await Ecoreservecontract.getTreasuryBalanceJoker(),9);
+        let jokervalue =jokertotalbalance*jokerprice;
+        setTreasuryPrice(creditvalue + dimevalue +jokervalue);
 
         // const jokercontract = new ethers.Contract(JOKERAddress, JOKERCOntractABI, provider);
         // let totalSupplyOfJoker = ethers.utils.formatUnits(await jokercontract.totalSupply(),0);
