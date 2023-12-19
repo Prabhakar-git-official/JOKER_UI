@@ -6,6 +6,8 @@ import Icon from '../../../assets/images/post-icon-1.png';
 import Logo from '../../../assets/images/modal-logo-new.png';
 // import SLogo from '../../../assets/images/elem-original.png';
 import SLogo from '../../../assets/images/launchpadJoker.png';
+import jokercoin from '../../../assets/images/Jokercoin.png';
+import stasisTetrahedron from '../../../assets/images/Statis Tetrahedron.png';
 import MyAlgoConnect from '@randlabs/myalgo-connect';
 import ReactDomServer from 'react-dom/server';
 import ButtonLoad from 'react-bootstrap-button-loader'
@@ -93,8 +95,10 @@ const PostCard = () => {
     const[MyDeposit,setMyDeposit] = useState();
     const[TotalDeposit,setTotalDeposit] = useState()
     const[minimumStake, setMinimumStake] = useState(0.0001);
+    const[startEpoch, setStartEpoch] = useState();
+    const[endEpoch, setEndEpoch] = useState();
+    const[isepochCalculated, setisepochCalculated] = useState(false);
 
-    
     const [minAlgo, setMinAlgo] = useState("");
 
     const handleAssetFalse = () => setToAssetOpt(false);
@@ -136,6 +140,10 @@ const PostCard = () => {
             let minimumStake1 = await launchpadContract.minimumStake();
             let minStake = ethers.utils.formatUnits(minimumStake1, 18);
             console.log("minimum stake:", minStake);
+            let startEpoch = await launchpadContract.getStartTimestamp();
+            setStartEpoch(startEpoch);
+            let endEpoch = await launchpadContract.getEndTimestamp();
+            setEndEpoch(endEpoch);
         }
         // let totalcount = await launchpadContract.getContractBalance();
         // console.log("contract balance:", totalcount);
@@ -1046,8 +1054,15 @@ function sleep(ms) {
  }
 
 const first = async () => {
+    
+      if(!isepochCalculated){
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        let launchpadContract =  new ethers.Contract(LaunchpadAddress,LaunchpadAbi,provider);
 
-    var us= 1710843278;
+      let endEpoch1 = await launchpadContract.getEndTimestamp();
+        // var us= 1710848002;
+    var us= endEpoch1;
+    console.log("time:",us);
     var ff=new Date(us);
 setdate(ff.toDateString());
 var hours = ff.getHours();
@@ -1105,7 +1120,9 @@ var countDowndate   =us * 1000;
     
       
     }, 1000);
-   
+       
+setisepochCalculated(true);
+      }
 
 }
 
@@ -1444,8 +1461,8 @@ const max = () =>
                     </Button>
                     <div className="pb-2 px-3">
                   
-                        <img src={SLogo} width="80" className="mx-auto mb-1 d-block" alt="icon" />
-                        <h5 className="mb-1 text-center">Element</h5>
+                        <img src={jokercoin} width="80" className="mx-auto mb-1 d-block" alt="icon" />
+                        <h5 className="mb-1 text-center">JOKER</h5>
                         <p className="mb-2 pb-1 text-center"></p>
 
                         <Form className='form-area'>
@@ -1478,26 +1495,26 @@ const max = () =>
             </Modal>
             <Card className='card-dash border-0 d-block'>
                 <div className="mb-3">
-                    <img src={Image} className="w-100 img-fluid rounded-16" alt="post img" />
+                    <img src={stasisTetrahedron} className="w-100 img-fluid rounded-16" alt="post img" />
                 </div>
 
                 <div className="post-card-title mb-2 w-100 d-flex align-items-center">
-                    <img src={SLogo} width="50" height="50" alt="icon" />
+                    <img src={jokercoin} width="50" height="50" alt="icon" />
                     <div>
                         <h6 className='m-0'>Launchpad</h6>
-                        <span className='d-block'>SAI</span>
+                        <span className='d-block'>JOKER</span>
                     </div>
                 </div>
 
                 <div className="post-card-body mb-3">
                     <div className="d-flex align-items-start justify-content-between">
                         <span>Total Sale</span>
-                        <div className="h6 text-end">1000000 SAI</div>
+                        <div className="h6 text-end">1000000 JOKER</div>
                     </div>
                     <div className="d-flex align-items-start justify-content-between">
                         <span>Starts On <br/> Ends On </span>
                         {/* <div className="h6 text-end">{mapStartDate} <small className='d-block'>≈</small></div> */}
-                        <strong className="text-end">{((new Date(parseFloat(1693466638)*1000)).toLocaleString()) } <br/> {((new Date(parseFloat(1701412457)*1000)).toLocaleString())}</strong>
+                        <strong className="text-end">{startEpoch ? ((new Date(parseFloat(startEpoch)*1000)).toLocaleString()) : 'NaN' } <br/> {endEpoch ?((new Date(parseFloat(endEpoch)*1000)).toLocaleString()) : 'NaN'}</strong>
                     </div>
                 </div>
 
@@ -1528,7 +1545,7 @@ const max = () =>
                 <Modal.Header className='align-items-start' closeButton>
                     <div className="d-flex flex-wrap align-items-start justify-content-between">
                         <div className="d-flex align-items-center flex-wrap modal-head">
-                            <img src={Logo} alt="logo" />
+                        <img src={jokercoin} width="60" height="60" alt="icon" /> <div className="h6 mb-14" style={{ fontSize: '40px' }}>JOKER</div>
 
                             {/* {appOpt === false ? <><ButtonLoad loading={loaderAppOpt} variant="primary" className='py-1' onClick={()=>appOptinWalletCheck()} style={{textTransform:"capitalize"}}>App Opt-in</ButtonLoad><p style={{color:"red"}}>(Please Opt-In App to Participate)</p></> : <></>} */}
                     
@@ -1547,13 +1564,13 @@ const max = () =>
                     
                     <div className="d-flex align-items-start justify-content-between">
                         <div className='d-flex flex-column'>
-                        <strong className="p">Exchange Rate</strong>
-                            <div className="h6 mb-10">1 ETH = 1 SAI</div>
+                        <strong className="p">Minimum Stake Amount</strong>
+                            <div className="h6 mb-10">{minimumStake ? minimumStake : "NaN"} ETH</div>
                         </div>
                         <div className='d-flex ms-auto pt-2 flex-column align-items-end'>
                             <strong className="p">Your Balance</strong>
                             <div className="h6 mb-10">{(parseFloat(ethBalance)).toFixed(2) === 'NaN' ?<>0.00</> :(parseFloat(ethBalance)).toFixed(2)}&nbsp; ETH</div>
-                            <div className="h6 mb-10">{(parseFloat(Saibalance)).toFixed(2) === 'NaN' ?<>0.00</> :(parseFloat(Saibalance)).toFixed(2)}&nbsp; SAI</div>
+                            <div className="h6 mb-10">{(parseFloat(Saibalance)).toFixed(2) === 'NaN' ?<>0.00</> :(parseFloat(Saibalance)).toFixed(2)}&nbsp; JOKER</div>
                         </div>
                         </div>
 
@@ -1597,7 +1614,7 @@ const max = () =>
                     <div className="d-flex align-items-start justify-content-between">
                         <div className='d-flex flex-column'>
                             <strong className="mb-0">Total Allocation</strong>
-                            <div className="h6 mb-0">{1000000} SAI</div>
+                            <div className="h6 mb-0">{1000000} JOKER</div>
                             {/* <strong>ELEM</strong> */}
                         </div>
                         {/* <div className='d-flex flex-column align-items-end'>
