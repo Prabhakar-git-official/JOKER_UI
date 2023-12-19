@@ -428,7 +428,7 @@ const purchaseBond = async() =>{
         // await mintTx.wait();
         console.log("minttx",mintTx.hash);
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
-        let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
+        let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
         toast.success(toastDiv(id));
         toast.success("Bond purchased succeefully");
         await displayValueCalculation()
@@ -460,7 +460,7 @@ const approve = async() =>{
         // await mintTx.wait();
         console.log("minttx",mintTx.hash);
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
-        let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
+        let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
         await sleep(2000);
         toast.success(toastDiv(id));
        
@@ -494,7 +494,7 @@ const approveJOKER = async() =>{
         // await mintTx.wait();
         console.log("minttx",mintTx.hash);
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
-        let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
+        let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
         await sleep(2000);
         toast.success(toastDiv(id));
         
@@ -533,7 +533,7 @@ const claimWalletCheck = async () =>
         // await mintTx.wait();
         console.log("minttx",mintTx.hash);
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
-        let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
+        let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
         await sleep(2000);
         toast.success(toastDiv(id));
         await displayValueCalculation();
