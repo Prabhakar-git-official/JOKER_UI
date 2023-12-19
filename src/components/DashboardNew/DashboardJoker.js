@@ -5,7 +5,10 @@ import AreaChart from './snippets/AreaChart';
 import AreaChartTau from './snippets/AreaChartTau';
 import AreaChartasaswap from './snippets/AreaChartASAswap';
 import AreaChartMintFeeTau from './snippets/AreaChartMintFeeTau';
-import AreaChartEinr from './snippets/AreaChartEinr';
+import BarChartMarketcap from './snippets/BarChartMarketcap';
+import BarCharttreasuryvalue from './snippets/BarChartTreasuryvalue';
+import AreaCharttotalsupply from './snippets/AreaCharttotalsupply';
+import BarChartPrice from './snippets/BarChartPrice';
 import AreaChartElemReserve from './snippets/AreaChartElemReserve';
 import AreaChartMintFeeEinr from './snippets/AreaChartMintFeeEinr';
 import AreaChartRedeemFee from './snippets/AreaChartRedeemFee';
@@ -19,17 +22,19 @@ import node from './nodeapi.json';
 import dashboardDetails from '../Dashboard/stablecoin-only.json';
 import config from '../../NFTFolder/config.json'
 import axios from 'axios';
-import { elemToken } from '../swapConfig';
+
 import AreaChartNFT from './snippets/AreaChartNFT'
 import Logo from '../../assets/images/algorand-logo.png';
 import { ethers } from 'ethers';
-import { BLACKAddress, BlackAbi, BondAbi, BondAddress, CommunityWallet, DAIAddress, DIMEAddress, DaiAbi, DimeAbi, JUSDAbi, JUSDAddress, JUSDPoolAbi, JUSDPoolAddress, TreasuryAddress } from '../../abi/abi';
+import { JOKERAddress,CREDITAddress,CreditcontractAbi,JOKERCOntractABI,BlackAbi, BondAbi, BondAddress, CommunityWallet, DAIAddress, DIMEAddress, DaiAbi, DimeAbi, JUSDAbi, JUSDAddress, JUSDPoolAbi, JUSDPoolAddress, TreasuryAddress,DIMEChainlinkAddress,CREDITChainlinkAddress,JOKERChainlinkAddress,ChainLinkABi,CreditpolicyAbi,CreditPolicyContractAddress,DimeContractABI,ECOReserveAddress,ECOReserveABI } from '../../abi/abi';
+import PieChart from './snippets/PieChartStable';
+import BarChartTreasuryvalue from './snippets/BarChartTreasuryvalue';
 
-const algosdk = require('algosdk');
+// const algosdk = require('algosdk');
 const Dashboard = () => {
 
     useEffect(() => {
-        document.title = "ELEMENT | Dashboard"
+        document.title = "JOKER | Dashboard"
     }, [])
 
     const [einrCir, setEinrCir] = useState("");
@@ -46,21 +51,25 @@ const Dashboard = () => {
     const [usdcEinrBalance, setUsdcEinrBalance] = useState("");
     const [nftBalance, setnftBalance] = useState("");
     const[asaswapelembalance,setasaswapelembalance] = useState("");
+    const [jokerMarketCap, setJokerMarketCap] = useState(0);
+    const [creditMarketCap, setCreditMarketCap] = useState(0);
+    const [dimeMarketCap, setDimeMarketCap] = useState(0);
 
   
 
-    const [JusdPrice, setJusdPrice] = useState("");
+    const [CreditPrice, setCreditPrice] = useState("");
     const [DimePrice, setDimePrice] = useState("");
-    const [BlackPrice, setBlackPrice] = useState("");
+    const [JokerPrice, setJokerPrice] = useState("");
+    const [TreasuryPrice, setTreasuryPrice] = useState("");
     const [Colratio, setColratio] = useState("");
 
 
     const [TrDaiBalance, setTrDaiBalance] = useState("");
     const [TrDimeBalance, setTrDimeBalance] = useState("");
-    const [TrBlackBalance, setTrBlackBalance] = useState("");
+    const [TrJokerBalance, setTrJokerBalance] = useState("");
     const [ComDimeBalance, setComDimeBalance] = useState("");
     const [nextrebasetime, setnextrebasetime] = useState("");
-
+    const [nextrebasetimedime, setnextrebasetimeDime] = useState("");
     const[timecf,settime]= useState("");
     const[map1,setMap]= useState([]);
     const[day,setTime4]= useState("");
@@ -70,66 +79,104 @@ const Dashboard = () => {
     const[lock,setlock]= useState(""); 
     const[date,setdate]= useState("");
 
+    const[timecdime,settimedime]= useState("");
+    const[daydime,setTime4dime]= useState("");
+    const[hourdime,setTim1dime]= useState("");
+    const[mindime,setTim2dime]= useState("");
+    const[secdime,setTim3dime]= useState("");
+    const[lockdime,setlockdime]= useState(""); 
+    const[datedime,setdatedime]= useState("");
+
+
+
     
 
-
-
-    const algodClientGet = new algosdk.Algodv2('', node['algodclient'], '');
+    useEffect(() => {
+        const fetchData = async () => {
+            await cir();
+        };
     
-        const algodClient = new algosdk.Algodv2('', node['algodclient'], '');
-        const indexClient = new algosdk.Indexer('', node['indexerclient'], '');
-
-        const tauID = dashboardDetails.tauID;
-        const einrID = dashboardDetails.einrID;
-        const elemID = dashboardDetails.elemID;
-        const usdcID = dashboardDetails.usdcID;
-        const tauTotalSupply = 18446744073709.551615;
-        const elemTotalSupply = 18446744073709.551615;
-        const einrTotalSupply = 18446744073709.551615;
-
-    useEffect(async() => {
-        await cir();
+        fetchData();
     }, []);
-
+    
     const cir =async () =>
     {
         const provider = new ethers.providers.Web3Provider(window.ethereum)
         // console.log("Connected Successfully", account);
 
         // Create contract instance with the correct order of arguments
-        const jusdpoolcontract = new ethers.Contract(JUSDPoolAddress, JUSDPoolAbi, provider);
-        let jusdprice =  ethers.utils.formatUnits(await jusdpoolcontract.getFRAXPrice(),6);
-        let dimeprice =  ethers.utils.formatUnits(await jusdpoolcontract.getFXSPrice(),6);
-        let blackprice =  ethers.utils.formatUnits(await jusdpoolcontract.getBLACKPrice(),6);
-        const jusdcontract = new ethers.Contract(JUSDAddress, JUSDAbi, provider);
-        let collratio =  ethers.utils.formatUnits(await jusdcontract.global_collateral_ratio(),6);
-        setJusdPrice(jusdprice);
+        // const jusdpoolcontract = new ethers.Contract(JUSDPoolAddress, JUSDPoolAbi, provider);
+        const dimepricedashboard = new ethers.Contract(DIMEChainlinkAddress,ChainLinkABi,provider);
+        const jokerpricedashboard = new ethers.Contract(JOKERChainlinkAddress,ChainLinkABi,provider);
+         const creditpricedashboard = new ethers.Contract(CREDITChainlinkAddress,ChainLinkABi,provider);
+        let dimeprice =  ethers.utils.formatUnits(await dimepricedashboard.getChainlinkDataFeedLatestAnswer(),0);
+      
+        let jokerprice =  ethers.utils.formatUnits(await jokerpricedashboard.getChainlinkDataFeedLatestAnswer(),0);
+        let creditprice =  ethers.utils.formatUnits(await creditpricedashboard.getChainlinkDataFeedLatestAnswer(),0);
+       
+        setCreditPrice(creditprice);
         setDimePrice(dimeprice);
-        setBlackPrice(blackprice);
-        setColratio(collratio);
+        setJokerPrice(jokerprice);
+     
 
-        const daicontract = new ethers.Contract(DAIAddress, DaiAbi, provider);
-        const dimecontract = new ethers.Contract(DIMEAddress, DimeAbi, provider);
-        const blackcontract = new ethers.Contract(BLACKAddress, BlackAbi, provider);
-
-        let trdaiBalance = ethers.utils.formatUnits(await daicontract.balanceOf(TreasuryAddress),18);
-        let trdimeBalance = ethers.utils.formatUnits(await dimecontract.balanceOf(TreasuryAddress),18);
-        let trblackBalance = ethers.utils.formatUnits(await blackcontract.balanceOf(TreasuryAddress),9);
-        let communitydimeBalance = ethers.utils.formatUnits(await dimecontract.balanceOf(CommunityWallet),18);
-
-        setTrDaiBalance(trdaiBalance);
-        setTrDimeBalance(trdimeBalance);
-        setTrBlackBalance(trblackBalance);
-        setComDimeBalance(communitydimeBalance);
-
-        const Bondcontract = new ethers.Contract(BondAddress, BondAbi, provider);
-        let lastepoch = ethers.utils.formatUnits(await Bondcontract.lastEpoch(),0);
-        let epochhours = ethers.utils.formatUnits(await Bondcontract.epochHours(),0);
+        const Creditcontract = new ethers.Contract(CreditPolicyContractAddress,CreditpolicyAbi, provider);
+       
+        let lastepoch = ethers.utils.formatUnits(await Creditcontract.lastRebaseTimestampSec(),0);
+        console.log("lastepo1",lastepoch);
+        let epochhours = ethers.utils.formatUnits(await Creditcontract.minRebaseTimeIntervalSec(),0);
        
         let added = parseInt(lastepoch) + parseInt(epochhours)
         console.log("lastepoch",lastepoch,epochhours,added)
         setnextrebasetime(added)
+        console.log("lastepore",nextrebasetime);
+        const Dimecontract = new ethers.Contract(DIMEAddress,DimeContractABI, provider);
+       
+        let lastepochdime = ethers.utils.formatUnits(await Dimecontract.lastEpoch(),0);
+     
+        let epochhoursdime = ethers.utils.formatUnits(await Dimecontract.epochHours(),0);
+        let addeddime = parseInt(lastepochdime) + parseInt(epochhoursdime)
+        console.log("lastepochdime",addeddime)
+        setnextrebasetimeDime(added)
+        console.log("lastepore",nextrebasetimedime);
+        const Ecoreservecontract = new ethers.Contract(ECOReserveAddress,ECOReserveABI, provider);
+        let Credittotalbalance = ethers.utils.formatUnits(await Ecoreservecontract.getTreasuryBalance(),0);
+        console.log("creditvalue1",creditvalue);
+        let creditvalue =Credittotalbalance * creditprice;
+        console.log("creditvalue",creditvalue);
+        let dimetotalbalance = ethers.utils.formatUnits(await Ecoreservecontract.getTreasuryBalance(),0);
+        let dimevalue =dimetotalbalance*dimeprice;
+        setTreasuryPrice(creditvalue + dimevalue);
 
+        // const jokercontract = new ethers.Contract(JOKERAddress, JOKERCOntractABI, provider);
+        // let totalSupplyOfJoker = ethers.utils.formatUnits(await jokercontract.totalSupply(),0);
+        // const jokerMarketCap = JokerPrice * totalSupplyOfJoker; // Replace totalSupplyOfJoker with the actual total supply
+       
+        // const creditcontract = new ethers.Contract(CreditAddress, CreditcontractAbi, provider);
+        // let totalSupplyOfCredit = ethers.utils.formatUnits(await creditcontract.totalSupply(),0);
+        // const creditMarketCap = CreditPrice * totalSupplyOfCredit; // Replace totalSupplyOfCredit with the actual total supply
+        
+    //     const dimecontract = new ethers.Contract(DIMEAddress, DimeContractABI, provider);
+    //     let totalSupplyOfDime = ethers.utils.formatUnits(await dimecontract.totalSupply(),0);
+    //     const dimeMarketCap = DimePrice * totalSupplyOfDime; // Replace totalSupplyOfDime with the actual total supply
+   
+    //    setJokerMarketCap(jokerMarketCap);
+    //    setCreditMarketCap(creditMarketCap);
+    //    setDimeMarketCap(dimeMarketCap);
+      
+
+        
+
+        // let trdaiBalance = ethers.utils.formatUnits(await daicontract.balanceOf(TreasuryAddress),18);
+        // let trdimeBalance = ethers.utils.formatUnits(await dimecontract.balanceOf(TreasuryAddress),18);
+        // let trjokerBalance = ethers.utils.formatUnits(await jokercontract.balanceOf(TreasuryAddress),9);
+        // let communitydimeBalance = ethers.utils.formatUnits(await dimecontract.balanceOf(CommunityWallet),18);
+
+        // setTrDaiBalance(trdaiBalance);
+        // setTrDimeBalance(trdimeBalance);
+        // setTrJokerBalance(trjokerBalance);
+        // setComDimeBalance(communitydimeBalance);
+
+        
 
 
 
@@ -145,7 +192,7 @@ const Dashboard = () => {
      }
     
     const first = async () => {
-    
+    console.log("lasteporebase",nextrebasetime);
         var us= nextrebasetime;
         var ff=new Date(us);
     setdate(ff.toDateString());
@@ -207,7 +254,76 @@ const Dashboard = () => {
        
     
     }
-
+  
+   useEffect(async() => {
+        await dimerebase()
+    }, [nextrebasetimedime]);
+    
+   
+    
+    const dimerebase = async () => {
+    console.log("lasteporebase",nextrebasetime);
+        var us= nextrebasetimedime;
+        var ff=new Date(us);
+    setdatedime(ff.toDateString());
+    var hours = ff.getHours();
+      var minutes = ff.getMinutes();
+      var ampm = hours >= 12 ? 'pm' : 'am';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
+      minutes = minutes < 10 ? '0'+minutes : minutes;
+      settimedime( hours + ':' + minutes + ' ' + ampm);
+    //settime(lock);
+    var countDowndate   =us * 1000;
+    //// console.log(countDowndate);
+    // var countDownDate = new Date().getTime() + (lock * 1000) ;
+    //alert(time);
+        var x = setInterval(function() {
+           var now = new Date().getTime();
+          var distance = countDowndate - now ;
+        //   // console.log("-------------------now", distance);
+         // // console.log(now);
+          // Time calculations for days, hours, minutes and seconds
+         var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+          console.log("date e", day);
+          console.log("hour e", hour);
+          console.log("min e", minutes);
+          console.log("sec e", seconds);
+    
+          // Output the result in an element with id="demo"
+         // document.getElementById("demo").innerHTML = hours + "h "
+         // + minutes + "m " + seconds + "s ";
+        setTime4dime(days);
+        setTim1dime(hours);
+        setTim2dime(minutes);
+        setTim3dime(seconds);
+    
+    
+        
+        
+        
+        
+          // If the count down is over, write some text 
+          if (distance < 0) {
+                clearInterval(x);
+                setlockdime(false);
+    
+               // // console.log('CountDown Finished');
+            }
+            else{
+             setlockdime(true);
+            }
+    
+        
+          
+        }, 1000);
+       
+    
+    }
     return (
         <Layout>
             <Container>
@@ -217,7 +333,7 @@ const Dashboard = () => {
                     <Card className='card-dash border-0 mb-4'>
                             <Row>
                                 <Col>
-                            <div className="text-md mb-20 font-semibold leading-7 text-purple">Collateral Ratio   
+                            <div className="text-md mb-20 font-semibold leading-7 text-purple">Marketcap    
                             <OverlayTrigger
                                 key="right"
                                 placement="right"
@@ -240,13 +356,50 @@ const Dashboard = () => {
                             </Row>
                             <div className='mb-20'>
                                 <h6 className='sub-heading mb-0'>
-                                    Ratio
+                                    Marketcap
                                 </h6>
-                                <h4 className='mb-2'>{Colratio?(Colratio*1000):"0"}%</h4>
+                                {/* <h4 className='mb-2'>{Colratio?(Colratio*1000):"0"}%</h4> */}
                                 <hr className='mb-20 mt-0' />
                                 <div className='mb-0'>
                                 <Col xs={12} sm={6} className="mb-sm-0 text-center mb-3">
-                                        <PieChartEinr x={(Colratio*1000)} />
+                                        <BarChartMarketcap/>
+                                    </Col>
+                                    </div>
+                            </div>                      
+                        </Card>
+                        <Card className='card-dash border-0 mb-4'>
+                            <Row>
+                                <Col>
+                            <div className="text-md mb-20 font-semibold leading-7 text-purple">Price   
+                            <OverlayTrigger
+                                key="right"
+                                placement="right"
+                                overlay={
+                                    <Tooltip id={`tooltip-right`}>
+                                       
+                                    </Tooltip>
+                                }
+                                >
+                                    <svg className="tooltip-icon ms-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12Z" stroke="#CCCCCC" stroke-width="1.5"></path><path d="M11 8C11 7.44772 11.4477 7 12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8Z" fill="#CCCCCC"></path><path d="M11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V12Z" fill="#CCCCCC"></path></svg>
+                                </OverlayTrigger>
+                            </div>
+                            </Col>
+                            <Col>
+                            {/* <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + JUSDAddress} target="_blank" rel="noreferer">
+                            <svg class="white me-2" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z"></path></svg>
+                            View on explorer
+                            </a> */}
+                            </Col>
+                            </Row>
+                            <div className='mb-20'>
+                                <h6 className='sub-heading mb-0'>
+                                    Price
+                                </h6>
+                                {/* <h4 className='mb-2'>{Colratio?(Colratio*1000):"0"}%</h4> */}
+                                <hr className='mb-20 mt-0' />
+                                <div className='mb-0'>
+                                <Col xs={12} sm={6} className="mb-sm-0 text-center mb-3">
+                                        <BarChartPrice/>
                                     </Col>
                                     </div>
                             </div>                      
@@ -255,13 +408,13 @@ const Dashboard = () => {
                         <Card className='card-dash border-0 mb-4'>
                             <Row>
                                 <Col>
-                            <div className="text-md mb-20 font-semibold leading-7 text-purple">JUSD Price  
+                            <div className="text-md mb-20 font-semibold leading-7 text-purple">Treasuryvalue    
                             <OverlayTrigger
                                 key="right"
                                 placement="right"
                                 overlay={
                                     <Tooltip id={`tooltip-right`}>
-                                        JUSD is the Stablecoin of this Ecosystem.
+                                       
                                     </Tooltip>
                                 }
                                 >
@@ -270,53 +423,28 @@ const Dashboard = () => {
                             </div>
                             </Col>
                             <Col>
-                            <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + JUSDAddress} target="_blank" rel="noreferer">
+                            {/* <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + JUSDAddress} target="_blank" rel="noreferer">
                             <svg class="white me-2" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z"></path></svg>
                             View on explorer
-                            </a>
+                            </a> */}
                             </Col>
                             </Row>
                             <div className='mb-20'>
                                 <h6 className='sub-heading mb-0'>
-                                    Price
+                                    Treasury value
                                 </h6>
-                                <h4 className='mb-2'>${JusdPrice?JusdPrice:"0"}</h4>
-                               
+                                {/* <h4 className='mb-2'>{Colratio?(Colratio*1000):"0"}%</h4> */}
+                                <hr className='mb-20 mt-0' />
+                                <div className='mb-0'>
+                                <Col xs={12} sm={6} className="mb-sm-0 text-center mb-3">
+                                        <BarCharttreasuryvalue/>
+                                    </Col>
+                                    </div>
                             </div>                      
                         </Card>
-                        <Card className='card-dash border-0 mb-4'>
-                            <Row>
-                                <Col>
-                            <div className="text-md mb-20 font-semibold leading-7 text-purple">Treasury DAI 
-                            <OverlayTrigger
-                                key="right"
-                                placement="right"
-                                overlay={
-                                    <Tooltip id={`tooltip-right`}>
-                                        
-                                    </Tooltip>
-                                }
-                                >
-                                    <svg className="tooltip-icon ms-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12Z" stroke="#CCCCCC" stroke-width="1.5"></path><path d="M11 8C11 7.44772 11.4477 7 12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8Z" fill="#CCCCCC"></path><path d="M11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V12Z" fill="#CCCCCC"></path></svg>
-                                </OverlayTrigger>
-                            </div>
-                            </Col>
-                            <Col>
-                            <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + DAIAddress} target="_blank" rel="noreferer">
-                            <svg class="white me-2" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z"></path></svg>
-                            View on explorer
-                            </a>
-                            </Col>
-                            </Row>
-                            <div className='mb-20'>
-                                <h6 className='sub-heading mb-0'>
-                                    DAI Balance
-                                </h6>
-                                <h4 className='mb-2'>{TrDaiBalance?parseFloat(TrDaiBalance).toFixed(4):"0"}</h4>
-                               
-                            </div>                      
-                        </Card>
-                        <Card className='card-dash border-0 mb-4'>
+
+                       
+                        {/* <Card className='card-dash border-0 mb-4'>
                             <Row>
                                 <Col>
                             <div className="text-md mb-20 font-semibold leading-7 text-purple">Treasury DIME 
@@ -347,8 +475,8 @@ const Dashboard = () => {
                                 <h4 className='mb-2'>{TrDimeBalance?parseFloat(TrDimeBalance).toFixed(4):"0"}</h4>
                                
                             </div>                      
-                        </Card>
-                        <Card className='card-dash border-0 mb-4'>
+                        </Card> */}
+                        {/* <Card className='card-dash border-0 mb-4'>
                             <Row>
                                 <Col>
                             <div className="text-md mb-20 font-semibold leading-7 text-purple">Rebase 
@@ -366,10 +494,7 @@ const Dashboard = () => {
                             </div>
                             </Col>
                             <Col>
-                            {/* <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + DIMEAddress} target="_blank" rel="noreferer">
-                            <svg class="white me-2" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z"></path></svg>
-                            View on explorer
-                            </a> */}
+                          
                             </Col>
                             </Row>
                             <div className='mb-20'>
@@ -379,7 +504,7 @@ const Dashboard = () => {
                                 <h4 className='mb-2'>{lock == true ? (<>{day}d:{hour}h:{min}m:{sec}s</>):(<></>)}</h4>
                                
                             </div>                      
-                        </Card>
+                        </Card> */}
 
                         
 
@@ -413,20 +538,20 @@ const Dashboard = () => {
                                 <h6 className='sub-heading mb-0'>
                                     Price
                                 </h6>
-                                <h4 className='mb-2'>${DimePrice?DimePrice:"0"}</h4>
+                                <h4 className='mb-2'>${parseFloat(DimePrice/1e8)?parseFloat(DimePrice/1e8):"0"}</h4>
                                
                             </div>                      
                         </Card>
                         <Card className='card-dash border-0 mb-4'>
                             <Row>
                                 <Col>
-                            <div className="text-md mb-20 font-semibold leading-7 text-purple">BLACK Price  
+                            <div className="text-md mb-20 font-semibold leading-7 text-purple">JOKER Price  
                             <OverlayTrigger
                                 key="right"
                                 placement="right"
                                 overlay={
                                     <Tooltip id={`tooltip-right`}>
-                                       BLACK
+                                       JOKER
                                     </Tooltip>
                                 }
                                 >
@@ -435,7 +560,7 @@ const Dashboard = () => {
                             </div>
                             </Col>
                             <Col>
-                            <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + BLACKAddress} target="_blank" rel="noreferer">
+                            <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + JOKERAddress} target="_blank" rel="noreferer">
                             <svg class="white me-2" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z"></path></svg>
                             View on explorer
                             </a>
@@ -445,14 +570,14 @@ const Dashboard = () => {
                                 <h6 className='sub-heading mb-0'>
                                     Price
                                 </h6>
-                                <h4 className='mb-2'>${BlackPrice?BlackPrice:"0"}</h4>
+                                <h4 className='mb-2'>${parseFloat(JokerPrice/1e8)?parseFloat(JokerPrice/1e8):"0"}</h4>
                                
                             </div>                      
                         </Card>
                         <Card className='card-dash border-0 mb-4'>
                             <Row>
                                 <Col>
-                            <div className="text-md mb-20 font-semibold leading-7 text-purple">Treasury BLACK 
+                            <div className="text-md mb-20 font-semibold leading-7 text-purple">CREDIT Price 
                             <OverlayTrigger
                                 key="right"
                                 placement="right"
@@ -467,7 +592,7 @@ const Dashboard = () => {
                             </div>
                             </Col>
                             <Col>
-                            <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + BLACKAddress} target="_blank" rel="noreferer">
+                            <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + JOKERAddress} target="_blank" rel="noreferer">
                             <svg class="white me-2" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z"></path></svg>
                             View on explorer
                             </a>
@@ -475,16 +600,16 @@ const Dashboard = () => {
                             </Row>
                             <div className='mb-20'>
                                 <h6 className='sub-heading mb-0'>
-                                    BLACK Balance
+                                    Price
                                 </h6>
-                                <h4 className='mb-2'>{TrBlackBalance?parseFloat(TrBlackBalance).toFixed(4):"0"}</h4>
+                                <h4 className='mb-2'>${parseFloat(CreditPrice/1e8)?parseFloat(CreditPrice/1e8):"0"}</h4>
                                
                             </div>                      
                         </Card>
                         <Card className='card-dash border-0 mb-4'>
                             <Row>
                                 <Col>
-                            <div className="text-md mb-20 font-semibold leading-7 text-purple">Community DIME 
+                            <div className="text-md mb-20 font-semibold leading-7 text-purple">Treasury Price 
                             <OverlayTrigger
                                 key="right"
                                 placement="right"
@@ -507,15 +632,115 @@ const Dashboard = () => {
                             </Row>
                             <div className='mb-20'>
                                 <h6 className='sub-heading mb-0'>
-                                    DIME Balance
+                                    Price
                                 </h6>
-                                <h4 className='mb-2'>{ComDimeBalance?parseFloat(TrDaiBalance).toFixed(4):"0"}</h4>
+                                <h4 className='mb-2'>${parseFloat(TreasuryPrice/1e8)?parseFloat(TreasuryPrice/1e8):"0"}</h4>
                                
                             </div>                      
                         </Card>
 
-                         
-
+                        <Card className='card-dash border-0 mb-4'>
+                            <Row>
+                                <Col>
+                            <div className="text-md mb-20 font-semibold leading-7 text-purple">DIME Rebase  
+                            <OverlayTrigger
+                                key="right"
+                                placement="right"
+                                overlay={
+                                    <Tooltip id={`tooltip-right`}>
+                                        Next Rebase Time of DIME
+                                    </Tooltip>
+                                }
+                                >
+                                    <svg className="tooltip-icon ms-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12Z" stroke="#CCCCCC" stroke-width="1.5"></path><path d="M11 8C11 7.44772 11.4477 7 12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8Z" fill="#CCCCCC"></path><path d="M11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V12Z" fill="#CCCCCC"></path></svg>
+                                </OverlayTrigger>
+                            </div>
+                            </Col>
+                            <Col>
+                            {/* <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + JUSDAddress} target="_blank" rel="noreferer">
+                            <svg class="white me-2" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z"></path></svg>
+                            View on explorer
+                            </a> */}
+                            </Col>
+                            </Row>
+                            <div className='mb-20'>
+                                <h6 className='sub-heading mb-0'>
+                                Next Rebase Time of DIME
+                                </h6>
+                                 <h4 className='mb-2'>{lockdime == true ? (<>{daydime}d:{hourdime}h:{mindime}m:{secdime}s</>):(<>00d:00h:00m:00s</>)}</h4>
+                               
+                            </div>                      
+                        </Card>
+                        <Card className='card-dash border-0 mb-4'>
+                            <Row>
+                                <Col>
+                            <div className="text-md mb-20 font-semibold leading-7 text-purple">CREDIT  Rebase 
+                            <OverlayTrigger
+                                key="right"
+                                placement="right"
+                                overlay={
+                                    <Tooltip id={`tooltip-right`}>
+                                        
+                                    </Tooltip>
+                                }
+                                >
+                                    <svg className="tooltip-icon ms-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12Z" stroke="#CCCCCC" stroke-width="1.5"></path><path d="M11 8C11 7.44772 11.4477 7 12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8Z" fill="#CCCCCC"></path><path d="M11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V12Z" fill="#CCCCCC"></path></svg>
+                                </OverlayTrigger>
+                            </div>
+                            </Col>
+                            <Col>
+                            {/* <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + DAIAddress} target="_blank" rel="noreferer">
+                            <svg class="white me-2" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z"></path></svg>
+                            View on explorer
+                            </a> */}
+                            </Col>
+                            </Row>
+                            <div className='mb-20'>
+                                <h6 className='sub-heading mb-0'>
+                                    Timing for Next Rebase
+                                </h6>
+                                <h4 className='mb-2'>{lock == true ? (<>{day}d:{hour}h:{min}m:{sec}s</>):(<>00d:00h:00m:00s</>)}</h4>
+                               
+                            </div>                          
+                        </Card>
+                      
+                        <Card className='card-dash border-0 mb-4'>
+                            <Row>
+                                <Col>
+                            <div className="text-md mb-20 font-semibold leading-7 text-purple">TotalSupply    
+                            <OverlayTrigger
+                                key="right"
+                                placement="right"
+                                overlay={
+                                    <Tooltip id={`tooltip-right`}>
+                                       
+                                    </Tooltip>
+                                }
+                                >
+                                    <svg className="tooltip-icon ms-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12Z" stroke="#CCCCCC" stroke-width="1.5"></path><path d="M11 8C11 7.44772 11.4477 7 12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8Z" fill="#CCCCCC"></path><path d="M11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V12Z" fill="#CCCCCC"></path></svg>
+                                </OverlayTrigger>
+                            </div>
+                            </Col>
+                            <Col>
+                            {/* <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + JUSDAddress} target="_blank" rel="noreferer">
+                            <svg class="white me-2" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z"></path></svg>
+                            View on explorer
+                            </a> */}
+                            </Col>
+                            </Row>
+                            <div className='mb-20'>
+                                <h6 className='sub-heading mb-0'>
+                                    totalSupply
+                                </h6>
+                                {/* <h4 className='mb-2'>{Colratio?(Colratio*1000):"0"}%</h4> */}
+                                <hr className='mb-20 mt-0' />
+                                <div className='mb-0'>
+                                <Col xs={12} sm={12} className="mb-sm-0 text-center mb-3">
+                                        <AreaCharttotalsupply/>
+                                    </Col>
+                                    </div>
+                            </div>                      
+                        </Card>
                         
                       
                     </Col>

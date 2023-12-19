@@ -21,10 +21,10 @@ function HomePage() {
                 <Layout>
                 <HomeBanner />
                 <PriceStability />
-                <StablecoinPortfolio />
+                {/* <StablecoinPortfolio />
                 <ELEMGovernance />
                 <Economy /> 
-                <PartnersInvestorsHome />
+                <PartnersInvestorsHome /> */}
                 </Layout>               
             </div>
         

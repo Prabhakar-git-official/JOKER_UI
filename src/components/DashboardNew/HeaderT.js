@@ -370,7 +370,7 @@ const isMetaMaskInstalled = async () => {
 };
 async function ConnectWallet() {
     // const { activate, chainId } = useWeb3React();
-      const injectedConnector = new InjectedConnector({ supportedChainIds: [84531] });
+      const injectedConnector = new InjectedConnector({ supportedChainIds: [11155111] });
       // activate(injectedConnector);
       // <><Header active = {active}/></>
       // <AvatarDropDown deactivate = {deactivate} />
