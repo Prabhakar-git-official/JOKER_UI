@@ -5,6 +5,9 @@ import WalletConnect from "@walletconnect/client";
 import QRCodeModal from "algorand-walletconnect-qrcode-modal";
 import { formatJsonRpcRequest } from "@json-rpc-tools/utils";
 import { dualwalletconnect } from '../walletconnection';
+import jokercoin from '../../../assets/images/Jokercoin.png';
+// import stasiscoin  from '../../assets/images/stasiscoin.png';
+import creditscoin from '../../../assets/images/creditscoin.png';
 import algosdk, { Algod ,encodeUint64} from "algosdk";
 import ButtonLoad from 'react-bootstrap-button-loader';
 import node from '../nodeapi.json';
@@ -19,7 +22,7 @@ import { checkotp, walletBalance } from "../../formula";
 import { globalstate } from "../../StableswapConfig";
 import { createtpairhistory } from "../../apicallfunction";
 import { ethers } from "ethers";
-import { DIMEAddress, DIMELPStakingAddress, DimeAbi, DimeContractABI, DimeStakingAbi, DimeStakingAddress, StakingContractABI, uniswapNFTContractABI, uniswapNFTContractAddress } from "../../../abi/abi";
+import { CREDITLPStakingAddress, CreditPolicyContractAddress, DIMEAddress, DIMELPStakingAddress, DimeAbi, DimeContractABI, DimeStakingAbi, DimeStakingAddress, StakingContractABI, uniswapNFTContractABI, uniswapNFTContractAddress } from "../../../abi/abi";
 
 // import jokercoin from '../../../assets/images/Jokercoin.png';
 import stasiscoin  from '../../../assets/images/stasiscoin.png';
@@ -84,7 +87,7 @@ function PoolChild() {
           // console.log("Connected Successfully", account);
 
           //new codes
-          const dimeStakingLPContract = new ethers.Contract(DIMELPStakingAddress, StakingContractABI, provider);
+          const dimeStakingLPContract = new ethers.Contract(CREDITLPStakingAddress, StakingContractABI, provider);
           const uniswapNFTContract = new ethers.Contract(uniswapNFTContractAddress, uniswapNFTContractABI, provider);
           
           let totalLpLiquidity =  ethers.utils.formatUnits(await dimeStakingLPContract.totalLiquiidtySupply(),0);
@@ -111,7 +114,7 @@ function PoolChild() {
             console.log("walletNFTID",walletNFTID, walletNFTLiquidity)
             try{
                 let allowance =  await uniswapNFTContract.getApproved(walletNFTID);
-                if(allowance === DIMELPStakingAddress){
+                if(allowance === CREDITLPStakingAddress){
                     setAllowance(true);
                 }
                 else{
@@ -288,7 +291,7 @@ function PoolChild() {
                 console.log("Connected Successfully", account);
         
                 // Create contract instance with the correct order of arguments
-                const dimeUSDCLPstakingContract = new ethers.Contract(DIMELPStakingAddress, StakingContractABI, web31.getSigner(account));
+                const dimeUSDCLPstakingContract = new ethers.Contract(CREDITLPStakingAddress, StakingContractABI, web31.getSigner(account));
         
                 // const val = ethers.utils.formatUnits(100000000000000, 0);
                 // let k = Web3.utils.toBN(1000000000000000000n);
@@ -326,7 +329,7 @@ function PoolChild() {
                 console.log("Connected Successfully", account);
         
                 // Create contract instance with the correct order of arguments
-                const dimeUSDCLPstakingContract = new ethers.Contract(DIMELPStakingAddress, StakingContractABI, web31.getSigner(account));
+                const dimeUSDCLPstakingContract = new ethers.Contract(CREDITLPStakingAddress, StakingContractABI, web31.getSigner(account));
         
                 // const val = ethers.utils.formatUnits(100000000000000, 0);
                 // let k = Web3.utils.toBN(1000000000000000000n);
@@ -363,7 +366,7 @@ function PoolChild() {
                 console.log("Connected Successfully", account);
         
                 // Create contract instance with the correct order of arguments
-                const dimeUSDCLPstakingContract = new ethers.Contract(DIMELPStakingAddress, StakingContractABI, web31.getSigner(account));
+                const dimeUSDCLPstakingContract = new ethers.Contract(CREDITLPStakingAddress, StakingContractABI, web31.getSigner(account));
         
                 // const val = ethers.utils.formatUnits(100000000000000, 0);
                 // let k = Web3.utils.toBN(1000000000000000000n);
@@ -403,7 +406,7 @@ function PoolChild() {
                 // Create contract instance with the correct order of arguments
                 const uniswapcontract = new ethers.Contract(uniswapNFTContractAddress, uniswapNFTContractABI, web31.getSigner(account));
         
-                const mintTx = await uniswapcontract.approve(DIMELPStakingAddress,walletNFTID);
+                const mintTx = await uniswapcontract.approve(CREDITLPStakingAddress,walletNFTID);
               
                 // await mintTx.wait();
                 console.log("minttx",mintTx.hash);
@@ -537,7 +540,7 @@ function PoolChild() {
             <Modal show={show} className="modal-dashboard" centered onHide={handleToggle}>
                 <Modal.Header className="mb-0" closeButton />
                 <Modal.Body className="pt-0">
-                    <Modal.Title className="text-center mb-4">Confirm {functname} <img src={stasiscoin} alt='image' width={23} height={23} className="mx-1" /> DIME</Modal.Title>
+                    <Modal.Title className="text-center mb-4">Confirm {functname} <img src={creditscoin} alt='image' width={23} height={23} className="mx-1" /> CREDITS</Modal.Title>
                     
                     <div className="d-flex text-muted align-items-center justify-content-between flex-wrap">
                         {/* <p className="mb-3">{functname}ed: 
@@ -560,14 +563,14 @@ function PoolChild() {
                             placement="left"
                             overlay={
                                 <Tooltip id={`tooltip-left`}>
-                                    DIME_USDC LP
+                                    CREDIT_USDC LP
                                 </Tooltip>
                             }
                             >
                                 {functname === "Deposit" ? (<>
-                                <div className="d-inline-block ms-1">{walletNFTLiquidity? parseFloat(walletNFTLiquidity/1e9).toFixed(3):'0.0'} DIME_USDC LP</div>
+                                <div className="d-inline-block ms-1">{walletNFTLiquidity? parseFloat(walletNFTLiquidity/1e9).toFixed(3):'0.0'} CREDIT_USDC LP</div>
                                 </>):(<>
-                                    <div className="d-inline-block ms-1">{mystaked? parseFloat(mystaked/1e9).toFixed(3):'0.0'} DIME_USDC LP</div>
+                                    <div className="d-inline-block ms-1">{mystaked? parseFloat(mystaked/1e9).toFixed(3):'0.0'} CREDIT_USDC LP</div>
                                 </>)}
                             </OverlayTrigger>
                         </p>
@@ -697,7 +700,7 @@ function PoolChild() {
                     <div className='d-flex flex-md-row flex-column align-items-md-center w-100'>
                         <div class="acc-title me-2 mb-md-0 mb-3">
                             <div className="d-flex align-items-center justify-content-md-start justify-content-center mb-2">
-                                <img src={stasiscoin} alt="logo" /><span class="ms-3">DIME</span>
+                                <img src={creditscoin} alt="logo" /><span class="ms-3">CREDITS</span>
                             </div>
                             <p className='mb-0 d-flex text-sm align-items-center justify-content-md-start justify-content-center'>
                                 {/* <span className='text-muted text-end'>Coverage Ratio</span>  */}
@@ -741,7 +744,7 @@ function PoolChild() {
                                         </Tooltip>
                                     }
                                     >
-                                    <h6 class="sub-heading text-xs mb-0">DIME_USDC LP</h6>
+                                    <h6 class="sub-heading text-xs mb-0">CREDIT_USDC LP</h6>
                                 </OverlayTrigger>
                             </div>
                            
@@ -767,7 +770,7 @@ function PoolChild() {
                                         </Tooltip>
                                     }
                                     >
-                                    <h6 class="sub-heading text-xs mb-0">DIME_USDC LP</h6>
+                                    <h6 class="sub-heading text-xs mb-0">CREDIT_USDC LP</h6>
                                 </OverlayTrigger>
                             </div>
                         </div>
@@ -802,11 +805,11 @@ function PoolChild() {
                                 <img src={stasiscoin} alt="logo" width={15} />
                             </div>
                             <div className="d-flex align-items-center me-3">
-                                <span className="text-muted me-1"></span>
+                                {/* <span className="text-muted me-1">Base APR</span>
                                 <span className="me-1">
-                                    {/* {parseFloat(baseApr/100000000).toFixed(2)} */}
-                                 </span>
-                                {/* <OverlayTrigger
+                                  
+                                   500 %</span>
+                                <OverlayTrigger
                                     key="right"
                                     placement="right"
                                     overlay={

@@ -46,7 +46,7 @@ const AreaChart = () => {
   const jokerSeries = [
     {
       name: 'Joker Total Supply',
-      data: [jokertotalsupply, jokertotalsupply-10000000, jokertotalsupply-2000000, jokertotalsupply-100000, jokertotalsupply-10000], // Replace with actual Joker data
+      data: [jokertotalsupply, jokertotalsupply-100000000, jokertotalsupply-200000000, jokertotalsupply-250000000, jokertotalsupply-550000000], // Replace with actual Joker data
     },
   ];
 

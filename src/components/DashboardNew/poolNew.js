@@ -7,7 +7,7 @@ import { Button, Col, Container, Modal, OverlayTrigger, Row, Tab, Tabs, Tooltip 
 // import PoolParent from './snippets/PoolParent';
 import PoolChild from './snippets/PoolChild';
 import PoolChild1 from './snippets/PoolChild1';
-import PoolChild3 from './snippets/PoolChild3';
+import PoolChild11 from './snippets/PoolChild11';
 import ButtonLoad from 'react-bootstrap-button-loader';
 import axios from 'axios';
 import algologo from '../../assets/images/Algo.png';
@@ -1219,6 +1219,8 @@ try {
                     >
                         <Tab eventKey="main" title="Main Pool">
                             <PoolChild />
+                           
+                            <PoolChild11 />
                             <PoolChild1 />
                             {/* <PoolChild2 /> */}
                             {/* <PoolChild3 /> */}

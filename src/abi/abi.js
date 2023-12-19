@@ -7207,9 +7207,15 @@ export const MintContractAddress = "0xdAd6643F269A7E85C21d0D6eBdF7b5557E20Ba32"
 export const nftMintAddress = "0x983AAb61b5F2b4401a0D999b4F448A4CD420f71F";
 export const FaucetAddress = "0xC946d98A1fb68e415F721ebC5239C3E78c86d886"
 
-export const DIMELPStakingAddress = "0xF2B88E7aF0762ED11c53C041972eBe15d5EAB432";
+export const DIMELPStakingAddress = "0x2496B829182FA18Fd16AD681F630B2dd03aa37Ab";
+export const JOKERLPStakingAddress = "0xf465dE142207007831ecE999Cd3142Ef5EF4cA58";
+export const CREDITLPStakingAddress ="0x2669905c0ba3a788a04422c0F0929dCb279A9E34"
 export const uniswapNFTContractAddress = "0x1238536071E1c677A632429e3655c799b22cDA52"
 export const CreditPolicyContractAddress = "0xA7aF3B9835FdB80Af5A1725b066bB81582d5C38D"
+
+
+
+
 
 
 
