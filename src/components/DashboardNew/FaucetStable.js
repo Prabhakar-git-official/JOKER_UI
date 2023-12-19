@@ -22,7 +22,7 @@ import creditscoin from '../../assets/images/creditscoin.png';
 import WalletConnect from "@walletconnect/client";
 import QRCodeModal from "algorand-walletconnect-qrcode-modal";
 import { formatJsonRpcRequest } from "@json-rpc-tools/utils";
-import { CREDITAddress, CreditContrtactABI, DIMEAddress, DimeContractABI, FaucetAddress, FaucetContractABI, JOKERAddress, JOKERCOntractABI, TreasuryAddress, TreasuryContractABI, USDCAddress, USDCContractABI } from '../../abi/abi';
+import { CREDITAddress, CreditcontractAbi, DIMEAddress, DimeContractABI, FaucetAddress, FaucetContractABI, JOKERAddress, JOKERCOntractABI, TreasuryAddress, TreasuryContractABI, USDCAddress, USDCContractABI } from '../../abi/abi';
 import { ethers } from 'ethers';
 /* global BigInt */
 
@@ -184,7 +184,7 @@ const algodClientGet = new algosdk.Algodv2('', node['algodclient'], '');
         const USDCContract = new ethers.Contract(USDCAddress, USDCContractABI, provider);
         const TreasuryContract = new ethers.Contract(TreasuryAddress, TreasuryContractABI, provider);
         const JOKERContract = new ethers.Contract(JOKERAddress, JOKERCOntractABI, provider);
-        const CreditContract = new ethers.Contract(CREDITAddress, CreditContrtactABI, provider);
+        const CreditContract = new ethers.Contract(CREDITAddress, CreditcontractAbi, provider);
         
 
         let daibalance = ethers.utils.formatUnits(await USDCContract.balanceOf(localStorage.getItem("walletAddress")),0);

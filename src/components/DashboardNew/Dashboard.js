@@ -5,7 +5,7 @@ import AreaChart from './snippets/AreaChart';
 import AreaChartTau from './snippets/AreaChartTau';
 import AreaChartasaswap from './snippets/AreaChartASAswap';
 import AreaChartMintFeeTau from './snippets/AreaChartMintFeeTau';
-import AreaChartEinr from './snippets/AreaChartEinr';
+import AreaChartEinr from './snippets/BarChartMarketcap';
 import AreaChartElemReserve from './snippets/AreaChartElemReserve';
 import AreaChartMintFeeEinr from './snippets/AreaChartMintFeeEinr';
 import AreaChartRedeemFee from './snippets/AreaChartRedeemFee';

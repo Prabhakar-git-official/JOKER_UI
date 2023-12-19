@@ -5,6 +5,8 @@ import {
   } from "react-router-dom";
 
 import ProtocolImage from "../../assets/images/protocol-image.png";
+import stasislogo from "../../assets/images/Statis Tetrahedron.png";
+//import stasislogo from "../../assets/images/stasisicon.png";
 import ProtocolImageMOb from "../../assets/images/element-protocol-mob-image-2.png";
 
 const HomeBannerBanking = () => {
@@ -14,20 +16,20 @@ const HomeBannerBanking = () => {
             <Container fluid="lg">
                 <Row className='justify-content-center py-0'>
                     <Col xl={12}><br/>
-                        <h1>Joker Protocol</h1>
+                        <h1>𝚪ɸꝁΣℝ</h1>
                     </Col>
                 </Row>
 
                 <div className="text-center banner-protocol-image">
 
-                    <img src={ProtocolImage} alt="ProtocolImage" className='img-fluid d-none d-md-block mx-auto' />
-                    <img src={ProtocolImageMOb} alt="ProtocolImage" className='img-fluid d-md-none w-100' />
+                    <img src={stasislogo} alt="ProtocolImage" className='img-fluid d-none d-md-block mx-auto' />
+                    <img src={stasislogo} alt="ProtocolImage" className='img-fluid d-md-none w-100' />
                     
                 </div>
 
                 <Row className='justify-content-center banner-protocol-text'>
                     <Col xl={12}>
-                       <p><small>The First Dynamic Algorithmic Fractional Stablecoin Model to solve the so-called '‘Stablecoin Trilemma" problem via  Autonomous Demand Supply Balancer (ADSB) stabilization algorithm that orthogonally regulates the price dynamics through elastic supply adjustments, burn and bonding mechanics within a closed ecosystem.</small></p>
+                       <p><small>The world’s first adaptive three-dimensional asset class to combat price volatility and linearly increase buying power</small></p>
                         {/* <p>TAU is the first non-dilutive fractional stablecoin for DeFi 2.0, where the price balance is orthogonally regulated through ELEM elastic supply adjustments, burn and bonding mechanics within a closed ecosystem.</p> */}
                     </Col>
                 </Row>

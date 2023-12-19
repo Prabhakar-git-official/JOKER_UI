@@ -3,7 +3,7 @@ import {Container, Navbar, Nav, Badge} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Logo from '../../assets/images/logo.png';
 import colorLogo from '../../assets/images/modal-logo-new.png'
-import jusdlogo from '../../assets/images/JUSD.svg'
+import jusdlogo from '../../assets/images/jokerheadericons.svg'
 function Header() {
     React.useEffect(() => {
         localStorage.removeItem('Theme', 'light');
