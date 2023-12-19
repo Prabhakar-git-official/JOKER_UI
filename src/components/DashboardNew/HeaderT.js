@@ -111,7 +111,7 @@ const Header = (props) => {
           console.log("addresses : ", addresses);
           localStorage.setItem("walletAddress", addresses[0]);
           localStorage.setItem("UserType", "wallet");
-            await countAsset();
+            // await countAsset();
           window.location.reload();
           setShowButton(false);
         } catch (err) {
@@ -187,122 +187,122 @@ const Header = (props) => {
         }
       }
       
-      const connectPeraWallet = async () => {
-        localStorage.setItem("walletconnect", "");
-        localStorage.setItem("walletName", "PeraWallet");
-        try {
-          const bridge = "https://bridge.walletconnect.org";
-          const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
-          setConnector(connector);
-          console.log("connector",connector);
-          // window.localStorage.setItem("connector", connector);
-          // console.log("connector local", JSON.parse(window.localStorage.getItem("connector")));
-          localStorage.setItem("walletAddress", connector._accounts[0]);
-          if (!connector.connected) {
-            await connector.createSession();
-            console.log("Creating new connector session");
-          }
+      // const connectPeraWallet = async () => {
+      //   localStorage.setItem("walletconnect", "");
+      //   localStorage.setItem("walletName", "PeraWallet");
+      //   try {
+      //     const bridge = "https://bridge.walletconnect.org";
+      //     const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
+      //     setConnector(connector);
+      //     console.log("connector",connector);
+      //     // window.localStorage.setItem("connector", connector);
+      //     // console.log("connector local", JSON.parse(window.localStorage.getItem("connector")));
+      //     localStorage.setItem("walletAddress", connector._accounts[0]);
+      //     if (!connector.connected) {
+      //       await connector.createSession();
+      //       console.log("Creating new connector session");
+      //     }
   
-          connector.on("connect", (error, payload) => {
-            if (error) {
-              throw error;
-            }
-            // Get provided accounts
-            const { accounts } = payload.params[0];
-            console.log("connector.on connect: Connected an account with address:", accounts[0]);
-            setConnector(connector);
-            setConnected(true);
-            localStorage.setItem("walletAddress", connector._accounts[0]);
-            setCurrentAccount(accounts[0]);
-            handleClose();
-            window.location.reload();
-            // localStorage.setItem("walletAddress", connector._accounts[0]);
+      //     connector.on("connect", (error, payload) => {
+      //       if (error) {
+      //         throw error;
+      //       }
+      //       // Get provided accounts
+      //       const { accounts } = payload.params[0];
+      //       console.log("connector.on connect: Connected an account with address:", accounts[0]);
+      //       setConnector(connector);
+      //       setConnected(true);
+      //       localStorage.setItem("walletAddress", connector._accounts[0]);
+      //       setCurrentAccount(accounts[0]);
+      //       handleClose();
+      //       window.location.reload();
+      //       // localStorage.setItem("walletAddress", connector._accounts[0]);
             
-          });
+      //     });
   
-          connector.on("session_update", (error, payload) => {
-            if (error) {
-              throw error;
-            }
-            // Get updated accounts 
-            const { accounts } = payload.params[0];
-            setCurrentAccount(accounts[0])
-          });
+      //     connector.on("session_update", (error, payload) => {
+      //       if (error) {
+      //         throw error;
+      //       }
+      //       // Get updated accounts 
+      //       const { accounts } = payload.params[0];
+      //       setCurrentAccount(accounts[0])
+      //     });
   
-          connector.on("disconnect", (error, payload) => {
-            if (error) {
-              throw error;
-            }
-            setCurrentAccount();
-            setConnected(false);
-            setConnector();
-          });
+      //     connector.on("disconnect", (error, payload) => {
+      //       if (error) {
+      //         throw error;
+      //       }
+      //       setCurrentAccount();
+      //       setConnected(false);
+      //       setConnector();
+      //     });
           
-          if (connector.connected) {
-            const {accounts} = connector;
-            const account = accounts[0];
-            setCurrentAccount(account);
-            setConnected(true);
-          }
-        } catch(error) {
-          console.log("something didn't work in creating connector", error);
-        }
-      } 
+      //     if (connector.connected) {
+      //       const {accounts} = connector;
+      //       const account = accounts[0];
+      //       setCurrentAccount(account);
+      //       setConnected(true);
+      //     }
+      //   } catch(error) {
+      //     console.log("something didn't work in creating connector", error);
+      //   }
+      // } 
 
-      const disconnectPeraWallet = async () => {
-        const bridge = "https://bridge.walletconnect.org";
-        const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
-        setConnector(connector);
-        connector.killSession();
-        console.log("Killing session for wallet with address: ", currentAccount);
-        setCurrentAccount();
-         setConnector();
-        // localStorage.setItem("walletName", "");
-         localStorage.setItem("walletAddress", "");
-        localStorage.setItem("walletconnect", "");
-        setConnected(false);
+      // const disconnectPeraWallet = async () => {
+      //   const bridge = "https://bridge.walletconnect.org";
+      //   const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
+      //   setConnector(connector);
+      //   connector.killSession();
+      //   console.log("Killing session for wallet with address: ", currentAccount);
+      //   setCurrentAccount();
+      //    setConnector();
+      //   // localStorage.setItem("walletName", "");
+      //    localStorage.setItem("walletAddress", "");
+      //   localStorage.setItem("walletconnect", "");
+      //   setConnected(false);
         
-        window.location.reload();
-      }
+      //   window.location.reload();
+      // }
 
-      const getBalance = async () => {
+      // const getBalance = async () => {
         
-        let accountinfo = await algodClient.accountInformation(localStorage.getItem("walletAddress")).do();
-        console.log("Account Balance in Algo:", algosdk.microalgosToAlgos(accountinfo.amount));
-        setwalletbalance(algosdk.microalgosToAlgos(accountinfo.amount));
-        localStorage.setItem("walletbalance",algosdk.microalgosToAlgos(accountinfo.amount))
-        if(localStorage.getItem("walletName") === "myAlgoWallet"){
-        await uservisit("myAlgoWallet");
-        }
-        else if(localStorage.getItem("walletName") === "PeraWallet"){
-        await uservisit("perawallet");
-        }
-      }
+      //   let accountinfo = await algodClient.accountInformation(localStorage.getItem("walletAddress")).do();
+      //   console.log("Account Balance in Algo:", algosdk.microalgosToAlgos(accountinfo.amount));
+      //   setwalletbalance(algosdk.microalgosToAlgos(accountinfo.amount));
+      //   localStorage.setItem("walletbalance",algosdk.microalgosToAlgos(accountinfo.amount))
+      //   if(localStorage.getItem("walletName") === "myAlgoWallet"){
+      //   await uservisit("myAlgoWallet");
+      //   }
+      //   else if(localStorage.getItem("walletName") === "PeraWallet"){
+      //   await uservisit("perawallet");
+      //   }
+      // }
       useEffect(() => {
         checkIfWalletIsConnected();
-        getBalance();
+        // getBalance();
         console.log('currentAccount:', currentAccount);
       }, [currentAccount, walletbalance])
 
       useEffect(async() => {
-        await countAsset()
+        // await countAsset()
     }, [assetCount, algoBalance]);
 
-      const countAsset = async () =>
-      {
+      // const countAsset = async () =>
+      // {
 
-            let accountInfo = await indexClient.lookupAccountByID(localStorage.getItem("walletAddress")).do();            
-        // console.log(accountInfo);
-        // if(accountInfo['account']['assets'] === null)
-        // {
-        //     setAssetCount(0);
-        // }
-        // else
-        // {
-        //     setAssetCount(accountInfo['account']['assets']['length']);
-        // }
-        setAlgoBalance(accountInfo['account']['amount']);
-      }
+      //       let accountInfo = await indexClient.lookupAccountByID(localStorage.getItem("walletAddress")).do();            
+      //   // console.log(accountInfo);
+      //   // if(accountInfo['account']['assets'] === null)
+      //   // {
+      //   //     setAssetCount(0);
+      //   // }
+      //   // else
+      //   // {
+      //   //     setAssetCount(accountInfo['account']['assets']['length']);
+      //   // }
+      //   setAlgoBalance(accountInfo['account']['amount']);
+      // }
 
 const copyCheck = () =>
 {
@@ -448,7 +448,7 @@ async function ConnectWallet() {
       if(localStorage.getItem("walletAddress") === null || localStorage.getItem("walletAddress") === undefined || localStorage.getItem("walletAddress") === ''){                
       }
       else{
-      const response = await fetch(`https://api-sepolia.org/api?module=account&action=balance&address=${walletAddress}&tag=latest`);
+      const response = await fetch(`https://api-sepolia.etherscan.io/api?module=account&action=balance&address=${walletAddress}&tag=latest`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -694,8 +694,8 @@ async function ConnectWallet() {
                 <h6 className='mb-2 me-auto'>Connected with PeraWallet</h6>
                     <div className="d-flex flex-wrap mb-3 align-items-center">
                      
-                        <Button variant='primary' className='btn-xs mb-2 ms-1' onClick={disconnectPeraWallet}>Disconnect</Button>
-                        <Button variant='primary' className='btn-xs mb-2 ms-1' onClick={connectPeraWallet}>Change Account</Button>
+                        {/* <Button variant='primary' className='btn-xs mb-2 ms-1' onClick={disconnectPeraWallet}>Disconnect</Button>
+                        <Button variant='primary' className='btn-xs mb-2 ms-1' onClick={connectPeraWallet}>Change Account</Button> */}
                         {/* <Button variant='primary' className='btn-xs mb-2 ms-1'>Redeem</Button> */}
                     </div>
                     {/* <div> {storereem >= 1 ? (<>

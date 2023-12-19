@@ -26,9 +26,9 @@ const Footer = () => {
     }, [])
     return (
         <>
-            <Modal show={show} size="lg" centered className="modal-dashboard" onHide={handleClose}>
+            <Modal show={false} size="lg" centered className="modal-dashboard" onHide={handleClose}>
                 <Modal.Header closeButton className='align-items-start'>
-                    <Modal.Title><h2 className='m-0'>Welcome to Element</h2></Modal.Title>
+                    <Modal.Title><h2 className='m-0'>Welcome to JOKER </h2></Modal.Title>
                 </Modal.Header>
                 <Modal.Body className='p-0'>
                     <Row className='mb-3 align-items-center'>
