@@ -20,7 +20,7 @@ import { formatJsonRpcRequest } from "@json-rpc-tools/utils";
 import { minAlgoBalance } from '../../NFTFolder/formula';
 import {DataContext} from "../../App";
 import node from './nodeapi.json';
-import jokerlogo from '../../assets/images/J-coin-2.svg';
+import jokerlogo from '../../assets/images/Jokercoin.png';
 import { nftMintAbi, nftMintAddress } from '../../abi/abi';
 const axios = require('axios');
 const algosdk = require('algosdk'); 
