@@ -33,7 +33,9 @@ const BarChartMarketcap = () => {
 
     const marketcapHistory = async () =>
     {
-        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        // const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const url = "https://sepolia.infura.io/v3/886e9a53b5da4f6286230678f7591bde";
+        const provider = new ethers.providers.JsonRpcProvider(url);
         const dimepricedashboard = new ethers.Contract(DIMEChainlinkAddress,ChainLinkABi,provider);
         const jokerpricedashboard = new ethers.Contract(JOKERChainlinkAddress,ChainLinkABi,provider);
         const creditpricedashboard = new ethers.Contract(CREDITChainlinkAddress,ChainLinkABi,provider);

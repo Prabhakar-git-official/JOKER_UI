@@ -18,7 +18,9 @@ const AreaChart = () => {
   }, []);
 
   const marketcapHistory = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const url = "https://sepolia.infura.io/v3/886e9a53b5da4f6286230678f7591bde";
+    const provider = new ethers.providers.JsonRpcProvider(url);
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
 
     const jokercontract = new ethers.Contract(JOKERAddress, JOKERCOntractABI, provider);
     let totalSupplyOfJoker = ethers.utils.formatUnits(await jokercontract.totalSupply(), 9);

@@ -101,7 +101,9 @@ const Dashboard = () => {
     
     const cir =async () =>
     {
-        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const url = "https://sepolia.infura.io/v3/886e9a53b5da4f6286230678f7591bde";
+        const provider = new ethers.providers.JsonRpcProvider(url);
+        // const provider = new ethers.providers.Web3Provider(window.ethereum)
         // console.log("Connected Successfully", account);
 
         // Create contract instance with the correct order of arguments
@@ -116,7 +118,7 @@ const Dashboard = () => {
        
         setCreditPrice(creditprice);
         setDimePrice(dimeprice);
-        setJokerPrice(jokerprice);
+        setJokerPrice(jokerprice*10);
      
 
         const Creditcontract = new ethers.Contract(CreditPolicyContractAddress,CreditpolicyAbi, provider);
