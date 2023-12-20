@@ -126,10 +126,12 @@ const PostCard = () => {
             console.log("balanceWei",balance)
             setEthBalance(parseFloat(balance).toFixed(5));
 
-            let jokerContract =  new ethers.Contract(Erc20TokenAddress,Erc20TokenAbi,provider);
-            let jokerbalance = await jokerContract.balanceOf(localStorage.getItem("walletAddress"));
-            let balanceinth = ethers.utils.formatUnits(jokerbalance, 18)
-            console.log("jokerbalance",balanceinth)
+            // let jokerContract =  new ethers.Contract(Erc20TokenAddress,Erc20TokenAbi,provider);
+            // let jokerbalance = await jokerContract.balanceOf(localStorage.getItem("walletAddress"));
+            // let balanceinth = ethers.utils.formatUnits(jokerbalance, 18)
+            let jokerbalance = await launchpadContract.getRewardAmount(localStorage.getItem("walletAddress"));
+            let balanceinth = (jokerbalance / 10 ** 9).toFixed(2) ;
+            console.log("jokerbalance",balanceinth);
             setSaibalance(balanceinth)
             let mydeposits = await launchpadContract.getStakeddAmount(localStorage.getItem("walletAddress"));
             let mydep = (mydeposits /10 **18).toFixed(4);
