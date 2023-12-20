@@ -51,6 +51,7 @@ import MintingApp from './components/DashboardNew/MintCredit&DIME';
 import RedeemApp from './components/DashboardNew/StablecoinRedeem';
 import DashboardApp from './components/DashboardNew/Dashboard';
 import DashboardMainApp from './components/DashboardNew/DashboardJoker';
+import DashboardAdminMainApp from './components/DashboardNew/DashboardJokerAdmin';
 import AdminPage from './components/DashboardNew/AdminPage';
 import VaultPage from './components/DashboardNew/VaultPage';
 
@@ -89,6 +90,10 @@ function App() {
         <Route path="/dashboardMain">
           <DashboardMainApp />
         </Route>
+        <Route path="/dashboardAdmin">
+          <DashboardAdminMainApp />
+        </Route>
+        
         <Route path="/adminPage">
           <AdminPage />
         </Route>
