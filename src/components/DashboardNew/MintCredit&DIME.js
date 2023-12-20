@@ -95,7 +95,8 @@ const Stablecoin = () => {
     const handlePrerequisiteShow = () => setLoadPrerequisite(true);
     const handlePrerequisiteClose = () => setLoadPrerequisite(false);
 
-    const [usdcAmount, setUsdcAmount ] = useState();
+    const [usdcAmount, setUsdcAmount ] = useState("");
+    console.log("usdcAmount",usdcAmount)
     const [elemAmount, setElemAmount ] = useState();
     const [tauAmount, setTauAmount ] = useState();
     const [usdcAmountEinr, setUsdcAmountEinr ] = useState();
@@ -233,10 +234,10 @@ const Stablecoin = () => {
         setJokerBlance(Jokerbalance)  
 
         let allowance =  ethers.utils.formatUnits(await USDCContract.allowance(localStorage.getItem("walletAddress"),MintContractAddress),0);
-        console.log("allowance", allowance)
+        console.log("allowance1", allowance)
         setAllowance(allowance);
         let allowance2 =  ethers.utils.formatUnits(await JOKERContract.allowance(localStorage.getItem("walletAddress"),MintContractAddress),0);
-        console.log("allowance", allowance)
+        console.log("allowance2", allowance2)
         setAllowance2(allowance2);
 
 
@@ -283,6 +284,7 @@ const Stablecoin = () => {
       }
 
       const calculateJUSDmint = async(value)=>{
+        setUsdcAmount(value)
         //new code
         //Jokervalue = ((1-cPercentage)*(daiAmount*daiPrice)) / (cPercentage*blackPrice)
         let calculatedValue = ((1-0.5)*(value*1e9*USDCPrice))/(0.5*JokerPrice);
@@ -293,10 +295,10 @@ const Stablecoin = () => {
         let reducedTotalDollarvalue = Totaldollarvalue -(Totaldollarvalue * 10/100)
         let creditTokenMint = reducedTotalDollarvalue/CreditPrice;
         setCreditToken(creditTokenMint)
-        console.log("creditToken",creditTokenMint)
+        console.log("value",creditTokenMint,value)
 
         console.log("creditToken",(value*1e9*USDCPrice) ,((Math.abs(calculatedValue)) * JokerPrice))
-
+       
         //old code
         
 
@@ -345,6 +347,7 @@ const Stablecoin = () => {
 
       }
       const calculateDIMEmint = async(value)=>{
+          setUsdcAmount(value)
         //new code
         //Jokervalue = ((1-cPercentage)*(daiAmount*daiPrice)) / (cPercentage*blackPrice)
         let calculatedValue = ((1-0.5)*(value*1e9*USDCPrice))/(0.5*JokerPrice);
@@ -356,6 +359,7 @@ const Stablecoin = () => {
         let DimeTokenMint = reducedTotalDollarvalue/dimePrice;
         setDimeToken(DimeTokenMint)
         console.log("CreditPrice",DimeTokenMint,dimePrice,CreditPrice)
+      
 
         // console.log("creditToken",(value*1e9*USDCPrice) ,((Math.abs(calculatedValue)) * JokerPrice))
 
@@ -503,12 +507,14 @@ const mintCREDIT = async() =>{
         // Create contract instance with the correct order of arguments
         const MintContract = new ethers.Contract(MintContractAddress, MintContractABI, web31.getSigner(account));
 
+
+        console.log("jokerprice amount",JokerPrice,USDCPrice,usdcAmount*1e9,JokerInput)
         // const val = ethers.utils.formatUnits(100000000000000, 0);
         // let k = Web3.utils.toBN(1000000000000000000n);
         // const val11 = ethers.utils.formatUnits(100000000000000, 18);
         // const val1 =  ethers.utils.parseUnits(val11, 18);;
         // Send the transaction and wait for it to be mined
-        const mintTx = await MintContract.mintCreditAndAddLiquidity(BigInt(parseInt(usdcAmount)),BigInt(parseInt(JokerInput)));
+        const mintTx = await MintContract.mintCreditAndAddLiquidity(BigInt(parseInt(usdcAmount*1e9)),BigInt(parseInt(JokerInput-10)));
         // await mintTx.wait();
         console.log("minttx",mintTx.hash);
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
@@ -542,7 +548,7 @@ const mintDIME = async() =>{
         // const val11 = ethers.utils.formatUnits(100000000000000, 18);
         // const val1 =  ethers.utils.parseUnits(val11, 18);;
         // Send the transaction and wait for it to be mined
-        const mintTx = await MintContract.mintDimeAndAddLiquidity(BigInt(parseInt(usdcAmount)),BigInt(parseInt(JokerInput)));
+        const mintTx = await MintContract.mintDimeAndAddLiquidity(BigInt(parseInt(usdcAmount*1e9)),BigInt(parseInt(JokerInput-10)));
         // await mintTx.wait();
         console.log("minttx",mintTx.hash);
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
@@ -868,7 +874,7 @@ const usdcMaxTau = () =>
 
                                     <Row className='flex-nowrap align-items-center gx-3'>
                                         <Col>
-                                        {allowan > usdcAmount ?( allowan2 > JokerInput ? 
+                                        {allowan > (usdcAmount*1e9) ?( allowan2 > (JokerInput) ? 
                                                     (<><Button loading={loadMint} className='btn w-100 btn-blue mb-20'  onClick={mintCREDIT}>
                                                         Mint CREDIT
                                                     </Button></>) :
@@ -1017,7 +1023,7 @@ const usdcMaxTau = () =>
 
                                     <Row className='flex-nowrap align-items-center gx-3'>
                                         <Col>
-                                        {allowan > usdcAmount ?( allowan2 > JokerInput ? 
+                                        {allowan > (usdcAmount*1e9) ?( allowan2 > (JokerInput) ? 
                                                     (<><Button loading={loadMint} className='btn w-100 btn-blue mb-20'  onClick={mintDIME}>
                                                         Mint DIME
                                                     </Button></>) :
