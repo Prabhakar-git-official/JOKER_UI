@@ -506,7 +506,7 @@ const mintCREDIT = async() =>{
         // const val11 = ethers.utils.formatUnits(100000000000000, 18);
         // const val1 =  ethers.utils.parseUnits(val11, 18);;
         // Send the transaction and wait for it to be mined
-        const mintTx = await MintContract.depositAndAddLiquidity(BigInt(parseInt(usdcAmount)),BigInt(parseInt(JokerInput)));
+        const mintTx = await MintContract.mintCreditAndAddLiquidity(BigInt(parseInt(usdcAmount)),BigInt(parseInt(JokerInput)));
         // await mintTx.wait();
         console.log("minttx",mintTx.hash);
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
@@ -540,7 +540,7 @@ const mintDIME = async() =>{
         // const val11 = ethers.utils.formatUnits(100000000000000, 18);
         // const val1 =  ethers.utils.parseUnits(val11, 18);;
         // Send the transaction and wait for it to be mined
-        const mintTx = await MintContract.depositAndAddLiquidity(BigInt(parseInt(usdcAmount)),BigInt(parseInt(JokerInput)));
+        const mintTx = await MintContract.mintDimeAndAddLiquidity(BigInt(parseInt(usdcAmount)),BigInt(parseInt(JokerInput)));
         // await mintTx.wait();
         console.log("minttx",mintTx.hash);
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
