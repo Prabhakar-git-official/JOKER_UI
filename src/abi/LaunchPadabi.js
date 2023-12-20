@@ -1,6 +1,6 @@
-export const Erc20TokenAddress = "0x59c866ABB4207ed6A2F1fD864dc2F98B65E09AC7";
+export const Erc20TokenAddress = "0x14ab3Ff58e178bd706CD3DAFD24FCEa414Fb62b2";
 
-export const LaunchpadAddress = "0x61929427F83D9B81a65Bb9c5b57134BAB6e5CC50";
+export const LaunchpadAddress = "0x83427BB239B4f85946cd3E1572DD79d741076e6F";
 
 export const Erc20TokenAbi = [
 	{
@@ -247,8 +247,39 @@ export const LaunchpadAbi = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "renounceOwnership",
+		"inputs": [
+			{
+				"internalType": "contract IERC20",
+				"name": "_token",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_contractOwner",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_startTimestamp",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_endTimestamp",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_totalTokens",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_minimumStake",
+				"type": "uint256"
+			}
+		],
+		"name": "reSetter",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -258,6 +289,11 @@ export const LaunchpadAbi = [
 			{
 				"internalType": "contract IERC20",
 				"name": "_token",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_contractOwner",
 				"type": "address"
 			},
 			{
@@ -315,6 +351,13 @@ export const LaunchpadAbi = [
 		"type": "event"
 	},
 	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -323,39 +366,6 @@ export const LaunchpadAbi = [
 			}
 		],
 		"name": "reset_minimumStake",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "contract IERC20",
-				"name": "_token",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_startTimestamp",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_endTimestamp",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_totalTokens",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_minimumStake",
-				"type": "uint256"
-			}
-		],
-		"name": "reSetter",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -466,6 +476,19 @@ export const LaunchpadAbi = [
 	},
 	{
 		"inputs": [],
+		"name": "contractOwner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "endTimestamp",
 		"outputs": [
 			{
@@ -485,6 +508,19 @@ export const LaunchpadAbi = [
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getContractOwner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
 			}
 		],
 		"stateMutability": "view",
