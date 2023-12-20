@@ -26,7 +26,7 @@ import axios from 'axios';
 import AreaChartNFT from './snippets/AreaChartNFT'
 import Logo from '../../assets/images/algorand-logo.png';
 import { ethers } from 'ethers';
-import { JOKERAddress,CREDITAddress,CreditcontractAbi,JOKERCOntractABI,BlackAbi, BondAbi, BondAddress, CommunityWallet, DAIAddress, DIMEAddress, DaiAbi, DimeAbi, JUSDAbi, JUSDAddress, JUSDPoolAbi, JUSDPoolAddress, TreasuryAddress,DIMEChainlinkAddress,CREDITChainlinkAddress,JOKERChainlinkAddress,ChainLinkABi,CreditpolicyAbi,CreditPolicyContractAddress,DimeContractABI,ECOReserveAddress,ECOReserveABI, revenueWallet, USDCAddress, USDCContractABI, USDCChainlinkAddress } from '../../abi/abi';
+import { JOKERAddress,CREDITAddress,CreditcontractAbi,JOKERCOntractABI,BlackAbi, BondAbi, BondAddress, CommunityWallet, DAIAddress, DIMEAddress, DaiAbi, DimeAbi, JUSDAbi, JUSDAddress, JUSDPoolAbi, JUSDPoolAddress, TreasuryAddress,DIMEChainlinkAddress,CREDITChainlinkAddress,JOKERChainlinkAddress,ChainLinkABi,CreditpolicyAbi,CreditPolicyContractAddress,DimeContractABI,ECOReserveAddress,ECOReserveABI, revenueWallet, USDCAddress, USDCContractABI, USDCChainlinkAddress, FidicuaryVaultAddress } from '../../abi/abi';
 import PieChart from './snippets/PieChartStable';
 import BarChartTreasuryvalue from './snippets/BarChartTreasuryvalue';
 
@@ -91,6 +91,7 @@ const Dashboard = () => {
     const[TotalBurn,setTotalBurn]= useState("");
     const[JOKERRevenue,setJOKERRevenue]= useState("");
     const[USDCRevenue,setUSDCRevenue]= useState("");
+    const[JokerTresuryValue,setJokerTresuryValue] = useState("")
 
 
 
@@ -118,6 +119,7 @@ const Dashboard = () => {
         let totalburn =  ethers.utils.formatUnits(await jokercontract.totalBurn(),0);
 
         let revenueJOKER = ethers.utils.formatUnits(await jokercontract.balanceOf(revenueWallet),0);
+        let TreasuryJOKER = ethers.utils.formatUnits(await jokercontract.balanceOf(FidicuaryVaultAddress),0);
 
         const USDCcontract = new ethers.Contract(USDCAddress,USDCContractABI,provider);
         let revenueUSDC = ethers.utils.formatUnits(await USDCcontract.balanceOf(revenueWallet),0);
@@ -144,6 +146,7 @@ const Dashboard = () => {
         setTotalBurn(totalburn*jokerprice*10)
         setJOKERRevenue(revenueJOKER*jokerprice*10)
         setUSDCRevenue(revenueUSDC*usdcprice)
+        setJokerTresuryValue(TreasuryJOKER*jokerprice*10)
      
 
         const Creditcontract = new ethers.Contract(CreditPolicyContractAddress,CreditpolicyAbi, provider);
@@ -606,6 +609,38 @@ const Dashboard = () => {
                         <Card className='card-dash border-0 mb-4'>
                             <Row>
                                 <Col>
+                            <div className="text-md mb-20 font-semibold leading-7 text-purple">JOKER TREASURY FEES  
+                            {/* <OverlayTrigger
+                                key="right"
+                                placement="right"
+                                overlay={
+                                    <Tooltip id={`tooltip-right`}>
+                                       JOKER
+                                    </Tooltip>
+                                }
+                                >
+                                    <svg className="tooltip-icon ms-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12Z" stroke="#CCCCCC" stroke-width="1.5"></path><path d="M11 8C11 7.44772 11.4477 7 12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8Z" fill="#CCCCCC"></path><path d="M11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V12Z" fill="#CCCCCC"></path></svg>
+                                </OverlayTrigger> */}
+                            </div>
+                            </Col>
+                            {/* <Col>
+                            <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + JOKERAddress} target="_blank" rel="noreferer">
+                            <svg class="white me-2" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z"></path></svg>
+                            View on explorer
+                            </a>
+                            </Col> */}
+                            </Row>
+                            <div className='mb-20'>
+                                <h6 className='sub-heading mb-0'>
+                                    Total Treasury Fees
+                                </h6>
+                                <h4 className='mb-2'>${parseFloat(JokerTresuryValue/1e17)?parseFloat(JokerTresuryValue/1e17):"0"}</h4>
+                               
+                            </div>                      
+                        </Card>
+                        <Card className='card-dash border-0 mb-4'>
+                            <Row>
+                                <Col>
                             <div className="text-md mb-20 font-semibold leading-7 text-purple">JOKER Revenue 
                             {/* <OverlayTrigger
                                 key="right"
@@ -667,6 +702,7 @@ const Dashboard = () => {
                                
                             </div>                      
                         </Card>
+                        
 
                      
                       
