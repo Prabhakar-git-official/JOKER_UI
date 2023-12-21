@@ -7512,6 +7512,7 @@ export const USDCChainlinkAddress = "0x774586748f90BFbc2522B3255A5ED70ae9F84D3a"
 //Tokens
 export const DIMEAddress = "0xe8Bf46e7283c267d9C1532810017bA5ba2cAC996";
 export const JOKERAddress ="0x14ab3Ff58e178bd706CD3DAFD24FCEa414Fb62b2";
+export const jokerAddressForMinting = "0x345cb61a3CF8062b06827646Dc1D53a8898a7841";
 export const CREDITAddress = "0x118C400F508BCe999De1cD875E4Be804e847E915";
 export const USDCAddress = "0xD8b9C71dF56f3Cbe6B3603BC4440D19c1631a8Cc";
 //treasuryaddress
@@ -7519,7 +7520,7 @@ export const TreasuryAddress ="0x58303065612DE7B213f9974231a6753f7BFcD476";//bon
 export const ECOReserveAddress ="0x50e97Ce376cD3AC7C5c290353c583566fF0F2834";
 //othercontracts
 
-export const MintContractAddress = "0xdAd6643F269A7E85C21d0D6eBdF7b5557E20Ba32"
+export const MintContractAddress = "0xC98F9Fb1e7064B902911F1893DA52FE14a7F71B3"
 export const nftMintAddress = "0x983AAb61b5F2b4401a0D999b4F448A4CD420f71F";
 export const FaucetAddress = "0xC946d98A1fb68e415F721ebC5239C3E78c86d886"
 

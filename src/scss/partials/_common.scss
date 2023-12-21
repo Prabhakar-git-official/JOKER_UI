@@ -278,9 +278,9 @@ p{
 	
 	&-grad{
 		border: none;
-		color: #fff;
-		background: rgb(213,145,255);
-		background: -moz-linear-gradient(90deg, rgba(213,145,255,1) 0%, rgba(145,156,255,1) 50%, rgba(145,235,255,1) 100%);
+		color: black;
+		background: white;
+		background: white;
 		background: -webkit-linear-gradient(90deg, rgba(213,145,255,1) 0%, rgba(145,156,255,1) 50%, rgba(145,235,255,1) 100%);
 		background: linear-gradient(90deg, rgba(213,145,255,1) 0%, rgba(145,156,255,1) 50%, rgba(145,235,255,1) 100%);
 		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#d591ff",endColorstr="#91ebff",GradientType=1);

@@ -31,7 +31,7 @@ import stasiscoin  from '../../assets/images/stasiscoin.png';
 import creditscoin from '../../assets/images/creditscoin.png';
 
 import {ethers} from 'ethers';
-import { BLACKAddress, BlackAbi, CREDITChainlinkAddress, ChainLinkABi, DAIAddress, DIMEAddress, DIMEChainlinkAddress, DaiAbi, DimeAbi, JOKERAddress, JOKERCOntractABI, JOKERChainlinkAddress, JUSDAbi, JUSDAddress, JUSDPoolAbi, JUSDPoolAddress, USDCAddress, USDCChainlinkAddress, USDCContractABI } from '../../abi/abi';
+import { BLACKAddress, BlackAbi, CREDITChainlinkAddress, ChainLinkABi, DAIAddress, DIMEAddress, DIMEChainlinkAddress, DaiAbi, DimeAbi, jokerAddressForMinting, JOKERCOntractABI, JOKERChainlinkAddress, JUSDAbi, JUSDAddress, JUSDPoolAbi, JUSDPoolAddress, USDCAddress, USDCChainlinkAddress, USDCContractABI } from '../../abi/abi';
 import { MintContractAddress } from '../../abi/abi';
 import { MintContractABI } from '../../abi/abi';
 import { ECOReserveAddress } from '../../abi/abi';
@@ -210,7 +210,7 @@ const Stablecoin = () => {
         const JokerPriceContract = new ethers.Contract(JOKERChainlinkAddress, ChainLinkABi, provider);
         const CreditPriceContract = new ethers.Contract(CREDITChainlinkAddress, ChainLinkABi, provider);
         
-        const JOKERContract = new ethers.Contract(JOKERAddress, JOKERCOntractABI, provider);
+        const JOKERContract = new ethers.Contract(jokerAddressForMinting, JOKERCOntractABI, provider);
         const USDCContract = new ethers.Contract(USDCAddress, USDCContractABI, provider);
 
         const MintContract = new ethers.Contract(MintContractAddress, MintContractABI, provider);
@@ -607,7 +607,7 @@ const approveJOKER = async() =>{
         console.log("Connected Successfully", account);
 
         // Create contract instance with the correct order of arguments
-        const JOKERContract = new ethers.Contract(JOKERAddress, JOKERCOntractABI, web31.getSigner(account));
+        const JOKERContract = new ethers.Contract(jokerAddressForMinting, JOKERCOntractABI, web31.getSigner(account));
 
         const mintTx = await JOKERContract.approve(MintContractAddress,BigInt(10000000000*1e9));
         // await mintTx.wait();
