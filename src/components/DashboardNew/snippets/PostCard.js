@@ -1488,7 +1488,7 @@ const max = () =>
                             </InputGroup>
                             </div>
                         </Form.Group>
-                            <ButtonLoad loading={loaderParticipate} size="lg" className='w-100' onClick={()=>donateWalletCheck(value)}>
+                            <ButtonLoad loading={loaderParticipate} style ={{backgroundColor : 'Black'}}size="lg" className='w-100' onClick={()=>donateWalletCheck(value)}>
                                 Participate
                             </ButtonLoad>
                         </Form>
@@ -1522,7 +1522,7 @@ const max = () =>
 
                 <div className="post-card-footer">
                     <div>
-                    <Button className='w-100' onClick={handleShow}>Participate</Button><br/><br/>
+                    <Button className='w-100' style={{backgroundColor : 'Black'}} onClick={handleShow}>Participate</Button><br/><br/>
                     {/* <Button className='w-100' onClick={optinWhiteAsset}>White Asset Optin</Button> */}
                     {/* <Button variant="blue" onClick={indexerCheck}>check</Button><br/><br/> */}
 
@@ -1608,7 +1608,7 @@ const max = () =>
                         {/* {assetOpt === false ? <><ButtonLoad loading={loaderAssetOpt} variant="primary" className='mb-10 py-1' onClick={()=>assetOptinWalletCheck() } style={{textTransform:"capitalize"}}>Asset Opt-in</ButtonLoad><p className='mb-10' style={{color:"red"}}>(Please Opt-In Asset to Participate)</p><br/></> : <></>} */}
                         {/* {appOpt === false || assetOpt === false ? 
                         <ButtonLoad disabled loading={loaderParticipate} variant="primary" className='mb-10 py-1' onClick={()=>handleShowDonate()} style={{textTransform:"capitalize"}}>Participate</ButtonLoad> : <> */}
-                        <ButtonLoad loading={loaderParticipate} variant="primary" className='mb-10 py-1' onClick={()=>handleShowDonate()} style={{textTransform:"capitalize"}}>Participate</ButtonLoad>
+                        <ButtonLoad loading={loaderParticipate} variant="primary" className='mb-10 py-1' onClick={()=>handleShowDonate()} style={{textTransform:"capitalize",backgroundColor : 'Black'}}>Participate</ButtonLoad>
                         {/* </>} */}
                     </div>
                     </div>

@@ -885,7 +885,7 @@ const whiteList = async () =>
                             <center><Form.Label><h3>Sale</h3></Form.Label></center> <br/>
                             <Form.Control type="text" placeholder="Enter Amount" value={value} onChange={(e) => setValue(e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'))}/>
                         </Form.Group>
-                            <Button variant="grad" size="lg" className='w-100' onClick={()=>Donate(value)}>
+                            <Button variant="grad" size="lg" style ={{backgroundColor : 'Black'}}  className='w-100' onClick={()=>Donate(value)}>
                                 Participate
                             </Button>
                         </Form>
@@ -1009,7 +1009,7 @@ const whiteList = async () =>
                         </div>
                     <div className="mb-10 d-flex flex-column align-items-end">
                         {assetOpt === false ? <><Button variant="blue" className='mb-10 py-1' onClick={()=>optinAsset() } style={{textTransform:"capitalize"}}>asset opt-in</Button><p className='mb-10' style={{color:"red"}}>(Please Opt-In Asset to Participate)</p><br/></> : <></>}
-                        <Button variant="blue" className='mb-10 py-1' onClick={()=>handleShowDonate()} style={{textTransform:"capitalize"}}>participate</Button>
+                        <Button onClick={()=>handleShowDonate()} style={{textTransform:"capitalize",backgroundColor : 'Black'}}  className='mb-10 py-1'  >participate</Button>
                     </div>
                     </div>
 

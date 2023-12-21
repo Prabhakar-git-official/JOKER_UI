@@ -36,7 +36,7 @@ const bridge = "https://bridge.walletconnect.org";
 const Bond = () => {
 
     useEffect(() => {
-        document.title = "𝚪ɸꝁΣℝ | Bond"
+        document.title = "ɈɸꝁΣℝ | Bond"
     }, [])
 
     const[appTotal,setAppTotal] = useState("");

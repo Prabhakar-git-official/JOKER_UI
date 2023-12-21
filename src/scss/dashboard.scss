@@ -8,11 +8,11 @@
     --hr: rgb(51,51,51);
     --bg-77: rgb(77, 77, 77);
     --text-primary: #000;
-    --blue: rgb(19,58,198);
+    --blue: black;
     --dark-primary: #191919;
     --gray: rgb(153,153,153);
     --dark-text-primary: #f2f2f2;
-    --text-10 : #1043ff;
+    --text-10 :black;
     --text-FF : #FF2272;
     --purple: rgb(171, 158, 235);
     --text-187: rgb(187, 175, 236);
@@ -68,7 +68,7 @@ body{
         --bg-card: #fff;
         --hr: #fff;
         --bg-77: #fff;
-        --text-FF: rgb(16, 67, 255);
+        --text-FF: black;
     }
 
     &:not(.light-mode){

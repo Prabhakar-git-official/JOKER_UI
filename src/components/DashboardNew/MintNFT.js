@@ -1034,7 +1034,7 @@ const MintNFT = () => {
                                 {/* {MintStart === false ? (
                                   <ButtonLoad loading={loader} className='w-100 mb-3' onClick={()=>{mintNFT()}}>Mint ASA</ButtonLoad>
                                 ):( */}
-                                  <ButtonLoad loading={loader} className='w-100 mb-3' onClick={()=>{mintAppNFT()}}>Mint NFT</ButtonLoad>
+                                  <ButtonLoad loading={loader} className='w-100 mb-3' style={{backgroundColor : 'Black'}} onClick={()=>{mintAppNFT()}}>Mint NFT</ButtonLoad>
                                 {/* )}                                                                                                 */}
                             </Form>
 

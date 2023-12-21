@@ -16,7 +16,7 @@ const HomeBannerBanking = () => {
             <Container fluid="lg">
                 <Row className='justify-content-center py-0'>
                     <Col xl={12}><br/>
-                        <h1>𝚪ɸꝁΣℝ</h1>
+                        <h1>ɈɸꝁΣℝ</h1>
                     </Col>
                 </Row>
 

@@ -9,7 +9,7 @@ function Sidebar() {
             <a href="/">
                 <div className="icon"><img src={Jokerlogo} alt="LogoCircle" /></div>
             </a>
-            <div className="sliding-text"><span>𝚪ɸꝁΣℝ</span></div>
+            <div className="sliding-text"><span>ɈɸꝁΣℝ</span></div>
             {/* <div className="sliding-text"><span><img src={Logo} alt="logo" /></span></div> */}
         </div>
     );
