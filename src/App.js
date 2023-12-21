@@ -9,6 +9,7 @@ import View from "./KycDid/View";
 import CreateKyc from "./KycDid/CreateKyc";
 import Approvepage from "./KycDid/Approvepage";
 import LauchpadApp from "./components/DashboardNew/Launchpad";
+import Burnvault from "./components/DashboardNew/BurnVault";
 import StableswapApp from './components/DashboardNew/Stableswap';
 import PoolNew from "./components/DashboardNew/poolNew";
 import Home from './components/HomePageswap';
@@ -116,6 +117,9 @@ function App() {
         </Route>     
         <Route path="/buyback">
           <BuybackApp />
+        </Route>
+        <Route path="/burnvault">
+          <Burnvault />
         </Route>
         <Route path="/recollateralize">
           <RecollateralizeApp />
