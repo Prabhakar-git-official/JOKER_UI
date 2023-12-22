@@ -106,13 +106,13 @@ const Dashboard = () => {
 
     const [minAlgo, setMinAlgo] = useState("");
 
-    const [maxta,setmaxt] = useState([]);
-    const [jokerBalance,setJokerbalance] = useState([]);
-    const [usdcbalance,setUSDCBlance] = useState([]);
+    const [maxta,setmaxt] = useState("");
+    const [jokerBalance,setJokerbalance] = useState("");
+    const [usdcbalance,setUSDCBlance] = useState("");
     
-    const [circulatingbalance,setcirculatingbalance] = useState([]);
-    const [Jokervaultbalance,setJokerVaultBalance] = useState([]);
-    const [tid4,setId4] = useState([]);
+    const [circulatingbalance,setcirculatingbalance] = useState("");
+    const [Jokervaultbalance,setJokerVaultBalance] = useState("");
+   
     const [burn,setburn] = useState("");
     const [isOpen, setIsOpen] = useState(false);
     const [isOpens, setIsOpens] = useState(false);
@@ -167,8 +167,11 @@ const connectToEthereum = async () => {
         console.log("balanceWei")
         
  
-        if(localStorage.getItem("walletAddress")){
-         
+        if(localStorage.getItem("walletAddress") === null || localStorage.getItem("walletAddress") === undefined || localStorage.getItem("walletAddress") === ''){                
+            console.log("NotbalanceWei")
+        }
+        else{
+           
             let Jokerbalance = ethers.utils.formatUnits(await JOKERContract.balanceOf(localStorage.getItem("walletAddress")),0);
        
             setJokerbalance(Jokerbalance);
@@ -182,14 +185,14 @@ const connectToEthereum = async () => {
             setJokerVaultBalance(jokervaultbalance);
 
             let usdcprice = ethers.utils.formatUnits(await USDCPriceContract.getChainlinkDataFeedLatestAnswer(),0);
-            let jokerPrice = 10 * 10e8;//for now it is given as 10$
-            setJokerPriceinUSD(usdcprice*jokerPrice);
+           // let jokerPrice = 10 * 10e8;//for now it is given as 10$
+            setJokerPriceinUSD(jokerpricedashboard*10);
 
             let burnbalan = ethers.utils.formatUnits(await burnvaultContract.senderBurnBalance(localStorage.getItem("walletAddress")),0);
             
             let bb = maxta - burnbalan;
-            
-            setburn(bb/1e9);
+            console.log("bb",bb);
+            setburn(Math.abs(bb/1e9));
             let usdcbalance = ethers.utils.formatUnits(await USDCContract.balanceOf(localStorage.getItem("walletAddress")),0);
             setUSDCBlance(usdcbalance)  
             console.log("usdcbalance",usdcbalance)
@@ -371,26 +374,27 @@ const purchaseBond = async() =>{
               console.log("Connected Successfully", account);
       
             //   // Create contract instance with the correct order of arguments
-            //const burnvaultcontract = new ethers.Contract(BurnVaultAddress, BurnVaultABI, web3.getSigner(localStorage.getItem("walletAddress")));
+            const burnvaultcontract = new ethers.Contract(BurnVaultAddress, BurnVaultABI, web3.getSigner(localStorage.getItem("walletAddress")));
       
          
             let maxtx = ethers.utils.formatUnits(await burnvaultContract.maxTxAmount(),0)
-            let burnbalan = ethers.utils.formatUnits(await burnvaultContract.senderBurnBalance(account[0]),0)
+            let burnbalan = ethers.utils.formatUnits(await burnvaultContract.senderBurnBalance(localStorage.getItem("walletAddress")),0)
             
             // var burnbalan  = await burnvaultcontract.methods.senderBurnBalance(account[0]).call();
             var bb = maxtx - burnbalan;
             console.log(bb);
-            var burnab1=(bb/1000000000);                
+            var burnab1=(bb);                
       
             //   const val = 10000000000000;
             const val = swapamountjoker;
-           
+            console.log("valcheck",val,maxtx);
    //alert(maxtx);
-   if(val<=  100000){
+   if(val<=  maxtx){
+    console.log("valcheck",val);
     if( val <= burnab1){
-        let amount = val * 1000000000;
+        let amount = val;
      
-        const depositTx =await burnvaultContract.swap(amount);
+        const depositTx =await burnvaultcontract.swap(amount);
         
         await depositTx.wait();
        toast.success("Swapped successfully",{autoClose: 5000}); 
@@ -470,7 +474,7 @@ const changeInputValue = async(value) =>{
                     <Accordion.Item className='mb-24' eventKey="0">
                         <Accordion.Header>
                             <div className="acc-title me-2 d-flex align-items-center">
-                                <img src={stasiscoin} alt="logo" />
+                                <img src={jokercoin} alt="logo" />
                                 <span className='ms-3'>Joker</span>
                             </div>
 
@@ -480,7 +484,8 @@ const changeInputValue = async(value) =>{
                                         Joker Price
                                     </h6>
                                     <h5 className='mb-0 d-flex align-items-center'>
-                                        ${jokerpriceinusd ? (parseFloat((jokerpriceinusd/1e8)) ).toFixed(4) : "0"}
+                                    ${parseFloat(jokerpriceinusd/1e8)?parseFloat(jokerpriceinusd/1e8):"0"}
+                                        {/* ${jokerpriceinusd ? (parseFloat((jokerpriceinusd/1e8)) ).toFixed(4) : "0"} */}
                                         <OverlayTrigger
                                             key="left"
                                             placement="left"
@@ -542,7 +547,7 @@ const changeInputValue = async(value) =>{
                         </Accordion.Header>
                         <Accordion.Body>
                             <div className="d-flex flex-wrap justify-content-end align-items-center float-sm-end mt-1 mb-sm-0 mb-2 acc-h-links">
-                                <a href="https://testnet.algoexplorer.io/application/78065709" rel="noopener noreferrer" target="_blank">
+                                <a href={'https://sepolia.etherscan.io/address/' + BurnVaultAddress} rel="noopener noreferrer" target="_blank">
                                     <svg className="blue-dark-theme mb-1" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z" fill="#CCCCCC"></path></svg>
                                     {/* <span className='ms-1 text-white'>View Contract</span> */}
                                 </a>
@@ -554,6 +559,7 @@ const changeInputValue = async(value) =>{
                                 <Tab eventKey="bond" title="BurnVault">
                                     <Row className='row-divider'>
                                     <Col md={3}>
+
                                             <h6><span className='text-sm text-gray-d'>Your JOKER Balance: </span>{jokerBalance ? (parseFloat(jokerBalance)/1e9).toFixed(4) : '0'} JOKER</h6>
                                             <Row className='flex-nowrap mb-2 gx-3'>
                                             <Col> <div className="acc-title me-2 d-flex ">
