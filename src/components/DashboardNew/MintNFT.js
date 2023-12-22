@@ -296,11 +296,14 @@ const MintNFT = () => {
       var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;          
         if(localStorage.getItem("walletAddress") === null || localStorage.getItem("walletAddress") === undefined || localStorage.getItem("walletAddress") === ''){                
           toast.warning(`please connect your wallet`,{autoClose: 5000});            
-          handleHideLoad()                     
+          handleHideLoad();                     
         }
-       
+       else if(!Check){
+        toast.warning(`Please check in the Captcha`,{autoClose: 5000});
+        handleHideLoad();
+       }
         else{        
-        handleShowLoad()  
+        handleShowLoad();  
         const web3 = await connectToEthereum();
         if (!web3) return;
 
