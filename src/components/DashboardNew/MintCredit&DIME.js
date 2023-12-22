@@ -485,7 +485,7 @@ const Stablecoin = () => {
      const toastDiv = (txId) =>
     (
         <div>
-            <p> Transaction is successful &nbsp;<a style={{color:'#133ac6'}} href={txId} target="_blank" rel="noreferrer"><br/><p style={{fontWeight: 'bold'}}>View in Base Explorer <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <p> Transaction is successful &nbsp;<a style={{color:'#133ac6'}} href={txId} target="_blank" rel="noreferrer"><br/><p style={{fontWeight: 'bold'}}>View in Sepolia Explorer <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
      <path d="M11.7176 3.97604L1.69366 14L0.046875 12.3532L10.0697 2.32926H1.23596V0H14.0469V12.8109H11.7176V3.97604Z" fill="#133ac6"/>
      </svg></p></a></p> 
         </div>
@@ -515,12 +515,13 @@ const mintCREDIT = async() =>{
         // const val1 =  ethers.utils.parseUnits(val11, 18);;
         // Send the transaction and wait for it to be mined
         const mintTx = await MintContract.mintCreditAndAddLiquidity(BigInt(parseInt(usdcAmount*1e9)),BigInt(parseInt(JokerInput-10)));
-        // await mintTx.wait();
+        await mintTx.wait();
         console.log("minttx",mintTx.hash);
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
-        let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
+        let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
         toast.success(toastDiv(id));
-        toast.success("Mint is Done succeefully");
+        await fraxCalculation();
+        toast.success("Mint is Done successfully");
         handleHideMint();
     }catch(error){
         toast.error("Mint is not succeed",`${error}`);
@@ -549,12 +550,13 @@ const mintDIME = async() =>{
         // const val1 =  ethers.utils.parseUnits(val11, 18);;
         // Send the transaction and wait for it to be mined
         const mintTx = await MintContract.mintDimeAndAddLiquidity(BigInt(parseInt(usdcAmount*1e9)),BigInt(parseInt(JokerInput-10)));
-        // await mintTx.wait();
+        await mintTx.wait();
         console.log("minttx",mintTx.hash);
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
-        let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
+        let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
         toast.success(toastDiv(id));
-        toast.success("Mint is Done succeefully");
+        await fraxCalculation();
+        toast.success("Mint is Done successfully");
         handleHideMint();
     }catch(error){
         toast.error("Mint is not succeed",`${error}`);
@@ -580,13 +582,14 @@ const approve = async() =>{
         const USdcContract = new ethers.Contract(USDCAddress, USDCContractABI, web31.getSigner(account));
 
         const mintTx = await USdcContract.approve(MintContractAddress,BigInt(10000000000*1e9));
+        await mintTx.wait();
         console.log("minttx",mintTx.hash);
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
-        let id = "https://sepolia.org/tx/" + mintTx.hash;
+        let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
         await sleep(2000);
         await fraxCalculation();
         toast.success(toastDiv(id));
-        toast.success("Approve is Done succeefully");
+        toast.success("Approve is Done successfully");
         handleHideMint();
     }catch(error){
         toast.error("Approve is not succeed",`${error}`);
@@ -610,14 +613,14 @@ const approveJOKER = async() =>{
         const JOKERContract = new ethers.Contract(jokerAddressForMinting, JOKERCOntractABI, web31.getSigner(account));
 
         const mintTx = await JOKERContract.approve(MintContractAddress,BigInt(10000000000*1e9));
-        // await mintTx.wait();
+        await mintTx.wait();
         console.log("minttx",mintTx.hash);
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
-        let id = "https://sepolia.org/tx/" + mintTx.hash;
+        let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
         await sleep(2000);
         await fraxCalculation();
         toast.success(toastDiv(id));
-        toast.success("Approve is Done succeefully");
+        toast.success("Approve is Done successfully");
         handleHideMint();
     }catch(error){
         toast.error("Approve is not succeed",`${error}`);
@@ -642,12 +645,12 @@ const approvejusd = async() =>{
 
         const mintTx = await jusdContract.approve(JUSDPoolAddress,BigInt(10000000000*1e18));
        
-        // await mintTx.wait();
+        await mintTx.wait();
         console.log("minttx",mintTx.hash);
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
-        let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
+        let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
         toast.success(toastDiv(id));
-        toast.success("Approve JUSD is Done succeefully");
+        toast.success("Approve JUSD is Done successfully");
         handleHideMint();
     }catch(error){
         toast.error("Approve is not succeed",`${error}`);
@@ -678,12 +681,12 @@ const redeemfxs = async() =>{
         // const val1 =  ethers.utils.parseUnits(val11, 18);;
         // Send the transaction and wait for it to be mined
         const mintTx = await JusdPoolContract.redeemFrax(0,BigInt(inputValue),1,1);
-        // await mintTx.wait();
+        await mintTx.wait();
         console.log("minttx",mintTx.hash);
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
-        let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
+        let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
         toast.success(toastDiv(id));
-        toast.success("Redeem is Done succeefully");
+        toast.success("Redeem is Done successfully");
         handleHideMint();
     }catch(error){
         toast.error("Redeem is not succeed");

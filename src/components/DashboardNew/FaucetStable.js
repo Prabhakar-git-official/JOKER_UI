@@ -459,7 +459,7 @@ try {
 
     const mintTx = await FaucetContract.dispense("USDC");
   
-    // await mintTx.wait();
+    await mintTx.wait();
     console.log("minttx",mintTx.hash);
     // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
     let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
@@ -467,7 +467,7 @@ try {
     toast.success(toastDiv(id));
     
     await displayValueCalculation();
-    toast.success("Dispense is Done succeefully");
+    toast.success("Dispense is Done successfully");
     handleHideLoadUsdcFund()
 //toast.success(`Transaction Successful with ${response.txId}`);
   } catch (err) {
@@ -505,7 +505,7 @@ try {
 
     const mintTx = await FaucetContract.dispense("DIME");
   
-    // await mintTx.wait();
+    await mintTx.wait();
     console.log("minttx",mintTx.hash);
     // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
     let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
@@ -513,7 +513,7 @@ try {
     toast.success(toastDiv(id));
     
     await displayValueCalculation();
-    toast.success("Dispense is Done succeefully");
+    toast.success("Dispense is Done successfully");
     handleHideLoadElemFund();
 //toast.success(`Transaction Successful with ${response.txId}`);
   } catch (err) {
@@ -552,7 +552,7 @@ try {
 
     const mintTx = await FaucetContract.dispense("CREDIT");
   
-    // await mintTx.wait();
+    await mintTx.wait();
     console.log("minttx",mintTx.hash);
     // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
     let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
@@ -560,7 +560,7 @@ try {
     toast.success(toastDiv(id));
     
     await displayValueCalculation();
-    toast.success("Dispense is Done succeefully");
+    toast.success("Dispense is Done successfully");
     handleHideLoadTauFund();
 //toast.success(`Transaction Successful with ${response.txId}`);
   } catch (err) {
@@ -597,7 +597,7 @@ try {
 
     const mintTx = await FaucetContract.dispense("JOKER");
   
-    // await mintTx.wait();
+    await mintTx.wait();
     console.log("minttx",mintTx.hash);
     // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
     let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
@@ -605,7 +605,7 @@ try {
     toast.success(toastDiv(id));
     
     await displayValueCalculation();
-    toast.success("Dispense is Done succeefully");
+    toast.success("Dispense is Done successfully");
     handleHideLoadEinrFund();
 //toast.success(`Transaction Successful with ${response.txId}`);
   } catch (err) {

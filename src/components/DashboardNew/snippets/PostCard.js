@@ -1425,11 +1425,12 @@ useEffect(async() => {
             // Send the transaction and wait for it to be mined
             const depositTx = await launchpadContract.stake({ value: valueInWei });
             await depositTx.wait();
-              toast.success("Particiapted successfully",{autoClose: 5000}); 
+            await walletBalance();
+            toast.success("Particiapted successfully",{autoClose: 5000}); 
             //   let id = "https://testnet.algoexplorer.io/tx/" + txId;
             //   toast.success(toastDiv(id));
               // setMinStart(true)
-            await walletBalance();
+            
               handleHideLoadParticipate() ;
               handleCloseDonate();
         }   
