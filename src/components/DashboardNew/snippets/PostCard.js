@@ -1403,9 +1403,12 @@ useEffect(async() => {
                 toast.warning(`please connect your wallet`,{autoClose: 5000});            
                 handleHideLoadParticipate()                     
               }
-             
-              else{        
-              handleShowLoadParticipate(); 
+             else if (value < minimumStake){
+                toast.warning("Increase Stake amount");
+             }
+              else{   
+                try{
+                    handleShowLoadParticipate(); 
               const web3 = await connectToEthereum();
               if (!web3) return;
       
@@ -1433,6 +1436,13 @@ useEffect(async() => {
             
               handleHideLoadParticipate() ;
               handleCloseDonate();
+                }
+                catch(e){
+                    console.log("Error:",e);
+                    toast.error("Participation Failed",{autclose: 5000});
+                    handleHideLoadParticipate() ;
+                }     
+              
         }   
         }
 
@@ -1593,10 +1603,12 @@ const max = () =>
                             <strong>Start</strong>
                             <strong>End</strong>
                         </div>
-                        <ProgressBar className='no-shadow' now={MyDeposit? (MyDeposit/TotalDeposit)*100 : 0} />
+                        <ProgressBar className='no-shadow' now={TotalDeposit? (TotalDeposit/10)*100 : 0} />
                         <div className="d-flex justify-content-between">
-                            <strong>{(MyDeposit && TotalDeposit)? parseFloat((MyDeposit/TotalDeposit)*100).toFixed(4):0}%</strong>
-                            <strong>{ MyDeposit ? parseFloat(MyDeposit).toFixed(4) : 0}  / {TotalDeposit }  ETH</strong>
+                            {/* <strong>{(MyDeposit && TotalDeposit)? parseFloat((MyDeposit/TotalDeposit)*100).toFixed(4):0}%</strong>
+                            <strong>{ MyDeposit ? parseFloat(MyDeposit).toFixed(4) : 0}  / {TotalDeposit }  ETH</strong> */}
+                            <strong>{(TotalDeposit)? parseFloat((TotalDeposit/10)*100).toFixed(4):0}%</strong>
+                            <strong>{ TotalDeposit ? TotalDeposit : 0}  / {10 }  ETH</strong>
                         </div>
                     </div>
                     <div className="d-flex align-items-start justify-content-between">
