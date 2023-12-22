@@ -48,6 +48,7 @@ const Bond = () => {
 
     const handleShowLoadPurchase = () => setLoaderPurchase(true);
     const handleHideLoadPurchase = () => setLoaderPurchase(false);
+    
 
     const[loaderClaim, setLoaderClaim] = useState(false);
 
@@ -409,7 +410,9 @@ const connectToEthereum = async () => {
   };
 
 const purchaseBond = async() =>{
+  
     handleShowLoadPurchase();
+  
     try{
         const web31 = await connectToEthereum();
         if (!web31) return;
@@ -427,8 +430,10 @@ const purchaseBond = async() =>{
         // const val11 = ethers.utils.formatUnits(100000000000000, 18);
         // const val1 =  ethers.utils.parseUnits(val11, 18);;
         // Send the transaction and wait for it to be mined
+      
         const mintTx = await DimeContract.participateInBond(BigInt(parseInt(bondAmount)),BigInt(parseInt(JokerInput)));
         await mintTx.wait();
+      
         console.log("minttx",mintTx.hash);
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
         let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
@@ -803,9 +808,9 @@ const changeInputValue = async(value) =>{
                                                 <Col >
                                                 <br/>
                                                 {allowan > bondAmount ?( allowan2 > JokerInput ? 
-                                                    (<><Button loading={loaderPurchase} className='btn btn-blue' onClick={purchaseBond}>
+                                                    (<><ButtonLoad loading={loaderPurchase} className='btn btn-blue' onClick={purchaseBond}>
                                                         Purchase Bond
-                                                    </Button></>) :
+                                                    </ButtonLoad></>) :
                                                     (<><ButtonLoad loading={loaderPurchase} className='btn btn-blue' onClick={approveJOKER}>
                                                     Approve JOKER
                                                     </ButtonLoad></>) ):(<>
