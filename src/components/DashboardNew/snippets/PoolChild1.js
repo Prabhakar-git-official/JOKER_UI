@@ -296,13 +296,14 @@ function PoolChild() {
                 // const val1 =  ethers.utils.parseUnits(val11, 18);;
                 // Send the transaction and wait for it to be mined
                 const mintTx = await dimeUSDCLPstakingContract.deposit();
-                // await mintTx.wait();
+                await mintTx.wait();
                 console.log("minttx",mintTx.hash);
                 // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
-                let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
+                let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
                 toast.success(toastDiv(id));
-                toast.success("Staked succeefully");
                 await displayValueCalculation();
+                toast.success("Staked successfully");
+                
                 await sleep(2000);
                 handleHideLoad();
                 // await sleep(1600);
@@ -334,13 +335,14 @@ function PoolChild() {
                 // const val1 =  ethers.utils.parseUnits(val11, 18);;
                 // Send the transaction and wait for it to be mined
                 const mintTx = await dimeUSDCLPstakingContract.withdraw();
-                // await mintTx.wait();
+                await mintTx.wait();
                 console.log("minttx",mintTx.hash);
                 // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
-                let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
+                let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
                 toast.success(toastDiv(id));
-                toast.success("withdrawn succeefully");
                 await displayValueCalculation();
+                toast.success("withdrawn successfully");
+                
                 await sleep(2000);
                 handleHideLoad();
                 // await sleep(1600);
@@ -371,13 +373,14 @@ function PoolChild() {
                 // const val1 =  ethers.utils.parseUnits(val11, 18);;
                 // Send the transaction and wait for it to be mined
                 const mintTx = await dimeUSDCLPstakingContract.claimReward();
-                // await mintTx.wait();
+                await mintTx.wait();
                 console.log("minttx",mintTx.hash);
                 // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
-                let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
+                let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
                 toast.success(toastDiv(id));
-                toast.success("claimReward succeefully");
                 await displayValueCalculation();
+                toast.success("claimReward successfully");
+                
                 await sleep(2000);
                 handleHideLoad1();
                 // await sleep(1600);
@@ -405,13 +408,14 @@ function PoolChild() {
         
                 const mintTx = await uniswapcontract.approve(JOKERLPStakingAddress,walletNFTID);
               
-                // await mintTx.wait();
+                await mintTx.wait();
                 console.log("minttx",mintTx.hash);
                 // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
-                let id = "https://goerli.basescan.org/tx/" + mintTx.hash;
+                let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
                 toast.success(toastDiv(id));
-                toast.success("Approve is Done succeefully");
                 await displayValueCalculation();
+                toast.success("Approve is Done successfully");
+                
                 await sleep(2000);
                 handleHideLoad();
             }catch(error){
