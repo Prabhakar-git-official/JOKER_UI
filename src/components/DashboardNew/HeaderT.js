@@ -20,6 +20,10 @@ import Web3 from 'web3';
 import { ethers } from 'ethers';
 import { InjectedConnector } from '@web3-react/injected-connector';
 
+// import jokercoin from '../../assets/images/Jokercoin.png';
+// import stasiscoin  from '../../assets/images/stasiscoin.png';
+// import creditscoin from '../../assets/images/creditscoin.png';
+
 //import { AppId,escrowProgram } from "../swapConfig";
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 import { useWeb3React } from '@web3-react/core';
@@ -29,6 +33,7 @@ import MyAlgoConnect from '@randlabs/myalgo-connect';
 
 import WalletConnect from "@walletconnect/client";
 import QRCodeModal from "algorand-walletconnect-qrcode-modal";
+import { DIMEAddress, DimeContractABI, JOKERAddress, JOKERCOntractABI } from '../../abi/abi';
 
 const algosdk = require('algosdk');
 const myAlgoWallet = new MyAlgoConnect();
@@ -48,6 +53,9 @@ const Header = (props) => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [ethBalance, setEthBalance] = useState();
+
+    const[jokBalan,setJokerBalan] = useState("");
+    const[dimebalan,setDimeBalan] = useState("");
 
     const handleConnectedClose = () => setConnectedShow(false);
     const handleConnectedShow = () => setConnectedShow(true);
@@ -460,6 +468,14 @@ async function ConnectWallet() {
         throw new Error('API response was not successful');
       }
       setEthBalance(parseFloat(balanceWei/1e18).toFixed(5))
+
+      const url = "https://sepolia.infura.io/v3/886e9a53b5da4f6286230678f7591bde";
+        const provider = new ethers.providers.JsonRpcProvider(url);
+        const jokercontract = new ethers.Contract(JOKERAddress,JOKERCOntractABI,provider);
+        const dimecontract = new ethers.Contract(DIMEAddress,DimeContractABI,provider);
+
+        setJokerBalan(ethers.utils.formatUnits(await jokercontract.balanceOf(localStorage.getItem("walletAddress")),9));
+        setDimeBalan(ethers.utils.formatUnits(await dimecontract.balanceOf(localStorage.getItem("walletAddress")),9));
         
       }
     }
@@ -473,7 +489,7 @@ async function ConnectWallet() {
         <>
             <div className='header-navigation d-flex align-items-center'>
            
-                <Button variant="transparent" className='btn text-white p-0 d-none d-xl-block me-2' onClick={handleSidebar}>
+                {/* <Button variant="transparent" className='btn text-white p-0 d-none d-xl-block me-2' onClick={handleSidebar}>
                     {sidebar ? 
                     <svg viewBox="0 0 24 24" width="32px" color="textSubtle" xmlns="http://www.w3.org/2000/svg" class="sc-bdfBwQ gBefXE"><path d="M4 18H20C20.55 18 21 17.55 21 17C21 16.45 20.55 16 20 16H4C3.45 16 3 16.45 3 17C3 17.55 3.45 18 4 18ZM4 13H20C20.55 13 21 12.55 21 12C21 11.45 20.55 11 20 11H4C3.45 11 3 11.45 3 12C3 12.55 3.45 13 4 13ZM3 7C3 7.55 3.45 8 4 8H20C20.55 8 21 7.55 21 7C21 6.45 20.55 6 20 6H4C3.45 6 3 6.45 3 7Z"></path></svg>
                     
@@ -482,7 +498,7 @@ async function ConnectWallet() {
                     <svg viewBox="0 0 24 24" className='m-0' width="32" fill='currentColor' height="32" xmlns="http://www.w3.org/2000/svg"><path d="M4 18H15C15.55 18 16 17.55 16 17C16 16.45 15.55 16 15 16H4C3.45 16 3 16.45 3 17C3 17.55 3.45 18 4 18ZM4 13H12C12.55 13 13 12.55 13 12C13 11.45 12.55 11 12 11H4C3.45 11 3 11.45 3 12C3 12.55 3.45 13 4 13ZM3 7C3 7.55 3.45 8 4 8H15C15.55 8 16 7.55 16 7C16 6.45 15.55 6 15 6H4C3.45 6 3 6.45 3 7ZM20.3 14.88L17.42 12L20.3 9.12C20.69 8.73 20.69 8.1 20.3 7.71C19.91 7.32 19.28 7.32 18.89 7.71L15.3 11.3C14.91 11.69 14.91 12.32 15.3 12.71L18.89 16.3C19.28 16.69 19.91 16.69 20.3 16.3C20.68 15.91 20.69 15.27 20.3 14.88Z"></path></svg>
                     }
 
-                </Button>
+                </Button> */}
                 <Link to="/" className="header-logo">
                   <img src={jokercoin} alt="Logo" />
                   </Link>
@@ -525,10 +541,14 @@ async function ConnectWallet() {
                                    Connect wallet
                                </Button></> :
                            <> <Button className='btn btn-blue d-sm-block d-none'>
+                           {jokBalan ? <>{parseFloat(jokBalan).toFixed(3)} </> : "0"}  <img src={jokercoin} width={25} height={25}></img></Button>&nbsp;&nbsp;<Button className='btn btn-blue d-sm-block d-none'>
+                           {dimebalan ? <>{parseFloat(dimebalan).toFixed(3)} </> : "0"}  <img src={stasiscoin} width={25} height={25}></img></Button>&nbsp;&nbsp;<Button className='btn btn-blue d-sm-block d-none'>
                            {ethBalance ? <>{ethBalance} </> : "0"}  ETH</Button>&nbsp;&nbsp; <Button className='btn btn-blue d-sm-block d-none' onClick={()=>disConnectWallet()}>
                            <svg width="20" height="20" className='me-2 ms-0' viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"><path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z"></path></svg>
                            {(localStorage.getItem("walletAddress")).substring(0, 4)}...{(localStorage.getItem("walletAddress")).substring((localStorage.getItem("walletAddress")).length -4, (localStorage.getItem("walletAddress")).length)}
-                       </Button></>
+                       </Button>
+                       
+                       </>
                            }
                     { showButton ? <Button className='btn btn-blue d-sm-none' onClick={handleShow}>
                         <svg width="20" height="20" className='m-0' viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"><path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z"></path></svg>

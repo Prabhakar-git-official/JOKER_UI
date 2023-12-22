@@ -142,7 +142,8 @@ const BarChartPrice = () => {
                     return "$ " + val.toLocaleString();
                 }
             }
-        }
+        },
+        colors: ['rgb(77, 77, 77)', '#3498db', '#2ecc71'],
     };
 
     const series = [

@@ -16,19 +16,23 @@ import AreaChartTauCollateral from './snippets/AreaChartTauCollateral';
 import AreaChartEinrCollateral from './snippets/AreaChartEinrCollateral';
 import LineChart from './snippets/LineChart';
 import PieChartElem from './snippets/PieChartStable';
-import PieChartTau from './snippets/PieChartStable';
-import PieChartEinr from './snippets/PieChartStable';
+import PieChartJokerValueTeam from './snippets/PieChartJokerValueTeam';
+import PieChartJokerValue from './snippets/PieChartJokerValue';
 import node from './nodeapi.json';
 import dashboardDetails from '../Dashboard/stablecoin-only.json';
 import config from '../../NFTFolder/config.json'
 import axios from 'axios';
-
+import USDC from '../../assets/images/usdc.jpg';
 import AreaChartNFT from './snippets/AreaChartNFT'
 import Logo from '../../assets/images/algorand-logo.png';
 import { ethers } from 'ethers';
 import { JOKERAddress,CREDITAddress,CreditcontractAbi,JOKERCOntractABI,BlackAbi, BondAbi, BondAddress, CommunityWallet, DAIAddress, DIMEAddress, DaiAbi, DimeAbi, JUSDAbi, JUSDAddress, JUSDPoolAbi, JUSDPoolAddress, TreasuryAddress,DIMEChainlinkAddress,CREDITChainlinkAddress,JOKERChainlinkAddress,ChainLinkABi,CreditpolicyAbi,CreditPolicyContractAddress,DimeContractABI,ECOReserveAddress,ECOReserveABI, revenueWallet, USDCAddress, USDCContractABI, USDCChainlinkAddress, FidicuaryVaultAddress } from '../../abi/abi';
 import PieChart from './snippets/PieChartStable';
 import BarChartTreasuryvalue from './snippets/BarChartTreasuryvalue';
+
+import jokercoin from '../../assets/images/Jokercoin.png';
+import stasiscoin  from '../../assets/images/stasiscoin.png';
+import creditscoin from '../../assets/images/creditscoin.png';
 
 // const algosdk = require('algosdk');
 const Dashboard = () => {
@@ -62,6 +66,7 @@ const Dashboard = () => {
     const [JokerPrice, setJokerPrice] = useState("");
     const [TreasuryPrice, setTreasuryPrice] = useState("");
     const [Colratio, setColratio] = useState("");
+    const[LiquidityValue,setLiquidity] = useState("");
 
 
     const [TrDaiBalance, setTrDaiBalance] = useState("");
@@ -142,11 +147,11 @@ const Dashboard = () => {
         setJokerPrice(jokerprice*10);
 
         
-        setTotalTax(totalTax*jokerprice*10);
-        setTotalBurn(totalburn*jokerprice*10)
+        setTotalTax(totalTax);
+        setTotalBurn(totalburn)
         setJOKERRevenue(revenueJOKER*jokerprice*10)
         setUSDCRevenue(revenueUSDC*usdcprice)
-        setJokerTresuryValue(TreasuryJOKER*jokerprice*10)
+        setJokerTresuryValue(TreasuryJOKER)
      
 
         const Creditcontract = new ethers.Contract(CreditPolicyContractAddress,CreditpolicyAbi, provider);
@@ -179,6 +184,7 @@ const Dashboard = () => {
         let jokervalue =jokertotalbalance*jokerprice;
         setTreasuryPrice(creditvalue + dimevalue +jokervalue);
 
+        setLiquidity(ethers.utils.formatUnits(await jokercontract.balanceOf(JOKERAddress),0))
         // const jokercontract = new ethers.Contract(JOKERAddress, JOKERCOntractABI, provider);
         // let totalSupplyOfJoker = ethers.utils.formatUnits(await jokercontract.totalSupply(),0);
         // const jokerMarketCap = JokerPrice * totalSupplyOfJoker; // Replace totalSupplyOfJoker with the actual total supply
@@ -365,13 +371,13 @@ const Dashboard = () => {
                     <Card className='card-dash border-0 mb-4'>
                             <Row>
                                 <Col>
-                            <div className="text-md mb-20 font-semibold leading-7 text-purple">ECO Reserve    
+                            <div className="text-md mb-20 font-semibold leading-7 text-purple"><img src={jokercoin} width={35} height={35}></img>&nbsp; JOKER FEES  
                             {/* <OverlayTrigger
                                 key="right"
                                 placement="right"
                                 overlay={
                                     <Tooltip id={`tooltip-right`}>
-                                       
+                                       DIME
                                     </Tooltip>
                                 }
                                 >
@@ -379,11 +385,101 @@ const Dashboard = () => {
                                 </OverlayTrigger> */}
                             </div>
                             </Col>
-                            <Col>
-                            {/* <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + JUSDAddress} target="_blank" rel="noreferer">
+                            {/* <Col>
+                            <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + DIMEAddress} target="_blank" rel="noreferer">
                             <svg class="white me-2" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z"></path></svg>
                             View on explorer
-                            </a> */}
+                            </a>
+                            </Col> */}
+                            </Row>
+                            
+
+                              <hr className='mb-20 mt-0' />
+                            <div className='mb-20'>
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <div>
+                                <h6 className='sub-heading mb-0'>
+                                 TAX Value
+                                </h6>
+                                <h4 className='mb-2'>{parseFloat(TotalTax/1e9)?parseFloat(TotalTax/1e9):"0"}</h4>
+                               
+                                </div>
+                                <div>
+                                <h6 className='sub-heading mb-0'>
+                                BURN Value
+                                </h6>
+                                <h4 className='mb-2'>{parseFloat(TotalBurn/1e9)?parseFloat(TotalBurn/1e9):"0"}</h4>
+                                </div>
+                                {/* <div >
+                                <h6 className='sub-heading mb-0'>
+                                    DAO Reserve
+                                </h6>
+                                <h4 className='mb-2'>${parseFloat(DAOValue/1e8)?parseFloat(DAOValue/1e8).toFixed(2):"0"}</h4>
+                               
+                            </div>   */}
+                                </div>
+                                </div>                       
+                        </Card>
+                        <Card className='card-dash border-0 mb-4'>
+                            <Row>
+                                <Col>
+                            <div className="text-md mb-20 font-semibold leading-7 text-purple"><img src={jokercoin} width={35} height={35}></img>&nbsp; JOKER Treasury & LiquidityFee  
+                            {/* <OverlayTrigger
+                                key="right"
+                                placement="right"
+                                overlay={
+                                    <Tooltip id={`tooltip-right`}>
+                                       DIME
+                                    </Tooltip>
+                                }
+                                >
+                                    <svg className="tooltip-icon ms-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12Z" stroke="#CCCCCC" stroke-width="1.5"></path><path d="M11 8C11 7.44772 11.4477 7 12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8Z" fill="#CCCCCC"></path><path d="M11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V12Z" fill="#CCCCCC"></path></svg>
+                                </OverlayTrigger> */}
+                            </div>
+                            </Col>
+                            {/* <Col>
+                            <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + DIMEAddress} target="_blank" rel="noreferer">
+                            <svg class="white me-2" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z"></path></svg>
+                            View on explorer
+                            </a>
+                            </Col> */}
+                            </Row>
+                            
+
+                              <hr className='mb-20 mt-0' />
+                            <div className='mb-20'>
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <div>
+                                <h6 className='sub-heading mb-0'>
+                                 Treasury Value
+                                </h6>
+                                <h4 className='mb-2'>{parseFloat(JokerTresuryValue/1e9)?parseFloat(JokerTresuryValue/1e9):"0"}</h4>
+                               
+                                </div>
+                                <div>
+                                <h6 className='sub-heading mb-0'>
+                                Liquidity Value
+                                </h6>
+                                <h4 className='mb-2'>{parseFloat(LiquidityValue/1e9)?parseFloat(LiquidityValue/1e9):"0"}</h4>
+                                </div>
+                                {/* <div >
+                                <h6 className='sub-heading mb-0'>
+                                    DAO Reserve
+                                </h6>
+                                <h4 className='mb-2'>${parseFloat(DAOValue/1e8)?parseFloat(DAOValue/1e8).toFixed(2):"0"}</h4>
+                               
+                            </div>   */}
+                                </div>
+                                </div>                       
+                        </Card>
+                    <Card className='card-dash border-0 mb-4'>
+                            <Row>
+                                <Col>
+                            <div className="text-md mb-20 font-semibold leading-7 text-purple">ECO Reserve 
+                          
+                            </div>
+                            </Col>
+                            <Col>                          
                             </Col>
                             </Row>
                             <div className='mb-20'>
@@ -403,17 +499,7 @@ const Dashboard = () => {
                             <Row>
                                 <Col>
                             <div className="text-md mb-20 font-semibold leading-7 text-purple"> DAO Reserve   
-                            {/* <OverlayTrigger
-                                key="right"
-                                placement="right"
-                                overlay={
-                                    <Tooltip id={`tooltip-right`}>
-                                       
-                                    </Tooltip>
-                                }
-                                >
-                                    <svg className="tooltip-icon ms-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12Z" stroke="#CCCCCC" stroke-width="1.5"></path><path d="M11 8C11 7.44772 11.4477 7 12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8Z" fill="#CCCCCC"></path><path d="M11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V12Z" fill="#CCCCCC"></path></svg>
-                                </OverlayTrigger> */}
+                           
                             </div>
                             </Col>
                             <Col>
@@ -437,43 +523,7 @@ const Dashboard = () => {
                             </div>                      
                         </Card>
                        
-                        <Card className='card-dash border-0 mb-4'>
-                            <Row>
-                                <Col>
-                            <div className="text-md mb-20 font-semibold leading-7 text-purple">Bond Reserve    
-                            {/* <OverlayTrigger
-                                key="right"
-                                placement="right"
-                                overlay={
-                                    <Tooltip id={`tooltip-right`}>
-                                       
-                                    </Tooltip>
-                                }
-                                >
-                                    <svg className="tooltip-icon ms-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12Z" stroke="#CCCCCC" stroke-width="1.5"></path><path d="M11 8C11 7.44772 11.4477 7 12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8Z" fill="#CCCCCC"></path><path d="M11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V12Z" fill="#CCCCCC"></path></svg>
-                                </OverlayTrigger> */}
-                            </div>
-                            </Col>
-                            <Col>
-                            {/* <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + JUSDAddress} target="_blank" rel="noreferer">
-                            <svg class="white me-2" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z"></path></svg>
-                            View on explorer
-                            </a> */}
-                            </Col>
-                            </Row>
-                            <div className='mb-20'>
-                                <h6 className='sub-heading mb-0'>
-                                    Bond Value
-                                </h6>
-                                {/* <h4 className='mb-2'>{Colratio?(Colratio*1000):"0"}%</h4> */}
-                                <hr className='mb-20 mt-0' />
-                                <div className='mb-0'>
-                                <Col xs={12} sm={6} className="mb-sm-0 text-center mb-3">
-                                        <BarChartBondReserve/>
-                                    </Col>
-                                    </div>
-                            </div>                      
-                        </Card>
+                       
 
                        
                         {/* <Card className='card-dash border-0 mb-4'>
@@ -542,106 +592,13 @@ const Dashboard = () => {
 
                     </Col>
                     <Col md={6}>
-                    <Card className='card-dash border-0 mb-4'>
-                            <Row>
-                                <Col>
-                            <div className="text-md mb-20 font-semibold leading-7 text-purple">JOKER TOTAL TAX  
-                            {/* <OverlayTrigger
-                                key="right"
-                                placement="right"
-                                overlay={
-                                    <Tooltip id={`tooltip-right`}>
-                                       DIME
-                                    </Tooltip>
-                                }
-                                >
-                                    <svg className="tooltip-icon ms-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12Z" stroke="#CCCCCC" stroke-width="1.5"></path><path d="M11 8C11 7.44772 11.4477 7 12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8Z" fill="#CCCCCC"></path><path d="M11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V12Z" fill="#CCCCCC"></path></svg>
-                                </OverlayTrigger> */}
-                            </div>
-                            </Col>
-                            {/* <Col>
-                            <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + DIMEAddress} target="_blank" rel="noreferer">
-                            <svg class="white me-2" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z"></path></svg>
-                            View on explorer
-                            </a>
-                            </Col> */}
-                            </Row>
-                            <div className='mb-20'>
-                                <h6 className='sub-heading mb-0'>
-                                    TAX FEES
-                                </h6>
-                                <h4 className='mb-2'>${parseFloat(TotalTax/1e17)?parseFloat(TotalTax/1e17):"0"}</h4>
-                               
-                            </div>                      
-                        </Card>
+                   
+                      
+                     
                         <Card className='card-dash border-0 mb-4'>
                             <Row>
                                 <Col>
-                            <div className="text-md mb-20 font-semibold leading-7 text-purple">JOKER TOTAL BURN FEES  
-                            {/* <OverlayTrigger
-                                key="right"
-                                placement="right"
-                                overlay={
-                                    <Tooltip id={`tooltip-right`}>
-                                       JOKER
-                                    </Tooltip>
-                                }
-                                >
-                                    <svg className="tooltip-icon ms-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12Z" stroke="#CCCCCC" stroke-width="1.5"></path><path d="M11 8C11 7.44772 11.4477 7 12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8Z" fill="#CCCCCC"></path><path d="M11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V12Z" fill="#CCCCCC"></path></svg>
-                                </OverlayTrigger> */}
-                            </div>
-                            </Col>
-                            {/* <Col>
-                            <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + JOKERAddress} target="_blank" rel="noreferer">
-                            <svg class="white me-2" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z"></path></svg>
-                            View on explorer
-                            </a>
-                            </Col> */}
-                            </Row>
-                            <div className='mb-20'>
-                                <h6 className='sub-heading mb-0'>
-                                    BURN FEES
-                                </h6>
-                                <h4 className='mb-2'>${parseFloat(TotalBurn/1e17)?parseFloat(TotalBurn/1e17):"0"}</h4>
-                               
-                            </div>                      
-                        </Card>
-                        <Card className='card-dash border-0 mb-4'>
-                            <Row>
-                                <Col>
-                            <div className="text-md mb-20 font-semibold leading-7 text-purple">JOKER TREASURY FEES  
-                            {/* <OverlayTrigger
-                                key="right"
-                                placement="right"
-                                overlay={
-                                    <Tooltip id={`tooltip-right`}>
-                                       JOKER
-                                    </Tooltip>
-                                }
-                                >
-                                    <svg className="tooltip-icon ms-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12Z" stroke="#CCCCCC" stroke-width="1.5"></path><path d="M11 8C11 7.44772 11.4477 7 12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8Z" fill="#CCCCCC"></path><path d="M11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V12Z" fill="#CCCCCC"></path></svg>
-                                </OverlayTrigger> */}
-                            </div>
-                            </Col>
-                            {/* <Col>
-                            <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + JOKERAddress} target="_blank" rel="noreferer">
-                            <svg class="white me-2" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z"></path></svg>
-                            View on explorer
-                            </a>
-                            </Col> */}
-                            </Row>
-                            <div className='mb-20'>
-                                <h6 className='sub-heading mb-0'>
-                                    Total Treasury Fees
-                                </h6>
-                                <h4 className='mb-2'>${parseFloat(JokerTresuryValue/1e17)?parseFloat(JokerTresuryValue/1e17):"0"}</h4>
-                               
-                            </div>                      
-                        </Card>
-                        <Card className='card-dash border-0 mb-4'>
-                            <Row>
-                                <Col>
-                            <div className="text-md mb-20 font-semibold leading-7 text-purple">JOKER Revenue 
+                            <div className="text-md mb-20 font-semibold leading-7 text-purple">Revenue 
                             {/* <OverlayTrigger
                                 key="right"
                                 placement="right"
@@ -662,24 +619,45 @@ const Dashboard = () => {
                             </a>
                             </Col> */}
                             </Row>
+                            <hr className='mb-20 mt-0' />
                             <div className='mb-20'>
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <div>
                                 <h6 className='sub-heading mb-0'>
-                                    Revenue for the Protocol
+                                <img src={jokercoin} width={35} height={35}></img>&nbsp; JOKER Value
                                 </h6>
                                 <h4 className='mb-2'>${parseFloat(JOKERRevenue/1e17)?parseFloat(JOKERRevenue/1e17):"0"}</h4>
                                
-                            </div>                      
+                                </div>
+                                <div>
+                                <h6 className='sub-heading mb-0'>
+                                <img src={USDC} width={35} height={35}></img>&nbsp; USDC Value
+                                </h6>
+                                <h4 className='mb-2'>${parseFloat(USDCRevenue/1e17)?parseFloat(USDCRevenue/1e17):"0"}</h4>
+                                </div>
+                                {/* <div >
+                                <h6 className='sub-heading mb-0'>
+                                    DAO Reserve
+                                </h6>
+                                <h4 className='mb-2'>${parseFloat(DAOValue/1e8)?parseFloat(DAOValue/1e8).toFixed(2):"0"}</h4>
+                               
+                            </div>   */}
+                                </div>
+                                </div>    
+                                                
                         </Card>
+                        
+
                         <Card className='card-dash border-0 mb-4'>
                             <Row>
                                 <Col>
-                            <div className="text-md mb-20 font-semibold leading-7 text-purple">USDT Revenue
+                            <div className="text-md mb-20 font-semibold leading-7 text-purple"> JOKER Circulation Value in User wallet & Treasury   
                             {/* <OverlayTrigger
                                 key="right"
                                 placement="right"
                                 overlay={
                                     <Tooltip id={`tooltip-right`}>
-                                        
+                                       
                                     </Tooltip>
                                 }
                                 >
@@ -687,26 +665,159 @@ const Dashboard = () => {
                                 </OverlayTrigger> */}
                             </div>
                             </Col>
-                            {/* <Col>
-                            <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + DAIAddress} target="_blank" rel="noreferer">
+                            <Col>
+                            {/* <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + JUSDAddress} target="_blank" rel="noreferer">
                             <svg class="white me-2" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z"></path></svg>
                             View on explorer
-                            </a>
-                            </Col> */}
+                            </a> */}
+                            </Col>
                             </Row>
                             <div className='mb-20'>
-                                <h6 className='sub-heading mb-0'>
-                                   Total USDC Revenue for the Protocol
-                                </h6>
-                                <h4 className='mb-2'>${parseFloat(USDCRevenue/1e17)?parseFloat(USDCRevenue/1e17):"0"}</h4>
+                                {/* <h6 className='sub-heading mb-0'>
+                                    Total value
+                                </h6> */}
+                                  <hr className='mb-20 mt-0' />
+                                <Row className='justify-content-center'>
+                                    <Col xs={12} sm={6} className="mb-sm-0 text-center mb-3">
+                                    <PieChartJokerValue />
+                                    </Col>
+                                    <Col xs={'auto'} sm={6}>
+                                        <div className='mb-20 pt-sm-3'>
+                                            <div className="text-sm d-flex align-items-center mb-1  ">
+                                                <svg className="d-inline-block me-2" style={{width: '16px', height: '16px', borderRadius: '4px'}}><rect fill="black" x="0" y="0" width="16" height="16"></rect></svg>
+                                                In Treasury
+                                              
+                                              
+                                            </div>
+                                            {/* <h6>{parseInt((tauTotalSupply - parseFloat(tauCir)/1000000)) ? (parseInt((tauTotalSupply - parseFloat(tauCir)/1000000).toFixed(0))).toLocaleString() : "0"} TAU</h6> */}
+                                        </div>
+                                        <div className='mb-20'>
+                                            <div className="text-sm d-flex align-items-center mb-1  ">
+                                                <svg className="d-inline-block me-2" style={{width: '16px', height: '16px', borderRadius: '4px'}}><rect fill="rgb(77, 77, 77)" x="0" y="0" width="16" height="16"></rect></svg>
+                                             In user wallets
+
+                                               
+                                            </div>
+                                            {/* <h6>{(parseInt((parseFloat(tauCir)/1000000))) ? (parseInt((parseFloat(tauCir)/1000000).toFixed(0))).toLocaleString() : "0"} TAU</h6> */}
+                                        </div>
+                                    </Col>
+                                </Row>
                                
+                                {/* <h4 className='mb-2'>{Colratio?(Colratio*1000):"0"}%</h4> */}
+                                {/* <hr className='mb-20 mt-0' />
+                                <div className='mb-0'>
+                                <Col xs={12} sm={6} className="mb-sm-0 text-center mb-3">
+                                        <BarCharttreasuryvalue/>
+                                    </Col>
+                                    </div> */}
+                            </div>                      
+                        </Card>
+
+                        <Card className='card-dash border-0 mb-4'>
+                            <Row>
+                                <Col>
+                            <div className="text-md mb-20 font-semibold leading-7 text-purple"> JOKER  Value in Team wallet   
+                            {/* <OverlayTrigger
+                                key="right"
+                                placement="right"
+                                overlay={
+                                    <Tooltip id={`tooltip-right`}>
+                                       
+                                    </Tooltip>
+                                }
+                                >
+                                    <svg className="tooltip-icon ms-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12Z" stroke="#CCCCCC" stroke-width="1.5"></path><path d="M11 8C11 7.44772 11.4477 7 12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8Z" fill="#CCCCCC"></path><path d="M11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V12Z" fill="#CCCCCC"></path></svg>
+                                </OverlayTrigger> */}
+                            </div>
+                            </Col>
+                            <Col>
+                            {/* <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + JUSDAddress} target="_blank" rel="noreferer">
+                            <svg class="white me-2" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z"></path></svg>
+                            View on explorer
+                            </a> */}
+                            </Col>
+                            </Row>
+                            <div className='mb-20'>
+                                {/* <h6 className='sub-heading mb-0'>
+                                    Total value
+                                </h6> */}
+                                  <hr className='mb-20 mt-0' />
+                                <Row className='justify-content-center'>
+                                    <Col xs={12} sm={6} className="mb-sm-0 text-center mb-3">
+                                    <PieChartJokerValueTeam />
+                                    </Col>
+                                    <Col xs={'auto'} sm={6}>
+                                        <div className='mb-20 pt-sm-3'>
+                                            <div className="text-sm d-flex align-items-center mb-1  ">
+                                                <svg className="d-inline-block me-2" style={{width: '16px', height: '16px', borderRadius: '4px'}}><rect fill="black" x="0" y="0" width="16" height="16"></rect></svg>
+                                                In Team Wallet
+                                              
+                                              
+                                            </div>
+                                            {/* <h6>{parseInt((tauTotalSupply - parseFloat(tauCir)/1000000)) ? (parseInt((tauTotalSupply - parseFloat(tauCir)/1000000).toFixed(0))).toLocaleString() : "0"} TAU</h6> */}
+                                        </div>
+                                        <div className='mb-20'>
+                                            <div className="text-sm d-flex align-items-center mb-1  ">
+                                                <svg className="d-inline-block me-2" style={{width: '16px', height: '16px', borderRadius: '4px'}}><rect fill="rgb(77, 77, 77)" x="0" y="0" width="16" height="16"></rect></svg>
+                                             Total Supply
+
+                                               
+                                            </div>
+                                            {/* <h6>{(parseInt((parseFloat(tauCir)/1000000))) ? (parseInt((parseFloat(tauCir)/1000000).toFixed(0))).toLocaleString() : "0"} TAU</h6> */}
+                                        </div>
+                                    </Col>
+                                </Row>
+                               
+                                {/* <h4 className='mb-2'>{Colratio?(Colratio*1000):"0"}%</h4> */}
+                                {/* <hr className='mb-20 mt-0' />
+                                <div className='mb-0'>
+                                <Col xs={12} sm={6} className="mb-sm-0 text-center mb-3">
+                                        <BarCharttreasuryvalue/>
+                                    </Col>
+                                    </div> */}
                             </div>                      
                         </Card>
                         
 
                      
                       
-                       
+                        <Card className='card-dash border-0 mb-4'>
+                            <Row>
+                                <Col>
+                            <div className="text-md mb-20 font-semibold leading-7 text-purple">Bond Reserve    
+                            {/* <OverlayTrigger
+                                key="right"
+                                placement="right"
+                                overlay={
+                                    <Tooltip id={`tooltip-right`}>
+                                       
+                                    </Tooltip>
+                                }
+                                >
+                                    <svg className="tooltip-icon ms-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12Z" stroke="#CCCCCC" stroke-width="1.5"></path><path d="M11 8C11 7.44772 11.4477 7 12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8Z" fill="#CCCCCC"></path><path d="M11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V12Z" fill="#CCCCCC"></path></svg>
+                                </OverlayTrigger> */}
+                            </div>
+                            </Col>
+                            <Col>
+                            {/* <a className='mb-3 text-white d-flex align-items-center btn-link' href={"https://goerli.basescan.org/address/" + JUSDAddress} target="_blank" rel="noreferer">
+                            <svg class="white me-2" width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15.8333 15.8333H4.16667V4.16667H10V2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V10H15.8333V15.8333ZM11.6667 2.5V4.16667H14.6583L6.46667 12.3583L7.64167 13.5333L15.8333 5.34167V8.33333H17.5V2.5H11.6667Z"></path></svg>
+                            View on explorer
+                            </a> */}
+                            </Col>
+                            </Row>
+                            <div className='mb-20'>
+                                <h6 className='sub-heading mb-0'>
+                                    Bond Value
+                                </h6>
+                                {/* <h4 className='mb-2'>{Colratio?(Colratio*1000):"0"}%</h4> */}
+                                <hr className='mb-20 mt-0' />
+                                <div className='mb-0'>
+                                <Col xs={12} sm={6} className="mb-sm-0 text-center mb-3">
+                                        <BarChartBondReserve/>
+                                    </Col>
+                                    </div>
+                            </div>                      
+                        </Card>
                         
                       
                     </Col>

@@ -3,7 +3,7 @@ import Doughnut from 'react-apexcharts';
 import node from '../nodeapi.json';
 import dashboardDetails from '../../Dashboard/stablecoin.json';
 import { ethers } from 'ethers';
-import { BurnVaultAddress, ChainLinkABi, JOKERAddress, JOKERCOntractABI, JOKERChainlinkAddress, USDCAddress, USDCChainlinkAddress, USDCContractABI } from '../../../abi/abi';
+import { BurnVaultAddress, ChainLinkABi, DAOReserveAddress, ECOReserveAddress, JOKERAddress, JOKERCOntractABI, JOKERChainlinkAddress, USDCAddress, USDCChainlinkAddress, USDCContractABI, ownerAddress, revenueWallet, teamwallet } from '../../../abi/abi';
 
 const algosdk = require('algosdk');
 const PieChart = ({x}) => {
@@ -26,8 +26,12 @@ const PieChart = ({x}) => {
         const url = "https://sepolia.infura.io/v3/886e9a53b5da4f6286230678f7591bde";
         const provider = new ethers.providers.JsonRpcProvider(url);
         const jokercontract = new ethers.Contract(JOKERAddress,JOKERCOntractABI,provider);
-        let revenueJOKER = ethers.utils.formatUnits(await jokercontract.balanceOf(BurnVaultAddress),9);
+        let revenueJOKER = ethers.utils.formatUnits(await jokercontract.balanceOf(ECOReserveAddress),9);
+        let revenueJOKERinDaoreserve = ethers.utils.formatUnits(await jokercontract.balanceOf(DAOReserveAddress),9);
+        let  teamWallet = ethers.utils.formatUnits(await jokercontract.balanceOf(teamwallet),9);
+        let  owneraddress = ethers.utils.formatUnits(await jokercontract.balanceOf(ownerAddress),9);
 
+        let totalsupply = ethers.utils.formatUnits(await jokercontract.totalSupply(),9);
         const USDCcontract = new ethers.Contract(USDCAddress,USDCContractABI,provider);
         let revenueUSDC = ethers.utils.formatUnits(await USDCcontract.balanceOf(BurnVaultAddress),9);
 
@@ -37,11 +41,13 @@ const PieChart = ({x}) => {
        let jokerprice =  ethers.utils.formatUnits(await jokerpricedashboard.getChainlinkDataFeedLatestAnswer(),8);
        let usdcprice =  ethers.utils.formatUnits(await usdcpricedashboard.getChainlinkDataFeedLatestAnswer(),8);
 
-       setjokerValue(revenueJOKER*jokerprice*10)
-       setusdcValue(revenueUSDC*usdcprice)
+       setjokerValue((parseFloat(revenueJOKER)+parseFloat(revenueJOKERinDaoreserve))*jokerprice*10)
+       setusdcValue((parseFloat(totalsupply)-(parseFloat(teamWallet)+ parseFloat(owneraddress)+parseFloat(revenueJOKER)+parseFloat(revenueJOKERinDaoreserve)))*jokerprice*10)
+       console.log("totalsupply",totalsupply,teamWallet,revenueJOKER,revenueJOKERinDaoreserve)
+       console.log("sub",((teamWallet+revenueJOKER+revenueJOKERinDaoreserve)))
     }
 
-    const series1 = [usdcValue, jokerValue];
+    const series1 = [usdcValue,jokerValue];
     const options1 = {
         chart: {
             height: 350,
@@ -56,7 +62,7 @@ const PieChart = ({x}) => {
                 enabled: false
             }
         },
-        colors: ['#55689e', '#2c3862'],
+        // colors: ['#55689e', '#2c3862'],
         dataLabels: {
             enabled: true,
         },
@@ -79,7 +85,7 @@ const PieChart = ({x}) => {
         legend: {
             show: false
         },
-        colors: ['rgb(77, 77, 77)', '#343434', '#728694'],
+        colors: ['rgb(77, 77, 77)', '#343434', '#2ecc71'],
     }
     
     return (

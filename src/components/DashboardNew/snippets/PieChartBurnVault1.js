@@ -28,6 +28,7 @@ const PieChart = ({x}) => {
         const jokercontract = new ethers.Contract(JOKERAddress,JOKERCOntractABI,provider);
         let revenueJOKER = ethers.utils.formatUnits(await jokercontract.balanceOf(BurnVaultAddress),9);
 
+        let totalsupply = ethers.utils.formatUnits(await jokercontract.totalSupply(),9);
         const USDCcontract = new ethers.Contract(USDCAddress,USDCContractABI,provider);
         let revenueUSDC = ethers.utils.formatUnits(await USDCcontract.balanceOf(BurnVaultAddress),9);
 
@@ -38,10 +39,10 @@ const PieChart = ({x}) => {
        let usdcprice =  ethers.utils.formatUnits(await usdcpricedashboard.getChainlinkDataFeedLatestAnswer(),8);
 
        setjokerValue(revenueJOKER*jokerprice*10)
-       setusdcValue(revenueUSDC*usdcprice)
+       setusdcValue(totalsupply*jokerprice*10)
     }
 
-    const series1 = [usdcValue, jokerValue];
+    const series1 = [usdcValue,jokerValue];
     const options1 = {
         chart: {
             height: 350,
@@ -56,7 +57,7 @@ const PieChart = ({x}) => {
                 enabled: false
             }
         },
-        colors: ['#55689e', '#2c3862'],
+        // colors: ['#55689e', '#2c3862'],
         dataLabels: {
             enabled: true,
         },
@@ -79,7 +80,7 @@ const PieChart = ({x}) => {
         legend: {
             show: false
         },
-        colors: ['rgb(77, 77, 77)', '#343434', '#728694'],
+        colors: ['rgb(77, 77, 77)', '#343434', '#2ecc71'],
     }
     
     return (

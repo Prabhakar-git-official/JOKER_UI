@@ -122,7 +122,8 @@ const BarChartMarketcap = () => {
                     return "$ " + val.toLocaleString();
                 }
             }
-        }
+        },
+        colors: ['rgb(77, 77, 77)', '#3498db', '#2ecc71'],
     };
 
     const series = [
@@ -131,6 +132,7 @@ const BarChartMarketcap = () => {
             data: [jokerMarketCap, creditMarketCap, dimeMarketCap]
              //data: [200000000, 10000000, 20000000]
         }
+        
     ];
 
 // const options1 = {

@@ -106,7 +106,7 @@ const AreaChart = () => {
       },
     },
     grid: {
-      borderColor: 'rgba(255,255,255,0.2)',
+      borderColor: 'rgb(77, 77, 77)',
       row: {
         colors: ['transparent', 'transparent'],
         opacity: 1,
@@ -130,7 +130,7 @@ const AreaChart = () => {
         type: 'datetime', // Specify the x-axis type as datetime
         labels: {
           style: {
-            colors: '#AAAAAA',
+            colors: 'rgb(77, 77, 77)',
           },
           formatter: function (value) {
             const date = new Date(value);
@@ -156,6 +156,8 @@ const AreaChart = () => {
     legend: {
       show: false,
     },
+    colors: ['rgb(77, 77, 77)', '#3498db', '#2ecc71'],
+  
   };
 
   return (

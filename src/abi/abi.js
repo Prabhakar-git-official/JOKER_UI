@@ -7538,6 +7538,9 @@ export const DAOReserveAddress ="0x0c062CddF4b2482fbE3cf66838f2DB3CAB75f4Ba"
 export const FidicuaryVaultAddress ="0x864e64B2FE37dC645391a629Fc9c9d294Ddfb54C";
 export const BurnVaultAddress ="0x475ecB8f648950981ef393410ad4cdDc5bd7c184";
 
+export const teamwallet ="0x0E14a753f1C91BcFFF611229255B7B2e62eBb4Dc"
+export const ownerAddress = "0xdc61dE4fED82E2CDbC5E31156c4dA41389Ae1e22"
+
 
 
 
