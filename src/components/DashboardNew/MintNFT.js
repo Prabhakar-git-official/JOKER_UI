@@ -293,6 +293,7 @@ const MintNFT = () => {
       }
     };
     const mintAppNFT =async() =>{
+      try{
       var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;          
         if(localStorage.getItem("walletAddress") === null || localStorage.getItem("walletAddress") === undefined || localStorage.getItem("walletAddress") === ''){                
           toast.warning(`please connect your wallet`,{autoClose: 5000});            
@@ -322,7 +323,17 @@ const MintNFT = () => {
         toast.success("Mint NFT successful",{autoClose: 5000}); 
         // setMinStart(true)
         handleHideLoad() 
-  }           
+        
+  }      
+
+ 
+}
+catch(error){
+  toast.error("Mint NFT is not succeed",`${error}`);
+  console.log("error",error)
+  handleHideLoad(); 
+        
+}
 }
     const mintNFT = async() =>{        
         var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;          
