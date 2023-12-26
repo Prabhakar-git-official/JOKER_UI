@@ -22,7 +22,7 @@ function Footer() {
                 <Row className='mb-4 pb-2 align-items-center'>
                     <Col className='text-md-start text-center mb-md-0 mb-4'>
                         <img src={jusdlogo} width={70} height={70} className='mb-3' alt="logo" />
-                        <p>JOKER Protocol</p>
+                        <p>JɸKER PROTOCOL</p>
                     </Col>
                     <Col>
                         <div className="social-icons justify-content-md-end justify-content-center d-flex align-items-center">

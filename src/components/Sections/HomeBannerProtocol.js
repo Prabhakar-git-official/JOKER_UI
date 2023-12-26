@@ -22,9 +22,9 @@ const HomeBannerBanking = () => {
                     </Col>
                 </Row>
 
-                <div className="text-center ">
+                <div className="text-center">
             
-                    <img src={stasislogo} alt="ProtocolImage" className='img-fluid d-none d-md-block mx-auto' />
+                    <img src={stasislogo}   style={{paddingRight: '90px'}}alt="ProtocolImage" className='img-fluid d-none d-md-block mx-auto' />
                     <img src={stasislogo} alt="ProtocolImage" className='img-fluid d-md-none w-100' />
                   
                 </div>
