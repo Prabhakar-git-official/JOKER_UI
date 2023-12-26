@@ -3,7 +3,9 @@ import {Container, Navbar, Nav, Badge} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Logo from '../../assets/images/logo.png';
 import colorLogo from '../../assets/images/modal-logo-new.png'
-import jusdlogo from '../../assets/images/jokerheadericons.svg'
+//import jusdlogo from '../../assets/images/jokerheadericons.svg'
+import jusdlogo from '../../assets/images/headercoins.svg'
+
 function Header() {
     React.useEffect(() => {
         localStorage.removeItem('Theme', 'light');
@@ -13,7 +15,7 @@ function Header() {
         <header className="header">
             <Navbar expand="xl" className='p-0'>
                 <Container fluid="lg">
-                    <Navbar.Brand href="/"><img src={jusdlogo} width={70} height={70} alt="logo" /></Navbar.Brand>
+                    {/* <Navbar.Brand href="/"><img src={jusdlogo} width={70} height={70} alt="logo" /></Navbar.Brand> */}
                     <Navbar.Toggle aria-controls="basic-navbar-nav">
                         <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M16.9214 18.6127V20.6127H5.92139V18.6127H16.9214ZM21.9214 11.6127V13.6127H3.92139V11.6127H21.9214ZM19.9214 4.61267V6.61267H8.92139V4.61267H19.9214Z" fill="white"/>
