@@ -72,7 +72,8 @@ function PoolNew() {
     const[taustakedAmount, settaustakedAmount] = useState("");
 
     const[usdtstakedAmount, setusdtstakedAmount] = useState("");
-    const[Circulatingsupply,setcirculatingsupply] = useState("")
+    const[Circulatingsupply,setcirculatingsupply] = useState("");
+    const[Theme,setTheme] = useState("");
 
     useEffect(() => {first()},[claimamount])
     const first = async()=>{
@@ -989,7 +990,10 @@ try {
                 } 
             
             }
-
+            useEffect(() => {
+              const storedTheme = localStorage.getItem('Theme') || 'dark';
+              setTheme(storedTheme);
+            }, []);
 
 
     return ( 
@@ -1217,16 +1221,15 @@ try {
                     id="tab-example"
                     className="mb-24 justify-content-center"
                     >
-                        <Tab eventKey="main" title="Main Pool">
-                            <PoolChild />
-                           
-                            <PoolChild11 />
-                            <PoolChild1 />
-                            {/* <PoolChild2 /> */}
-                            {/* <PoolChild3 /> */}
-                            {/* <PoolChild />
-                            <PoolChild /> */}
-                        </Tab>
+                         <Tab eventKey="main" title={<span style={{ color: Theme === 'light' ? 'black' : 'white' }}>Main Pool</span>}>
+      <PoolChild />
+      <PoolChild11 />
+      <PoolChild1 />
+      {/* <PoolChild2 /> */}
+      {/* <PoolChild3 /> */}
+      {/* <PoolChild />
+      <PoolChild /> */}
+    </Tab>
                         {/* <Tab eventKey="alt" title="Alt Pools">
                             <PoolParent />
                             <PoolParent />
