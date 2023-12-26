@@ -30,12 +30,29 @@ import buybackLogo from '../../assets/images/buyback.png'
 const Sidebar = ({activeClass, handleLink}) => {
     const location = window.location.pathname;
     const device = window.innerWidth;
+
+    const RetweetIcon = () => (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M15 18a5 5 0 0 1-7.7 4.1l-4.3 2.1V23h12v-2.8l-4.3-2.1A5 5 0 0 1 15 18z" />
+          <path d="M10 12V8l-5 4 5 4v-4z" />
+        </svg>
+      );
     // console.log(device)
     const handleSide = () => handleLink()
     return (
         <div className={`side-navigation ${activeClass}`}>
             <ul className='side-navigation-list list-unstyled'>
-            {/* <li>
+                <li>
                     <Dropdown>
                        
                             {device > 1199 && activeClass ? (
@@ -51,14 +68,8 @@ const Sidebar = ({activeClass, handleLink}) => {
                         
                         {device > 1199 && activeClass ? null : (
                             <Dropdown.Menu show={location === "/Mint-NFT" || location === "/dashboardAdmin"|| location === "/dashboardMain" ||location === "/launchpad" || location === "/burnvault" || location === "/mint"|| location === "/buyback"|| location === "/recollateralize" || location === "/bond" || location === "/pool"|| location === "/vault"|| location === '/minting' || location === '/faucet' ? true : false} as="ul" className={`list-unstyled position-relative mb-0 p-0 ${location === "/Mint-NFT" || location === "/launchpad" || location === "/mint"|| location === "/buyback"|| location === "/recollateralize" || location === "/bond" || location === "/pool"|| location === "/dashboardMain"|| location === "/dashboardAdmin" || location === "/vault" || location === '/minting' || location === '/faucet'? 'd-block' : ''}`} style={{minWidth: 'auto'}}>
-                            
-                            </Dropdown.Menu>
-                        )}
-                    </Dropdown>
-                </li> */}
-                <li><Link to="/dashboardMain" activeClassName='active'><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.49967 15H9.16634V16.6667H10.833V15H12.4997V16.6667H13.333C13.7932 16.6667 14.1663 17.0398 14.1663 17.5C14.1663 17.9602 13.7932 18.3333 13.333 18.3333H6.66634C6.2061 18.3333 5.83301 17.9602 5.83301 17.5C5.83301 17.0398 6.2061 16.6667 6.66634 16.6667H7.49967V15Z" fill="currentColor"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M3.33366 5L3.33366 11.6667C3.33366 12.5871 4.07985 13.3333 5.00033 13.3333L15.0003 13.3333C15.9208 13.3333 16.667 12.5871 16.667 11.6667L16.667 5C16.667 4.07953 15.9208 3.33333 15.0003 3.33333L5.00033 3.33333C4.07985 3.33333 3.33366 4.07953 3.33366 5ZM1.66699 11.6667C1.66699 13.5076 3.15938 15 5.00033 15L15.0003 15C16.8413 15 18.3337 13.5076 18.3337 11.6667L18.3337 5C18.3337 3.15905 16.8413 1.66667 15.0003 1.66667L5.00033 1.66667C3.15938 1.66667 1.66699 3.15905 1.66699 5L1.66699 11.6667Z" fill="currentColor"></path><path d="M5.83333 5C5.3731 5 5 5.3731 5 5.83333C5 6.29357 5.3731 6.66667 5.83333 6.66667H11.6667C12.1269 6.66667 12.5 6.29357 12.5 5.83333C12.5 5.3731 12.1269 5 11.6667 5H5.83333Z" fill="currentColor"></path><path d="M5.83333 8.33333C5.3731 8.33333 5 8.70643 5 9.16667C5 9.6269 5.3731 10 5.83333 10H7.5C7.96024 10 8.33333 9.6269 8.33333 9.16667C8.33333 8.70643 7.96024 8.33333 7.5 8.33333H5.83333Z" fill="currentColor"></path></svg> Dashboard</Link></li>
+                                <li><Link to="/dashboardMain" activeClassName='active'><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.49967 15H9.16634V16.6667H10.833V15H12.4997V16.6667H13.333C13.7932 16.6667 14.1663 17.0398 14.1663 17.5C14.1663 17.9602 13.7932 18.3333 13.333 18.3333H6.66634C6.2061 18.3333 5.83301 17.9602 5.83301 17.5C5.83301 17.0398 6.2061 16.6667 6.66634 16.6667H7.49967V15Z" fill="currentColor"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M3.33366 5L3.33366 11.6667C3.33366 12.5871 4.07985 13.3333 5.00033 13.3333L15.0003 13.3333C15.9208 13.3333 16.667 12.5871 16.667 11.6667L16.667 5C16.667 4.07953 15.9208 3.33333 15.0003 3.33333L5.00033 3.33333C4.07985 3.33333 3.33366 4.07953 3.33366 5ZM1.66699 11.6667C1.66699 13.5076 3.15938 15 5.00033 15L15.0003 15C16.8413 15 18.3337 13.5076 18.3337 11.6667L18.3337 5C18.3337 3.15905 16.8413 1.66667 15.0003 1.66667L5.00033 1.66667C3.15938 1.66667 1.66699 3.15905 1.66699 5L1.66699 11.6667Z" fill="currentColor"></path><path d="M5.83333 5C5.3731 5 5 5.3731 5 5.83333C5 6.29357 5.3731 6.66667 5.83333 6.66667H11.6667C12.1269 6.66667 12.5 6.29357 12.5 5.83333C12.5 5.3731 12.1269 5 11.6667 5H5.83333Z" fill="currentColor"></path><path d="M5.83333 8.33333C5.3731 8.33333 5 8.70643 5 9.16667C5 9.6269 5.3731 10 5.83333 10H7.5C7.96024 10 8.33333 9.6269 8.33333 9.16667C8.33333 8.70643 7.96024 8.33333 7.5 8.33333H5.83333Z" fill="currentColor"></path></svg> Dashboard</Link></li>
                                 <li><Link to="/dashboardAdmin"><img src={AdminLogo} alt="Kyc" /> Admin Dashboard</Link></li>
-                                
                                 <li><Link to="/Mint-NFT"><img src={Kyc} alt="Kyc" /> Mint NFT</Link></li>
                                 <li><Link to="/launchpad"><img src={Particiapte} alt="Kyc" /> Launchpad</Link></li>
                                 <li><Link to="/burnvault"><img src={RiskFreeLending} alt="Kyc" /> Burnvault</Link></li>
@@ -77,6 +88,43 @@ const Sidebar = ({activeClass, handleLink}) => {
                                 <li><Link to="/pool" activeClassName='active'><svg stroke="currentColor" fill="currentColor" stroke-width="0" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path d="M15.91 13.34l2.636-4.026-.454-.406-3.673 3.099c-.675-.138-1.402.068-1.894.618-.736.823-.665 2.088.159 2.824.824.736 2.088.665 2.824-.159.492-.55.615-1.295.402-1.95zm-3.91-10.646v-2.694h4v2.694c-1.439-.243-2.592-.238-4 0zm8.851 2.064l1.407-1.407 1.414 1.414-1.321 1.321c-.462-.484-.964-.927-1.5-1.328zm-18.851 4.242h8v2h-8v-2zm-2 4h8v2h-8v-2zm3 4h7v2h-7v-2zm21-3c0 5.523-4.477 10-10 10-2.79 0-5.3-1.155-7.111-3h3.28c1.138.631 2.439 1 3.831 1 4.411 0 8-3.589 8-8s-3.589-8-8-8c-1.392 0-2.693.369-3.831 1h-3.28c1.811-1.845 4.321-3 7.111-3 5.523 0 10 4.477 10 10z"/></svg> Staking</Link></li>
                                 {/* <li><Link to="/vault"><img src={vaultLogo} alt="Kyc" /> Helio</Link></li> */}
                                 <li><Link to="/faucet" activeClassName='active'><img src={Faucet} alt="Faucet" /> {device > 1199 && activeClass ? '' : 'Faucet'}</Link></li>
+                            </Dropdown.Menu>
+                        )}
+                    </Dropdown>
+                </li>
+                <li>
+                    <Dropdown>
+                       
+                            {device > 1199 && activeClass ? (
+                                <Dropdown.Toggle onClick={handleSide} variant='transparent' className={`noarrow`} id="dropdown-basic">
+                                    <svg width="24" height="24" className='ms-0' fill='currentColor' viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g id="sprout" transform="translate(-49.874 -14.287)"><path id="Path_5" data-name="Path 5" d="M123.9,42.355V35.841c3.63-.24,10.153-1.326,14.655-5.828,6.4-6.4,5.9-16.892,5.874-17.335a2.556,2.556,0,0,0-2.411-2.411c-.443-.025-10.936-.526-17.335,5.874a16.521,16.521,0,0,0-1.816,2.165,23.98,23.98,0,0,0-5.993-11.27C109.231-.609,96.652-.008,96.121.022A2.556,2.556,0,0,0,93.71,2.433c-.029.532-.631,13.11,7.013,20.754,5.6,5.6,13.847,6.775,18.067,6.991V42.355a22.731,22.731,0,0,1,5.112,0Z" transform="translate(-20.875 22)"></path><path id="Path_6" data-name="Path 6" d="M130.26,344.721a16.633,16.633,0,0,0-5.217.837,23.327,23.327,0,0,0-42.912,0,16.66,16.66,0,0,0-21.874,15.82v6.669a3.32,3.32,0,0,0,3.32,3.32H143.6a3.32,3.32,0,0,0,3.32-3.32v-6.669a16.676,16.676,0,0,0-16.657-16.657Z" transform="translate(-3.116 -264.181)"></path></g></svg>
+                                </Dropdown.Toggle>
+                                ) : (
+                                    <Dropdown.Toggle variant='transparent' className={`noarrow ${location === "/" ? 'active' : '' }`} id="dropdown-basic">
+                                        <svg width="24" height="24" className='ms-0' fill='currentColor' viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g id="sprout" transform="translate(-49.874 -14.287)"><path id="Path_5" data-name="Path 5" d="M123.9,42.355V35.841c3.63-.24,10.153-1.326,14.655-5.828,6.4-6.4,5.9-16.892,5.874-17.335a2.556,2.556,0,0,0-2.411-2.411c-.443-.025-10.936-.526-17.335,5.874a16.521,16.521,0,0,0-1.816,2.165,23.98,23.98,0,0,0-5.993-11.27C109.231-.609,96.652-.008,96.121.022A2.556,2.556,0,0,0,93.71,2.433c-.029.532-.631,13.11,7.013,20.754,5.6,5.6,13.847,6.775,18.067,6.991V42.355a22.731,22.731,0,0,1,5.112,0Z" transform="translate(-20.875 22)"></path><path id="Path_6" data-name="Path 6" d="M130.26,344.721a16.633,16.633,0,0,0-5.217.837,23.327,23.327,0,0,0-42.912,0,16.66,16.66,0,0,0-21.874,15.82v6.669a3.32,3.32,0,0,0,3.32,3.32H143.6a3.32,3.32,0,0,0,3.32-3.32v-6.669a16.676,16.676,0,0,0-16.657-16.657Z" transform="translate(-3.116 -264.181)"></path></g></svg> 
+                                        Carbonix
+                                    </Dropdown.Toggle>
+                                )}
+                        
+                        {device > 1199 && activeClass ? null : (
+                            <Dropdown.Menu show={location === "/vault" || location === "/stabilizer"|| location === "/dashboardMain" ||location === "/carbon-yield" || location === "/burnvault" || location === "/mint"|| location === "/buyback"|| location === "/recollateralize" || location === "/bond" || location === "/pool"|| location === "/vault"|| location === '/minting' || location === '/faucet' ? true : false} as="ul" className={`list-unstyled position-relative mb-0 p-0 ${location === "/carbon-yield" || location === "/stabilizer" || location === "/mint"|| location === "/buyback"|| location === "/recollateralize" || location === "/bond" || location === "/pool"|| location === "/dashboardMain"|| location === "/dashboardAdmin" || location === "/vault" || location === '/minting' || location === '/faucet'? 'd-block' : ''}`} style={{minWidth: 'auto'}}>
+                                <li><Link to="/dashboardMain" activeClassName='active'><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.49967 15H9.16634V16.6667H10.833V15H12.4997V16.6667H13.333C13.7932 16.6667 14.1663 17.0398 14.1663 17.5C14.1663 17.9602 13.7932 18.3333 13.333 18.3333H6.66634C6.2061 18.3333 5.83301 17.9602 5.83301 17.5C5.83301 17.0398 6.2061 16.6667 6.66634 16.6667H7.49967V15Z" fill="currentColor"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M3.33366 5L3.33366 11.6667C3.33366 12.5871 4.07985 13.3333 5.00033 13.3333L15.0003 13.3333C15.9208 13.3333 16.667 12.5871 16.667 11.6667L16.667 5C16.667 4.07953 15.9208 3.33333 15.0003 3.33333L5.00033 3.33333C4.07985 3.33333 3.33366 4.07953 3.33366 5ZM1.66699 11.6667C1.66699 13.5076 3.15938 15 5.00033 15L15.0003 15C16.8413 15 18.3337 13.5076 18.3337 11.6667L18.3337 5C18.3337 3.15905 16.8413 1.66667 15.0003 1.66667L5.00033 1.66667C3.15938 1.66667 1.66699 3.15905 1.66699 5L1.66699 11.6667Z" fill="currentColor"></path><path d="M5.83333 5C5.3731 5 5 5.3731 5 5.83333C5 6.29357 5.3731 6.66667 5.83333 6.66667H11.6667C12.1269 6.66667 12.5 6.29357 12.5 5.83333C12.5 5.3731 12.1269 5 11.6667 5H5.83333Z" fill="currentColor"></path><path d="M5.83333 8.33333C5.3731 8.33333 5 8.70643 5 9.16667C5 9.6269 5.3731 10 5.83333 10H7.5C7.96024 10 8.33333 9.6269 8.33333 9.16667C8.33333 8.70643 7.96024 8.33333 7.5 8.33333H5.83333Z" fill="currentColor"></path></svg> Dashboard</Link></li>
+                                <li><Link to="/vault"><img src={vaultLogo} alt="Kyc" /> Vault</Link></li>
+                                <li><Link to="/stabilizer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-activity" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M6 2a.5.5 0 0 1 .47.33L10 12.036l1.53-4.208A.5.5 0 0 1 12 7.5h3.5a.5.5 0 0 1 0 1h-3.15l-1.88 5.17a.5.5 0 0 1-.94 0L6 3.964 4.47 8.171A.5.5 0 0 1 4 8.5H.5a.5.5 0 0 1 0-1h3.15l1.88-5.17A.5.5 0 0 1 6 2Z"/> </svg>
+                                     Stabilizer</Link>
+                                </li>
+                                <li><Link to="/carbon-yield">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <g> <path fill="none" d="M0 0h24v24H0z"/> <path fill-rule="nonzero" d="M12 23a7.5 7.5 0 0 0 7.5-7.5c0-.866-.23-1.697-.5-2.47-1.667 1.647-2.933 2.47-3.8 2.47 3.995-7 1.8-10-4.2-14 .5 5-2.796 7.274-4.138 8.537A7.5 7.5 0 0 0 12 23zm.71-17.765c3.241 2.75 3.257 4.887.753 9.274-.761 1.333.202 2.991 1.737 2.991.688 0 1.384-.2 2.119-.595a5.5 5.5 0 1 1-9.087-5.412c.126-.118.765-.685.793-.71.424-.38.773-.717 1.118-1.086 1.23-1.318 2.114-2.78 2.566-4.462z"/> </g> </svg>
+                                Carbon Yield</Link></li>
+                                {/* <li><Link to="/governance"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bank" viewBox="0 0 16 16"> <path d="M8 .95 14.61 4h.89a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H15v7a.5.5 0 0 1 .485.379l.5 2A.5.5 0 0 1 15.5 17H.5a.5.5 0 0 1-.485-.621l.5-2A.5.5 0 0 1 1 14V7H.5a.5.5 0 0 1-.5-.5v-2A.5.5 0 0 1 .5 4h.89L8 .95zM3.776 4h8.447L8 2.05 3.776 4zM2 7v7h1V7H2zm2 0v7h2.5V7H4zm3.5 0v7h1V7h-1zm2 0v7H12V7H9.5zM13 7v7h1V7h-1zm2-1V5H1v1h14zm-.39 9H1.39l-.25 1h13.72l-.25-1z"/> </svg>
+                                 &nbsp;Governance</Link>
+                                </li> */}
+                                {/* <li><Link to="/burnvault"><img src={RiskFreeLending} alt="Kyc" /> Burnvault</Link></li> */}
+                            </Dropdown.Menu>
+                        )}
+                    </Dropdown>
+                </li>
             {/* <li>
                     <Dropdown>
                         {device > 1199 && activeClass ? (
