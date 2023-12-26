@@ -55,7 +55,8 @@ import DashboardMainApp from './components/DashboardNew/DashboardJoker';
 import DashboardAdminMainApp from './components/DashboardNew/DashboardJokerAdmin';
 import AdminPage from './components/DashboardNew/AdminPage';
 import VaultPage from './components/DashboardNew/VaultPage';
-
+import Stabilizer from './components/DashboardNew/Stabilizer';
+import CarbonYield from './components/DashboardNew/CarbonYield';
 import BondApp from './components/DashboardNew/Bonds';
 
 export const DataContext = createContext();
@@ -93,8 +94,16 @@ function App() {
         </Route>
         <Route path="/dashboardAdmin">
           <DashboardAdminMainApp />
+        </Route> 
+        <Route path="/stabilizer">
+          <Stabilizer />
+        </Route> 
+        <Route path="/carbon-yield">
+          <CarbonYield />
         </Route>
-        
+        <Route path="/dashboardAdmin">
+          <DashboardAdminMainApp />
+        </Route>        
         <Route path="/adminPage">
           <AdminPage />
         </Route>
