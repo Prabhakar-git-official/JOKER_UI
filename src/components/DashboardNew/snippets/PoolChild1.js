@@ -673,7 +673,8 @@ function PoolChild() {
                         </Col>
                         <Col sm={6} className="mb-sm-0 mb-2">
                         {/* {appOpted ? (<> */}
-                        { allowan ?
+                        {functname==="Deposit"?(<>
+                            { allowan ?
                         (<>
                         <ButtonLoad loading={loader} variant="blue" className="w-100"
                              onClick={()=>depositOrwithdraw()} 
@@ -684,6 +685,14 @@ function PoolChild() {
                              >Approve</ButtonLoad>
                         </>)}
                                 
+                        
+                        </>):(<>
+                            <ButtonLoad loading={loader} variant="blue" className="w-100"
+                             onClick={()=>depositOrwithdraw()} 
+                             >{functname}</ButtonLoad>
+                        
+                        </>)}
+                     
                             {/* </>):(<>
                                 <ButtonLoad loading={loader} className='btn btn-blue w-100' onClick={()=>appOptIn()}>
                             Opt-In App

@@ -8,7 +8,7 @@ import Shape1 from '../../assets/images/footer-shape-1.png';
 import Shape2 from '../../assets/images/footer-desktop-circle.png';
 // import Purple from '../../assets/images/circle-purple.png';
 import colorLogo from '../../assets/images/modal-logo-new.png'
-import jusdlogo from '../../assets/images/Jokercoin.png'
+import jusdlogo from '../../assets/images/StatisLogo.svg'
 function Footer() {
     return (
         <div className="footer">

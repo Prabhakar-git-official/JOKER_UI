@@ -393,7 +393,7 @@ const purchaseBond = async() =>{
     console.log("valcheck",val);
     if( val <= burnab1){
         let amount = val;
-     
+        console.log("amountcheck",amount);
         const depositTx =await burnvaultcontract.swap(amount);
         
         await depositTx.wait();

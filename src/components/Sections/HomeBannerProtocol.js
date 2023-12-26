@@ -5,8 +5,9 @@ import {
   } from "react-router-dom";
 
 import ProtocolImage from "../../assets/images/protocol-image.png";
-import stasislogo from "../../assets/images/Statis Tetrahedron.png";
+import stasislogo from "../../assets/images/assetgraph.svg";
 //import stasislogo from "../../assets/images/stasisicon.png";
+import stasisname from "../../assets/images/stasisname.svg";
 import ProtocolImageMOb from "../../assets/images/element-protocol-mob-image-2.png";
 
 const HomeBannerBanking = () => {
@@ -16,16 +17,18 @@ const HomeBannerBanking = () => {
             <Container fluid="lg">
                 <Row className='justify-content-center py-0'>
                     <Col xl={12}><br/>
-                        <h1>ɈɸꝁΣℝ</h1>
+                        {/* <h1>ɈɸꝁΣℝ</h1> */}
+                        <img src={stasisname} />
                     </Col>
                 </Row>
 
-                <div className="text-center banner-protocol-image">
-
+                <div className="text-center ">
+            
                     <img src={stasislogo} alt="ProtocolImage" className='img-fluid d-none d-md-block mx-auto' />
                     <img src={stasislogo} alt="ProtocolImage" className='img-fluid d-md-none w-100' />
-                    
+                  
                 </div>
+              
 
                 <Row className='justify-content-center banner-protocol-text'>
                     <Col xl={12}>
