@@ -33,7 +33,9 @@ import MyAlgoConnect from '@randlabs/myalgo-connect';
 
 import WalletConnect from "@walletconnect/client";
 import QRCodeModal from "algorand-walletconnect-qrcode-modal";
-import { DIMEAddress, DimeContractABI, JOKERAddress, JOKERCOntractABI } from '../../abi/abi';
+import { DIMEAddress, DimeContractABI, JOKERAddress, JOKERCOntractABI, JOKERABI2 } from '../../abi/abi';
+// import { useWeb3Modal } from '@web3modal/scaffold-react'; 
+// import { useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers5/react';
 
 const algosdk = require('algosdk');
 const myAlgoWallet = new MyAlgoConnect();
@@ -378,17 +380,17 @@ const isMetaMaskInstalled = async () => {
 };
 async function ConnectWallet() {
     // const { activate, chainId } = useWeb3React();
-      const injectedConnector = new InjectedConnector({ supportedChainIds: [11155111] });
+      const injectedConnector = new InjectedConnector({ supportedChainIds: [5] });
       // activate(injectedConnector);
       // <><Header active = {active}/></>
       // <AvatarDropDown deactivate = {deactivate} />
       console.log("injectedConnector", injectedConnector);
       const chainId = await window.ethereum.request({ method: 'eth_requestAccounts' });
           console.log(chainId);
-          if(chainId!==0xaa36a7)
+          if(chainId!==0x5)
           {  await window.ethereum.request({
               method: 'wallet_switchEthereumChain',
-              params: [{ chainId:'0xaa36a7' }],
+              params: [{ chainId:'0x5' }],
             });
           }
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
@@ -418,8 +420,8 @@ async function ConnectWallet() {
       
             const APP_NAME = 'Coinbase';
             const APP_LOGO_URL = 'https://example.com/logo.png';
-            const DEFAULT_ETH_JSONRPC_URL =  'https://eth-sepolia.public.blastapi.io';
-            const DEFAULT_CHAIN_ID = 11155111;
+            const DEFAULT_ETH_JSONRPC_URL =  'https://eth-goerli.public.blastapi.io';
+            const DEFAULT_CHAIN_ID = 5;
       
             const coinbaseWallet = new CoinbaseWalletSDK({
                   appName: APP_NAME,
@@ -456,7 +458,7 @@ async function ConnectWallet() {
       if(localStorage.getItem("walletAddress") === null || localStorage.getItem("walletAddress") === undefined || localStorage.getItem("walletAddress") === ''){                
       }
       else{
-      const response = await fetch(`https://api-sepolia.etherscan.io/api?module=account&action=balance&address=${walletAddress}&tag=latest`);
+      const response = await fetch(`https://api-goerli.etherscan.io/api?module=account&action=balance&address=${walletAddress}&tag=latest`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -469,9 +471,9 @@ async function ConnectWallet() {
       }
       setEthBalance(parseFloat(balanceWei/1e18).toFixed(5))
 
-      const url = "https://sepolia.infura.io/v3/886e9a53b5da4f6286230678f7591bde";
+      const url = "https://goerli.infura.io/v3/886e9a53b5da4f6286230678f7591bde";
         const provider = new ethers.providers.JsonRpcProvider(url);
-        const jokercontract = new ethers.Contract(JOKERAddress,JOKERCOntractABI,provider);
+        const jokercontract = new ethers.Contract(JOKERAddress,JOKERABI2,provider);
         const dimecontract = new ethers.Contract(DIMEAddress,DimeContractABI,provider);
 
         setJokerBalan(ethers.utils.formatUnits(await jokercontract.balanceOf(localStorage.getItem("walletAddress")),9));
