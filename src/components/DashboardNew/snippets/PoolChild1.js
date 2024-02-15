@@ -148,14 +148,14 @@ function PoolChild() {
         //   let MyStakedamount = await dimeStakingContract.userInfo(localStorage.getItem("walletAddress"));
         //   let DIMEBlance = ethers.utils.formatUnits(await dimeContract.balanceOf(localStorage.getItem("walletAddress")),0);
         //   let myRewards = ethers.utils.formatUnits(await dimeStakingContract.pendingBlack(localStorage.getItem("walletAddress")),0);
-        //   let unstakeremainingtime = ethers.utils.formatUnits(await dimeStakingContract.holderUnstakeRemainingTime(localStorage.getItem("walletAddress")),0);
-
+          let unstakeremainingtime = ethers.utils.formatUnits(await dimeStakingContract.holderUnstakeRemainingTime(localStorage.getItem("walletAddress")),0);
+        console.log("stake time:",unstakeremainingtime)
 
         //   setTotalStakedAmount(Totalstakedamount);
         //   setmystaked(MyStakedamount);
         //   setmyBalance(DIMEBlance)
         //   setMyreward(myRewards)
-        //   setunstakeTime(unstakeremainingtime)
+          setunstakeTime(unstakeremainingtime)
 
           let allowance =  ethers.utils.formatUnits(await dimeStakingLPContract.allowance(localStorage.getItem("walletAddress"),JOKERStakingAddress),0);
           console.log("allowance", parseFloat(allowance))
