@@ -1222,9 +1222,10 @@ try {
                     className="mb-24 justify-content-center"
                     >
                          <Tab eventKey="main" title={<span style={{ color: Theme === 'light' ? 'black' : 'white' }}>Main Pool</span>}>
-      <PoolChild />
-      <PoolChild11 />
-      <PoolChild1 />
+                         <PoolChild1 />
+                         <PoolChild />
+                         <PoolChild11 />
+      
       {/* <PoolChild2 /> */}
       {/* <PoolChild3 /> */}
       {/* <PoolChild />
