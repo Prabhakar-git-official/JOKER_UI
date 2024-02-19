@@ -19,7 +19,7 @@ import { checkotp, walletBalance } from "../../formula";
 import { globalstate } from "../../StableswapConfig";
 import { createtpairhistory } from "../../apicallfunction";
 import { ethers } from "ethers";
-import { DIMEAddress, DIMELPStakingAddress, DimeAbi, DimeContractABI, DimeStakingAbi, DimeStakingAddress, JOKERLPStakingAddress, StakingContractABI, uniswapNFTContractABI, uniswapNFTContractAddress } from "../../../abi/abi";
+import { JOKERAddress, JOKERABI2,DIMEAddress, DIMELPStakingAddress, DimeAbi, DimeContractABI, DimeStakingAbi, DimeStakingAddress, JOKERLPStakingAddress, StakingContractABI, uniswapNFTContractABI, uniswapNFTContractAddress, StakingJOKERABI, JOKERStakingAddress } from "../../../abi/abi";
 
 import jokercoin from '../../../assets/images/Jokercoin.png';
 import stasiscoin  from '../../../assets/images/stasiscoin.png';
@@ -61,9 +61,12 @@ function PoolChild() {
 
 
     const[TotalStakedAmount,setTotalStakedAmount] = useState("")
-    const[mystaked,setmystaked] = useState([])
+    const[mystaked,setmystaked] = useState("")
     const[allowan,setAllowance] = useState(false)
     const[myBalance,setmyBalance] = useState("")
+    const[stakevalue,setstakevalue] = useState("")
+    const[stakevalue2,setstakevalue2] = useState("")
+    const[Jokerbalance,setJokerbalance] = useState("")
     const[Myreward,setMyreward] = useState("")
     const[unstakeTime,setunstakeTime] = useState("")
     const[walletNFTLiquidity,setwalletNFTLiquidity] = useState("")
@@ -84,43 +87,54 @@ function PoolChild() {
           // console.log("Connected Successfully", account);
 
           //new codes
-          const dimeStakingLPContract = new ethers.Contract(JOKERLPStakingAddress, StakingContractABI, provider);
-          const uniswapNFTContract = new ethers.Contract(uniswapNFTContractAddress, uniswapNFTContractABI, provider);
+          const dimeStakingLPContract = new ethers.Contract(JOKERAddress, JOKERABI2, provider);
+          const dimeStakingContract = new ethers.Contract(JOKERStakingAddress, StakingJOKERABI, provider);
+        //   const uniswapNFTContract = new ethers.Contract(uniswapNFTContractAddress, uniswapNFTContractABI, provider);
           
-          let totalLpLiquidity =  ethers.utils.formatUnits(await dimeStakingLPContract.totalLiquiidtySupply(),0);
-          setTotalStakedAmount(totalLpLiquidity);
+          let totalLpLiquidity =  ethers.utils.formatUnits(await dimeStakingLPContract.balanceOf(JOKERStakingAddress),0);
+          setTotalStakedAmount(parseFloat(totalLpLiquidity)/1e9);
           console.log("totalLpLiquidity",totalLpLiquidity)
 
-          let stakedAMount = await dimeStakingLPContract.userInfo(localStorage.getItem("walletAddress"));
+          let jokerbal = await dimeStakingLPContract.balanceOf(localStorage.getItem("walletAddress"));
+          setJokerbalance(jokerbal);
+
+          let myRewards = ethers.utils.formatUnits(await dimeStakingContract.pendingBlack(localStorage.getItem("walletAddress")),0);
+          setMyreward(parseFloat(myRewards/1e9));
+          console.log("rewards",parseFloat(myRewards));
+
+          let stakedAMount = await dimeStakingContract.userInfo(localStorage.getItem("walletAddress"));
           let myDepositAmount = ethers.utils.formatUnits(stakedAMount.amount,0);
-          setmystaked(myDepositAmount);
+          setmystaked(myDepositAmount/1e9);
+          console.log("staked",parseFloat(myDepositAmount).toFixed(6));
 
-          let myRewards = ethers.utils.formatUnits(await dimeStakingLPContract.pendingBlack(localStorage.getItem("walletAddress")),0);
-          setMyreward(myRewards)
+          
 
-          let unstakeremainingtime = ethers.utils.formatUnits(await dimeStakingLPContract.holderUnstakeRemainingTime(localStorage.getItem("walletAddress")),0);
-          setunstakeTime(unstakeremainingtime)
+        //   let myRewards = ethers.utils.formatUnits(await dimeStakingLPContract.pendingBlack(localStorage.getItem("walletAddress")),0);
+        //   setMyreward(myRewards)
+
+        //   let unstakeremainingtime = ethers.utils.formatUnits(await dimeStakingLPContract.holderUnstakeRemainingTime(localStorage.getItem("walletAddress")),0);
+        //   setunstakeTime(unstakeremainingtime)
 
          
 
-          let walletNFTDetails = await dimeStakingLPContract.getWalletIDFromContract(uniswapNFTContractAddress,localStorage.getItem("walletAddress"));
-            let walletNFTID = ethers.utils.formatUnits(walletNFTDetails[0],0);
-            let walletNFTLiquidity = ethers.utils.formatUnits(walletNFTDetails[1],0);
-            setwalletNFTLiquidity(walletNFTLiquidity)
-            setwalletNFTID(walletNFTID)
-            console.log("walletNFTID",walletNFTID, walletNFTLiquidity)
-            try{
-                let allowance =  await uniswapNFTContract.getApproved(walletNFTID);
-                if(allowance === JOKERLPStakingAddress){
-                    setAllowance(true);
-                }
-                else{
-                    setAllowance(false);
-                }
-            }
-            catch(error){
-                setAllowance(false);
-            }
+        //   let walletNFTDetails = await dimeStakingLPContract.getWalletIDFromContract(uniswapNFTContractAddress,localStorage.getItem("walletAddress"));
+        //     let walletNFTID = ethers.utils.formatUnits(walletNFTDetails[0],0);
+        //     let walletNFTLiquidity = ethers.utils.formatUnits(walletNFTDetails[1],0);
+        //     setwalletNFTLiquidity(walletNFTLiquidity)
+        //     setwalletNFTID(walletNFTID)
+        //     console.log("walletNFTID",walletNFTID, walletNFTLiquidity)
+            // try{
+            //     let allowance =  await uniswapNFTContract.getApproved(walletNFTID);
+            //     if(allowance === JOKERLPStakingAddress){
+            //         setAllowance(true);
+            //     }
+            //     else{
+            //         setAllowance(false);
+            //     }
+            // }
+            // catch(error){
+            //     setAllowance(false);
+            // }
             
             // console.log("allowance", allowance)
             
@@ -134,18 +148,18 @@ function PoolChild() {
         //   let MyStakedamount = await dimeStakingContract.userInfo(localStorage.getItem("walletAddress"));
         //   let DIMEBlance = ethers.utils.formatUnits(await dimeContract.balanceOf(localStorage.getItem("walletAddress")),0);
         //   let myRewards = ethers.utils.formatUnits(await dimeStakingContract.pendingBlack(localStorage.getItem("walletAddress")),0);
-        //   let unstakeremainingtime = ethers.utils.formatUnits(await dimeStakingContract.holderUnstakeRemainingTime(localStorage.getItem("walletAddress")),0);
-
+          let unstakeremainingtime = ethers.utils.formatUnits(await dimeStakingContract.holderUnstakeRemainingTime(localStorage.getItem("walletAddress")),0);
+        console.log("stake time:",unstakeremainingtime)
 
         //   setTotalStakedAmount(Totalstakedamount);
         //   setmystaked(MyStakedamount);
         //   setmyBalance(DIMEBlance)
         //   setMyreward(myRewards)
-        //   setunstakeTime(unstakeremainingtime)
+          setunstakeTime(unstakeremainingtime)
 
-        //   let allowance =  ethers.utils.formatUnits(await dimeContract.allowance(localStorage.getItem("walletAddress"),DimeStakingAddress),0);
-        //   console.log("allowance", allowance)
-        //   setAllowance(allowance);
+          let allowance =  ethers.utils.formatUnits(await dimeStakingLPContract.allowance(localStorage.getItem("walletAddress"),JOKERStakingAddress),0);
+          console.log("allowance", parseFloat(allowance))
+          setAllowance(parseFloat(allowance));
         //   let blackpurchased = ethers.utils.formatUnits
 
 
@@ -288,18 +302,18 @@ function PoolChild() {
                 console.log("Connected Successfully", account);
         
                 // Create contract instance with the correct order of arguments
-                const dimeUSDCLPstakingContract = new ethers.Contract(JOKERLPStakingAddress, StakingContractABI, web31.getSigner(account));
+                const dimeUSDCLPstakingContract = new ethers.Contract(JOKERStakingAddress, StakingJOKERABI, web31.getSigner(account));
         
                 // const val = ethers.utils.formatUnits(100000000000000, 0);
                 // let k = Web3.utils.toBN(1000000000000000000n);
                 // const val11 = ethers.utils.formatUnits(100000000000000, 18);
                 // const val1 =  ethers.utils.parseUnits(val11, 18);;
                 // Send the transaction and wait for it to be mined
-                const mintTx = await dimeUSDCLPstakingContract.deposit();
+                const mintTx = await dimeUSDCLPstakingContract.deposit(BigInt(stakevalue * 1e9),{gasLimit:3000000});
                 await mintTx.wait();
                 console.log("minttx",mintTx.hash);
-                // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
-                let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
+                // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `) 
+                let id = "https://goerli.etherscan.io/tx/" + mintTx.hash;
                 toast.success(toastDiv(id));
                 await displayValueCalculation();
                 toast.success("Staked successfully");
@@ -327,18 +341,18 @@ function PoolChild() {
                 console.log("Connected Successfully", account);
         
                 // Create contract instance with the correct order of arguments
-                const dimeUSDCLPstakingContract = new ethers.Contract(JOKERLPStakingAddress, StakingContractABI, web31.getSigner(account));
+                const dimeUSDCLPstakingContract = new ethers.Contract(JOKERStakingAddress, StakingJOKERABI, web31.getSigner(account));
         
                 // const val = ethers.utils.formatUnits(100000000000000, 0);
                 // let k = Web3.utils.toBN(1000000000000000000n);
                 // const val11 = ethers.utils.formatUnits(100000000000000, 18);
                 // const val1 =  ethers.utils.parseUnits(val11, 18);;
                 // Send the transaction and wait for it to be mined
-                const mintTx = await dimeUSDCLPstakingContract.withdraw();
+                const mintTx = await dimeUSDCLPstakingContract.withdraw(BigInt(stakevalue2 * 1e9),{gasLimit:3000000});
                 await mintTx.wait();
                 console.log("minttx",mintTx.hash);
                 // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
-                let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
+                let id = "https://goerli.etherscan.io/tx/" + mintTx.hash;
                 toast.success(toastDiv(id));
                 await displayValueCalculation();
                 toast.success("withdrawn successfully");
@@ -365,18 +379,18 @@ function PoolChild() {
                 console.log("Connected Successfully", account);
         
                 // Create contract instance with the correct order of arguments
-                const dimeUSDCLPstakingContract = new ethers.Contract(JOKERLPStakingAddress, StakingContractABI, web31.getSigner(account));
+                const dimeUSDCLPstakingContract = new ethers.Contract(JOKERStakingAddress, StakingJOKERABI, web31.getSigner(account));
         
                 // const val = ethers.utils.formatUnits(100000000000000, 0);
                 // let k = Web3.utils.toBN(1000000000000000000n);
                 // const val11 = ethers.utils.formatUnits(100000000000000, 18);
                 // const val1 =  ethers.utils.parseUnits(val11, 18);;
                 // Send the transaction and wait for it to be mined
-                const mintTx = await dimeUSDCLPstakingContract.claimReward();
+                const mintTx = await dimeUSDCLPstakingContract.claimReward({gasLimit:3000000});
                 await mintTx.wait();
                 console.log("minttx",mintTx.hash);
                 // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
-                let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
+                let id = "https://goerli.etherscan.io/tx/" + mintTx.hash;
                 toast.success(toastDiv(id));
                 await displayValueCalculation();
                 toast.success("claimReward successfully");
@@ -404,14 +418,14 @@ function PoolChild() {
                 console.log("Connected Successfully", account);
         
                 // Create contract instance with the correct order of arguments
-                const uniswapcontract = new ethers.Contract(uniswapNFTContractAddress, uniswapNFTContractABI, web31.getSigner(account));
-        
-                const mintTx = await uniswapcontract.approve(JOKERLPStakingAddress,walletNFTID);
+                // const uniswapcontract = new ethers.Contract(uniswapNFTContractAddress, uniswapNFTContractABI, web31.getSigner(account));
+                const jokercontract = new ethers.Contract(JOKERAddress, JOKERABI2,  web31.getSigner(account));
+                const mintTx = await jokercontract.approve(JOKERStakingAddress,100*1e9);
               
                 await mintTx.wait();
                 console.log("minttx",mintTx.hash);
                 // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
-                let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
+                let id = "https://goerli.etherscan.io/tx/" + mintTx.hash;
                 toast.success(toastDiv(id));
                 await displayValueCalculation();
                 toast.success("Approve is Done successfully");
@@ -564,14 +578,14 @@ function PoolChild() {
                             placement="left"
                             overlay={
                                 <Tooltip id={`tooltip-left`}>
-                                    JOKER_USDC LP
+                                    JOKER
                                 </Tooltip>
                             }
                             >
                                 {functname === "Deposit" ? (<>
-                                <div className="d-inline-block ms-1">{walletNFTLiquidity? parseFloat(walletNFTLiquidity/1e9).toFixed(3):'0.0'} JOKER_USDC LP</div>
+                                <div className="d-inline-block ms-1">{Jokerbalance? parseFloat(Jokerbalance/1e9).toFixed(3):'0.0'} JOKER</div>
                                 </>):(<>
-                                    <div className="d-inline-block ms-1">{mystaked? parseFloat(mystaked/1e9).toFixed(3):'0.0'} JOKER_USDC LP</div>
+                                    <div className="d-inline-block ms-1">{mystaked? parseFloat(mystaked/1e9).toFixed(3):'0.0'} JOKER</div>
                                 </>)}
                             </OverlayTrigger>
                         </p>
@@ -580,13 +594,13 @@ function PoolChild() {
                     <InputGroup className='input-group-max input-group-max-lg mb-3'>
                         <FormControl
                             // disabled={true}
-                            value={walletNFTLiquidity ? walletNFTLiquidity/1e9 : 0}
+                            // value={walletNFTLiquidity ? walletNFTLiquidity/1e9 : 0}
                             type='number'
                             placeholder="0.00"
                             className="ps-1 pb-0"
                             aria-label="Recipient's username"
                             aria-describedby="basic-addon2"
-                            // onChange={(e) => setBondAmount(e.target.value)}
+                            onChange={(e) => setstakevalue(e.target.value)}
                         />
                         {/* <Button variant="outline-purple" className='btn-xs-d rounded' onClick={()=>callingMax()}>Max</Button> */}
                     </InputGroup>
@@ -594,13 +608,13 @@ function PoolChild() {
                         <InputGroup className='input-group-max input-group-max-lg mb-3'>
                         <FormControl
                             // disabled={true}
-                            value={mystaked ? mystaked/1e9 : 0}
+                            // value={mystaked ? mystaked/1e9 : 0}
                             type='number'
                             placeholder="0.00"
                             className="ps-1 pb-0"
                             aria-label="Recipient's username"
                             aria-describedby="basic-addon2"
-                            // onChange={(e) => setBondAmount(e.target.value)}
+                            onChange={(e) => setstakevalue2(e.target.value)}
                         />
                         {/* <Button variant="outline-purple" className='btn-xs-d rounded' onClick={()=>callingMax()}>Max</Button> */}
                     </InputGroup>
@@ -743,7 +757,7 @@ function PoolChild() {
                                         </Tooltip>
                                     }
                                     >
-                                    <h5 class="mb-0 d-flex align-items-center"> {TotalStakedAmount ? parseFloat(TotalStakedAmount/1e9).toFixed(3):'0.0'} </h5>
+                                    <h5 class="mb-0 d-flex align-items-center"> {TotalStakedAmount ? parseFloat(TotalStakedAmount).toFixed(3):'0.0'} </h5>
                                 </OverlayTrigger>
                                 <OverlayTrigger
                                     key="left"
@@ -754,22 +768,22 @@ function PoolChild() {
                                         </Tooltip>
                                     }
                                     >
-                                    <h6 class="sub-heading text-xs mb-0">JOKER_USDC LP</h6>
+                                    <h6 class="sub-heading text-xs mb-0">JOKER</h6>
                                 </OverlayTrigger>
                             </div>
                            
                             <div class="mr-1">
-                                <h6 class="sub-heading text-xs mb-0">My Liquidity </h6>
+                                <h6 class="sub-heading text-xs mb-0">My Stake </h6>
                                 <OverlayTrigger
                                     key="left"
                                     placement="left"
                                     overlay={
                                         <Tooltip id={`tooltip-left`}>
-                                        Total deposited Liquidity Amount
+                                        Total deposited Amount
                                         </Tooltip>
                                     }
                                     >
-                                    <h5 class="mb-0 d-flex align-items-center">{mystaked?parseFloat(mystaked/1e9).toFixed(3):'0.0'}</h5>
+                                    <h5 class="mb-0 d-flex align-items-center">{mystaked ? parseFloat(mystaked).toFixed(3):'0.0'}</h5>
                                 </OverlayTrigger>
                                 <OverlayTrigger
                                     key="left"
@@ -780,7 +794,7 @@ function PoolChild() {
                                         </Tooltip>
                                     }
                                     >
-                                    <h6 class="sub-heading text-xs mb-0">JOKER_USDC LP</h6>
+                                    <h6 class="sub-heading text-xs mb-0">JOKER</h6>
                                 </OverlayTrigger>
                             </div>
                         </div>
@@ -873,7 +887,7 @@ function PoolChild() {
                         </div>
                         <span className="text-muted me-20">Rewards Earned:</span><span className="me-1">
                             {/* {claimamount  && stakedAmount > 1 ?parseFloat(claimamount/1000000).toFixed(6):"0.0"} */}
-                            {Myreward?parseFloat(Myreward/1e9).toFixed(6):'0.0'}
+                            {Myreward != "" ? parseFloat(Myreward).toFixed(6):'0.0'}
                             </span>
                             {Myreward? 
                             (<>

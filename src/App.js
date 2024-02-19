@@ -26,6 +26,7 @@ import MyNFTApp from './components/DashboardNew/MyNFT'
 import NFTDetailsApp from './components/DashboardNew/NFTDetails'
 import CreateArtistsApp from './components/DashboardNew/CreateArtists'
 import MintNFTApp from './components/DashboardNew/MintNFT'
+import ControlledSwap from './components/DashboardNew/ControlledSwap';
 // import EditArtists from "./components/DashboardNew/EditArtists";
 import MyNFTCopy from "./components/DashboardNew/MyNFTCopy";
 import TopCollections from "./components/DashboardNew/TopCollections";
@@ -59,8 +60,42 @@ import Stabilizer from './components/DashboardNew/Stabilizer';
 import CarbonYield from './components/DashboardNew/CarbonYield';
 import BondApp from './components/DashboardNew/Bonds';
 
+// import { createWeb3Modal, defaultConfig } from '@web3modal/ethers5/react';
+// import { useWeb3ModalAccount } from '@web3modal/ethers5/react';
+
+// const projectId = '9256340a0078da20d2a26bc6dc446b57'
+
+// const testnet = {
+//   chainId: 11155111,
+//   name: 'Sepolia Testnet',
+//   currency: 'ETH',
+//   explorerUrl: 'https://sepolia.etherscan.io/',
+//   rpcUrl: 'https://rpc2.sepolia.org'
+// }
+
+// const metadata = {
+//   name: 'My Website',
+//   description: 'My Website description',
+//   url: 'https://mywebsite.com',
+//   icons: ['https://avatars.mywebsite.com/']
+// }
+
+// createWeb3Modal({
+//   ethersConfig: defaultConfig({ 
+//     metadata,
+//     defaultChainId: 11155111,
+//     enableEIP6963: true,
+//     enableInjected: true,
+//     enableCoinbase: true,
+//     rpcUrl: 'https://rpc2.sepolia.org' // used for the Coinbase SDK
+//   }),
+//   chains: [testnet],
+//   projectId
+// })
+
 export const DataContext = createContext();
-function App() {    
+function App() {   
+  // const { address, chainId, isConnected } = useWeb3ModalAccount(); 
   const[getValue,setValue]=useState([""]);      
   const dbcallProfile=async()=>{        
     let req = [];    
@@ -120,7 +155,9 @@ function App() {
         <Route path="/minting">
           <MintingApp />
         </Route>
-        
+        <Route path="/controlledswap">
+          <ControlledSwap />
+        </Route>
         <Route path="/redeem">
           <RedeemApp />
         </Route>     

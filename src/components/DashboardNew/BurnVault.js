@@ -13,7 +13,7 @@ import { ethers } from 'ethers';
 
 /* global BigInt */
 import stasiscoin  from '../../assets/images/stasiscoin.png';
-import { JOKERAddress,CREDITAddress,CreditcontractAbi,USDCAddress,USDCChainlinkAddress,USDCContractABI,JOKERCOntractABI,BlackAbi, BondAbi, BondAddress, CommunityWallet, DAIAddress, DIMEAddress, DaiAbi, DimeAbi, JUSDAbi, JUSDAddress, JUSDPoolAbi, JUSDPoolAddress, TreasuryAddress,DIMEChainlinkAddress,CREDITChainlinkAddress,JOKERChainlinkAddress,ChainLinkABi,CreditpolicyAbi,CreditPolicyContractAddress,DimeContractABI,ECOReserveAddress,ECOReserveABI,BurnVaultAddress,BurnVaultABI } from '../../abi/abi';
+import { JOKERAddress,CREDITAddress,CreditcontractAbi,USDCAddress,USDCChainlinkAddress,USDCContractABI, JOKERABI2, JOKERCOntractABI,BlackAbi, BondAbi, BondAddress, CommunityWallet, DAIAddress, DIMEAddress, DaiAbi, DimeAbi, JUSDAbi, JUSDAddress, JUSDPoolAbi, JUSDPoolAddress, TreasuryAddress,DIMEChainlinkAddress,CREDITChainlinkAddress,JOKERChainlinkAddress,ChainLinkABi,CreditpolicyAbi,CreditPolicyContractAddress,DimeContractABI,ECOReserveAddress,ECOReserveABI,BurnVaultAddress,BurnVaultABI2 } from '../../abi/abi';
 import PieChart from './snippets/PieChartStable';
 import BarChartTreasuryvalue from './snippets/BarChartTreasuryvalue';
 import { Erc20TokenAddress, LaunchpadAddress, Erc20TokenAbi, LaunchpadAbi } from '../../abi/LaunchPadabi';
@@ -75,6 +75,7 @@ const Dashboard = () => {
     const[date,setdate]= useState("");
     const[time,settime]= useState("");
     const[JokerInput,setJokerInput] = useState("");
+    const[ETHInput,setETHInput] = useState("");
     const[map1,setMap]= useState([]);
     const[day,setTime4]= useState("");
     const[hour,setTim1]= useState("");
@@ -112,7 +113,7 @@ const Dashboard = () => {
     
     const [circulatingbalance,setcirculatingbalance] = useState("");
     const [Jokervaultbalance,setJokerVaultBalance] = useState("");
-   
+    const [ethBalance, setEthBalance] = useState();
     const [burn,setburn] = useState("");
     const [isOpen, setIsOpen] = useState(false);
     const [isOpens, setIsOpens] = useState(false);
@@ -148,12 +149,12 @@ const connectToEthereum = async () => {
       return null;
     }
   };
-  const url = "https://sepolia.infura.io/v3/886e9a53b5da4f6286230678f7591bde";
+  const url = "https://goerli.infura.io/v3/b1a500c779c94f89bc791ca58b3f1601";
   const provider = new ethers.providers.JsonRpcProvider(url);
 
-   const burnvaultContract =  new ethers.Contract(BurnVaultAddress,BurnVaultABI,provider);
+   const burnvaultContract =  new ethers.Contract(BurnVaultAddress,BurnVaultABI2,provider);
    // Create contract instance with the correct order of arguments
-   const JOKERContract = new ethers.Contract(JOKERAddress, JOKERCOntractABI, provider);
+   const JOKERContract = new ethers.Contract(JOKERAddress, JOKERABI2, provider);
    const jokerpricedashboard = new ethers.Contract(JOKERChainlinkAddress,ChainLinkABi,provider);
    const USDCPriceContract = new ethers.Contract(USDCChainlinkAddress, ChainLinkABi, provider);
    const USDCContract = new ethers.Contract(USDCAddress, USDCContractABI, provider);
@@ -171,10 +172,22 @@ const connectToEthereum = async () => {
             console.log("NotbalanceWei")
         }
         else{
-           
+            let response = await fetch(`https://api-goerli.etherscan.io/api?module=account&action=balance&address=${localStorage.getItem("walletAddress")}&tag=latest`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              let balanceWei;
+              const data = await response.json();
+              if (data.status === '1') {
+                balanceWei = data.result;
+              } else {
+                throw new Error('API response was not successful');
+              }
+              setEthBalance(parseFloat(balanceWei/1e18).toFixed(5))
             let Jokerbalance = ethers.utils.formatUnits(await JOKERContract.balanceOf(localStorage.getItem("walletAddress")),0);
        
             setJokerbalance(Jokerbalance);
+            console.log("joker bal swap",Jokerbalance);
             let maxtx = ethers.utils.formatUnits(await burnvaultContract.maxTxAmount(),0)
             // let maxtx = await burnvaultContract.methods.maxTxAmount().call();
             setmaxt(maxtx);
@@ -184,18 +197,18 @@ const connectToEthereum = async () => {
             // let  jokervaultbalance = await burnvaultContract.methods.getBurnVaultBLACKBalance().call();
             setJokerVaultBalance(jokervaultbalance);
 
-            let usdcprice = ethers.utils.formatUnits(await USDCPriceContract.getChainlinkDataFeedLatestAnswer(),0);
+            // let usdcprice = ethers.utils.formatUnits(await USDCPriceContract.getChainlinkDataFeedLatestAnswer(),0);
            // let jokerPrice = 10 * 10e8;//for now it is given as 10$
-            setJokerPriceinUSD(jokerpricedashboard*10);
+            // setJokerPriceinUSD(jokerpricedashboard*10);
 
             let burnbalan = ethers.utils.formatUnits(await burnvaultContract.senderBurnBalance(localStorage.getItem("walletAddress")),0);
             
             let bb = maxta - burnbalan;
             console.log("bb",bb);
             setburn(Math.abs(bb/1e9));
-            let usdcbalance = ethers.utils.formatUnits(await USDCContract.balanceOf(localStorage.getItem("walletAddress")),0);
-            setUSDCBlance(usdcbalance)  
-            console.log("usdcbalance",usdcbalance)
+            // let usdcbalance = ethers.utils.formatUnits(await USDCContract.balanceOf(localStorage.getItem("walletAddress")),0);
+            // setUSDCBlance(usdcbalance)  
+            // console.log("usdcbalance",usdcbalance)
               
             let checklock = await burnvaultContract.lock(localStorage.getItem("walletAddress"));
              setchecklock(checklock);
@@ -334,14 +347,14 @@ const approveJOKER = async() =>{
         console.log("Connected Successfully", account);
 
         // Create contract instance with the correct order of arguments
-        const JOKERContract = new ethers.Contract(JOKERAddress, JOKERCOntractABI, web31.getSigner(account));
+        const JOKERContract = new ethers.Contract(JOKERAddress, JOKERABI2, web31.getSigner(account));
         //const mintTx = await JOKERContract.methods.approve(BurnVaultAddress,BigInt(10000000000*1e9)).send({from:localStorage.getItem("walletAddress")});
          const mintTx = await JOKERContract.approve(BurnVaultAddress,BigInt(10000000000*1e9));
       
         // await mintTx.wait();
         console.log("minttx",mintTx.hash);
         // toast.success(` "Successfully Minted JUSD", ${(mintTx.hash)} `)
-        let id = "https://sepolia.etherscan.io/tx/" + mintTx.hash;
+        let id = "https://goerli.etherscan.io/tx/" + mintTx.hash;
         await walletBalance();
         await sleep(2000);
         toast.success(toastDiv(id));
@@ -374,7 +387,7 @@ const purchaseBond = async() =>{
               console.log("Connected Successfully", account);
       
             //   // Create contract instance with the correct order of arguments
-            const burnvaultcontract = new ethers.Contract(BurnVaultAddress, BurnVaultABI, web3.getSigner(localStorage.getItem("walletAddress")));
+            const burnvaultcontract = new ethers.Contract(BurnVaultAddress, BurnVaultABI2, web3.getSigner(localStorage.getItem("walletAddress")));
       
          
             let maxtx = ethers.utils.formatUnits(await burnvaultContract.maxTxAmount(),0)
@@ -394,7 +407,7 @@ const purchaseBond = async() =>{
     if( val <= burnab1){
         let amount = val;
         console.log("amountcheck",amount);
-        const depositTx =await burnvaultcontract.swap(amount);
+        const depositTx =await burnvaultcontract.swap(amount,{gasLimit:3000000});
         
         await depositTx.wait();
        toast.success("Swapped successfully",{autoClose: 5000}); 
@@ -424,7 +437,8 @@ const purchaseBond = async() =>{
 }
 
 const changeInputValue = async(value) =>{
-  
+    console.log("value2",value*2);
+    setETHInput(value*2);
     let swapAmount=value*1e9;
     setswapAmountjoker(swapAmount);
       console.log("valuej",swapamountjoker)
@@ -440,6 +454,7 @@ const changeInputValue = async(value) =>{
     // let calculatedValue = ((1-0.9)*(value*1e9*USDCPrice))/(0.9*JokerPrice);
     // console.log("calculated",calculatedValue,Math.abs(calculatedValue)*JokerPrice,value*1e9*USDCPrice);
     setJokerInput(calculatedValue);
+    
     
 }
 
@@ -587,7 +602,7 @@ const changeInputValue = async(value) =>{
                                           
                                         </Col>
                                         <Col md={3}>
-                                            <h6><span className='text-sm text-gray-d'>Your USDC Balance: </span>{usdcbalance ? (parseFloat(usdcbalance)/1e9).toFixed(4) : '0'} USDC</h6>
+                                            <h6><span className='text-sm text-gray-d'>Your ETH Balance: </span>{ethBalance ? (parseFloat(ethBalance)).toFixed(4) : '0.00'} ETH</h6>
                                             <Row className='flex-nowrap mb-2 gx-3'>
                                             <Col> <div className="acc-title me-2 d-flex ">
                                 <img src={USDC} alt="logo" />
@@ -596,12 +611,13 @@ const changeInputValue = async(value) =>{
                                 <InputGroup className='input-group-max'>
                                                         <FormControl
                                                             // disabled={true}
-                                                            value={JokerInput?parseFloat(JokerInput/1e9).toFixed(4):'0.0'}
+                                                            readOnly={true}
+                                                            value={ETHInput?parseFloat(ETHInput).toFixed(4):'0.00'}
                                                             type='number'
-                                                            placeholder="0.00"
+                                                            // placeholder="0.00"
                                                             aria-label="Recipient's username"
                                                             aria-describedby="basic-addon2"
-                                                            // onChange={(e) => JokerInput(e.target.value)}
+                                                        
                                                         />
                                                         {/* <Button variant="outline-purple" className='btn-xs-d' onClick={maxButton}>Max</Button> */}
                                                     </InputGroup>
