@@ -8,6 +8,7 @@ import { Button, Col, Container, Modal, OverlayTrigger, Row, Tab, Tabs, Tooltip 
 import PoolChild from './snippets/PoolChild';
 import PoolChild1 from './snippets/PoolChild1';
 import PoolChild11 from './snippets/PoolChild11';
+import PoolChild4 from './snippets/PoolChild4';
 import ButtonLoad from 'react-bootstrap-button-loader';
 import axios from 'axios';
 import algologo from '../../assets/images/Algo.png';
@@ -1223,6 +1224,7 @@ try {
                     >
                          <Tab eventKey="main" title={<span style={{ color: Theme === 'light' ? 'black' : 'white' }}>Main Pool</span>}>
                          <PoolChild1 />
+                         <PoolChild4/>
                          <PoolChild />
                          <PoolChild11 />
       

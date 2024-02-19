@@ -7515,6 +7515,7 @@ export const JOKERAddress ="0x538d56e505d1727ac9D2f227a7BDC4c01803ddd0"//"0xEfF9
 export const jokerAddressForMinting = "0x345cb61a3CF8062b06827646Dc1D53a8898a7841";
 export const CREDITAddress = "0x118C400F508BCe999De1cD875E4Be804e847E915";
 export const USDCAddress = "0xD8b9C71dF56f3Cbe6B3603BC4440D19c1631a8Cc";
+export const JOKERLPToken = "0xf31820338165a6AB943446EEB57d37de364b9F8E";
 //treasuryaddress
 export const TreasuryAddress ="0x58303065612DE7B213f9974231a6753f7BFcD476";//bondtreasury
 export const ECOReserveAddress ="0x50e97Ce376cD3AC7C5c290353c583566fF0F2834";
@@ -7526,7 +7527,7 @@ export const FaucetAddress = "0xC946d98A1fb68e415F721ebC5239C3E78c86d886"
 
 //staking address
 export const DIMELPStakingAddress = "0x2496B829182FA18Fd16AD681F630B2dd03aa37Ab";
-export const JOKERLPStakingAddress = "0xf465dE142207007831ecE999Cd3142Ef5EF4cA58";
+export const JOKERLPStakingAddress = "0x80150623a218E82892C101123935A05B018E4680"//"0xf465dE142207007831ecE999Cd3142Ef5EF4cA58";
 export const CREDITLPStakingAddress ="0x2669905c0ba3a788a04422c0F0929dCb279A9E34"
 export const JOKERStakingAddress = "0x04B9765edfb73c8e286d190a1b0e11bca62422B4"
 
